@@ -50,7 +50,11 @@ values."
      syntax-checking
      version-control
      c-c++
-     python
+     (python :variables
+             python-backend 'anaconda
+             python-test-runner 'pytest)
+     javascript
+     yaml
      )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these

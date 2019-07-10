@@ -1,0 +1,65 @@
+# -*- mode: snippet -*-
+# name: flood_fill
+# key: template_flood_fill
+# --
+
+int di[] = {-1, 0, 1, 0, -1, -1, 1, 1};
+int dj[] = {0, -1, 0, 1, -1, 1, -1, 1};
+const int nn = 8;
+
+bool is_inside (int i, int j, int n, int m){
+  return i>=0 && i<n && j>=0 && j<m;
+}
+
+void visit(vector<vector<char> > &v, int i, int j){
+  int n = v.size();
+  int m = v[0].size();
+  
+  int ii, jj;
+  for(int x = 0; x<nn; x++){
+    for(int y = 0; y<nn; y++){
+      ii = i + di[x];
+      jj = j + dj[y];
+      if(is_inside(ii, jj, n, m) && v[ii][jj] == '1'){
+        v[ii][jj] = '2';
+        visit(v, ii, jj);
+      }
+    }
+  }
+  v[i][j] = '3';
+}
+
+int flood_fill(vector<vector<char> > &v){
+  int n = v.size();
+  int m = v[0].size();
+
+  int conn_comp=0;
+  for(int i = 0; i<n; i++){
+    for(int j = 0; j<m; j++){
+      if(v[i][j] == '1'){
+        v[i][j] = '2';
+        visit(v,i,j);
+        conn_comp++;
+      }
+    }
+  }
+  return conn_comp;
+}
+
+int main()
+{
+  ios::sync_with_stdio(false);cin.tie(0);cout.tie(0);
+
+  int n;
+  while (cin>>n){
+    vector<vector<char> > v(n, vector<char> (n,'0'));
+    for (int i = 0; i<n; i++){
+      for (int j = 0; j<n; j++){
+        cin>>v[i][j];
+      }
+    }
+    cout<<flood_fill(v)<<"\n";
+  }
+  
+  return 0;
+}

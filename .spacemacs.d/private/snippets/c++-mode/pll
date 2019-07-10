@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: pair<long long int,long long int>
+# key: pll
+# --
+pair<ll, ll>

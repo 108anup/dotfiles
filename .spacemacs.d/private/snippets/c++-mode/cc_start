@@ -1,0 +1,23 @@
+# -*- mode: snippet -*-
+# name: cc_start
+# key: cc
+# --
+#include <bits/stdc++.h>
+
+using namespace std;
+typedef long long ll;
+typedef long double ld;
+typedef vector<int> vi;
+typedef vector< vi > vvi;
+typedef pair<int, int> pii;
+typedef vector< pii > vpii;
+#define rep(i, l, h) for(ll i = l; i<=h; i++)
+#define rev(i, h, l) for(ll i = h; i>=l; i--)
+const int MOD = 1e9+7;
+
+int main()
+{
+  ios::sync_with_stdio(false);cin.tie(0);cout.tie(0);
+
+  return 0;
+}

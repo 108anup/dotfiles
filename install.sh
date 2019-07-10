@@ -46,7 +46,7 @@ declare -A links
 
 links[".spacemacs.d"]="$HOME/.spacemacs.d"
 links+=( [".tmux.conf"]="$HOME/.tmux.conf" [".zshrc"]="$HOME/.zshrc" \
-                       [".oh-my-zsh-custom"]="$HOME/.oh-my-zsh-custom")
+                       [".oh-my-zsh-custom"]="$HOME/.oh-my-zsh-custom" )
 
 for l in ${!links[@]}; do
     make_link ${l} ${links[${l}]}
