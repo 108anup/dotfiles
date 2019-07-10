@@ -51,3 +51,7 @@ links+=( [".tmux.conf"]="$HOME/.tmux.conf" [".zshrc"]="$HOME/.zshrc" \
 for l in ${!links[@]}; do
     make_link ${l} ${links[${l}]}
 done
+
+if ! exists "$BASEDIR/.spacemacs.d/custom.el"; then
+    cp "$BASEDIR/.spacemacs.d/custom-template.el" "$BASEDIR/.spacemacs.d/custom.el"
+fi
