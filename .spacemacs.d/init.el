@@ -321,7 +321,7 @@ explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
 
   ;; Custom packages
-  (push "~/.spacemacs.d/local/" load-path)
+  (push "~/.spacemacs.d/packages/" load-path)
 
   ;; Fast switching between frames and windows
   (require 'framemove)
