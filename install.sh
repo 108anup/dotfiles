@@ -35,7 +35,9 @@ make_link(){
     if ! exists $2 || is_broken_link $2; then
         echo "Making link: src: $1, dst: $2"
         rm -fr $2
+        set -x
         ln -sT "$BASEDIR/$1" $2
+        set +x
     else
         echo "Found existing file/link for dst: $2"
     fi
@@ -45,8 +47,10 @@ make_link(){
 declare -A links
 
 links[".spacemacs.d"]="$HOME/.spacemacs.d"
-links+=( [".tmux.conf"]="$HOME/.tmux.conf" [".zshrc"]="$HOME/.zshrc" \
-                       [".oh-my-zsh-custom"]="$HOME/.oh-my-zsh-custom" )
+links+=( [".tmux.conf"]="$HOME/.tmux.conf" \
+                       [".zshrc"]="$HOME/.zshrc" \
+                       [".oh-my-zsh-custom"]="$HOME/.oh-my-zsh-custom" \
+                       [".i3"]="$HOME/.i3" )
 
 for l in ${!links[@]}; do
     make_link ${l} ${links[${l}]}
