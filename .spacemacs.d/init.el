@@ -340,6 +340,28 @@ you should place your code here."
   (when (file-exists-p "~/.spacemacs.d/custom-user-config.el")
     (load-file "~/.spacemacs.d/custom-user-config.el")
     )
+
+  ;; My C/C++ editing settings
+  (defun c-lineup-arglist-tabs-only (ignored)
+    "Line up argument lists by tabs, not spaces"
+    (let* ((anchor (c-langelem-pos c-syntactic-element))
+           (column (c-langelem-2nd-pos c-syntactic-element))
+           (offset (- (1+ column) anchor))
+           (steps (floor offset c-basic-offset)))
+      (* (max steps 1)
+         c-basic-offset)))
+
+  (c-add-style "linux-tabs-only"
+               '((tab-width . 8)
+                 (indent-tabs-mode . t)
+                 (c-basic-offset . 8)
+                 (c-offsets-alist
+                  (arglist-cont-nonempty
+                   c-lineup-gcc-asm-reg
+                   c-lineup-arglist-tabs-only))))
+
+  (push '(other . "linux-tabs-only") c-default-style)
+
   )
 
 (setq custom-file "~/.spacemacs.d/custom.el")
