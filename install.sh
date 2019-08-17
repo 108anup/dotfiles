@@ -3,6 +3,15 @@
 BASEDIR=$(dirname $0)
 echo "BASEDIR: $BASEDIR"
 
+UNAME=$(uname -s)
+echo "OS: $UNAME"
+
+if [[ $UNAME == "Darwin" ]] && [[ $1 == "firstrun" ]]; then
+    if [[ -z $(brew --version) ]]; then
+        $BASEDIR/.brew
+    fi
+fi
+
 cd $HOME
 
 if [[ -d "$HOME/.emacs.d" ]]; then
@@ -36,7 +45,7 @@ make_link(){
         echo "Making link: src: $1, dst: $2"
         rm -fr $2
         set -x
-        ln -sT "$BASEDIR/$1" $2
+        ln -s "$BASEDIR/$1" $2
         set +x
     else
         echo "Found existing file/link for dst: $2"
@@ -49,8 +58,10 @@ declare -A links
 links[".spacemacs.d"]="$HOME/.spacemacs.d"
 links+=( [".tmux.conf"]="$HOME/.tmux.conf" \
                        [".zshrc"]="$HOME/.zshrc" \
-                       [".oh-my-zsh-custom"]="$HOME/.oh-my-zsh-custom" \
-                       [".i3"]="$HOME/.i3" )
+                       [".oh-my-zsh-custom"]="$HOME/.oh-my-zsh-custom" )
+if [[ $UNAME == "Linux" ]]; then
+    links+=( [".i3"]="$HOME/.i3" )
+fi
 
 for l in ${!links[@]}; do
     make_link ${l} ${links[${l}]}
