@@ -121,7 +121,7 @@ alias sudo="sudo "
 # If not running interactively, do not do anything
 [[ $- != *i* ]] && return
 if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then
-  exec tmux
+  exec tmux -2
 fi
 
 # Allow local customizations in the ~/.shell_local_after file
