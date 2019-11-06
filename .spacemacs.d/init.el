@@ -364,7 +364,14 @@ you should place your code here."
                    c-lineup-gcc-asm-reg
                    c-lineup-arglist-tabs-only))))
 
+  (c-add-style "linux-spaces-only"
+               '((tab-width . 4)
+                 (indent-tabs-mode . nil)
+                 (c-basic-offset . 4)
+                 ))
+
   (push '(other . "linux-tabs-only") c-default-style)
+  (push '(other . "linux-spaces-only") c-default-style)
 
 
   (with-eval-after-load 'git-gutter+

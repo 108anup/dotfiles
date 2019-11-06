@@ -1,3 +1,5 @@
+[[ $TERM == "dumb" ]] && unsetopt zle && PS1='$ ' && return
+
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
@@ -118,9 +120,21 @@ alias sudo="sudo "
 
 # If not running interactively, do not do anything
 [[ $- != *i* ]] && return
-[[ -z "$TMUX" ]] && exec tmux
+if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then
+  exec tmux -2
+fi
 
 # Allow local customizations in the ~/.shell_local_after file
 if [ -f ~/.shell_local_after ]; then
     source ~/.shell_local_after
 fi
+
+# if [[ "$TERM" == "dumb" ]]
+# then
+#     unsetopt zle
+#     unsetopt prompt_cr
+#     unsetopt prompt_subst
+#     unfunction precmd
+#     unfunction preexec
+#     PS1='$ '
+# fi
