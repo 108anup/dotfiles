@@ -325,6 +325,9 @@ you should place your code here."
   ;; Custom packages
   (push "~/.spacemacs.d/packages/" load-path)
 
+  ;; p4 syntax highlighting
+  (require 'p4-mode)
+
   ;; Fast switching between frames and windows
   (require 'framemove)
   (windmove-default-keybindings)
