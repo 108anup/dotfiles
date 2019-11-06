@@ -31,6 +31,7 @@ values."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
+     lua
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
      ;; Uncomment some layer names and press <SPC f e R> (Vim style) or
@@ -323,6 +324,9 @@ you should place your code here."
   ;; Custom packages
   (push "~/.spacemacs.d/packages/" load-path)
 
+  ;; p4 syntax highlighting
+  (require 'p4-mode)
+
   ;; Fast switching between frames and windows
   (require 'framemove)
   (windmove-default-keybindings)
@@ -376,7 +380,7 @@ you should place your code here."
     (defun git-gutter+-remote-file-path (dir file)
       (let ((file (tramp-file-name-localname (tramp-dissect-file-name file))))
         (replace-regexp-in-string (concat "\\`" dir) "" file))))
-  
+
   )
 
 (setq custom-file "~/.spacemacs.d/custom.el")
