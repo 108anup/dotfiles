@@ -162,3 +162,5 @@ bindsym $mod+Ctrl+Right move workspace to output right
 bindsym $mod+Ctrl+Left move workspace to output left
 bindsym $mod+Ctrl+Up move workspace to output up
 bindsym $mod+Ctrl+Down move workspace to output down
+
+exec_always feh --bg-fill /media/anup/Data/Yandex/Pictures/Wallpapers/UW-QHD/3440x1440-Jet-Fighter-Plan-wallpaper.jpg
