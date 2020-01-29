@@ -163,5 +163,4 @@ bindsym $mod+Ctrl+Left move workspace to output left
 bindsym $mod+Ctrl+Up move workspace to output up
 bindsym $mod+Ctrl+Down move workspace to output down
 
-exec_always feh --bg-center /home/anupa/Pictures/Wallpapers/UW-QHD/3440x1440-Jet-Fighter-Plan-wallpaper.jpg
-exec_always xrandr --output DP-0 --mode "2560x1440" --rate "144"
+exec_always $HOME/.i3_local_startup.sh
