@@ -111,12 +111,21 @@ turbo_off_fn(){
 turbo_on_fn(){
     echo "0" > /sys/devices/system/cpu/intel_pstate/no_turbo
 }
-
+alias ls="exa"
+alias l="exa -lah -a"
+alias la="exa -lah"
+alias ll="exa -lh"
 alias turbo_on='bash -c "$(declare -f turbo_on_fn); turbo_on_fn"'
 alias turbo_off='bash -c "$(declare -f turbo_off_fn); turbo_off_fn"'
 
 alias emacsc="emacsclient -c"
 alias sudo="sudo "
+
+# Base16 Shell
+BASE16_SHELL="$HOME/.config/base16-shell/"
+[ -n "$PS1" ] && \
+    [ -s "$BASE16_SHELL/profile_helper.sh" ] && \
+    eval "$("$BASE16_SHELL/profile_helper.sh")"
 
 # If not running interactively, do not do anything
 [[ $- != *i* ]] && return
