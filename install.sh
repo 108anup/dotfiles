@@ -20,6 +20,12 @@ else
     git clone https://github.com/syl20bnr/spacemacs $HOME/.emacs.d
 fi
 
+if [[ -d "$HOME/.config/base16-shell" ]]; then
+    echo "Directory $HOME/.config/base16-shell/ already exists, assuming base16 installation for shell"
+else
+    git clone https://github.com/chriskempson/base16-shell.git ~/.config/base16-shell
+fi
+
 if [[ -z $(zsh --version) ]]; then
     echo "Please install zsh"
     exit 1
