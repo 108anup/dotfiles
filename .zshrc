@@ -115,10 +115,12 @@ turbo_on_fn(){
 }
 
 # Custom Aliases
-alias ls="exa"
-alias l="exa -lah -a"
-alias la="exa -lah"
-alias ll="exa -lh"
+if type exa > /dev/null; then
+    alias ls="exa"
+    alias l="exa -lah -a"
+    alias la="exa -lah"
+    alias ll="exa -lh"
+fi
 
 alias turbo_on='bash -c "$(declare -f turbo_on_fn); turbo_on_fn"'
 alias turbo_off='bash -c "$(declare -f turbo_off_fn); turbo_off_fn"'
