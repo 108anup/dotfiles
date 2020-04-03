@@ -145,10 +145,10 @@ values."
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
    ;; quickly tweak the mode-line size to make separators look not too crappy.
    dotspacemacs-default-font '("Source Code Pro"
-                               :size 13
-                               :weight normal
+                               :size 14
+                               :weight regular
                                :width normal
-                               :powerline-scale 1.1)
+                               :powerline-scale 1.3)
    ;; The leader key
    dotspacemacs-leader-key "SPC"
    ;; The key used for Emacs commands (M-x) (after pressing on the leader key).
@@ -380,6 +380,10 @@ you should place your code here."
   ;; Keyboard translations for terminal mode
   ;; Translate C-h to DEL.
   (keyboard-translate ?\C-h ?\C-?)
+
+  ;; Easier Code Navigation
+  (global-set-key (kbd "M-n") 'forward-paragraph)
+  (global-set-key (kbd "M-p") 'backward-paragraph)
 
   ;; xterm with the resource ?.VT100.modifyOtherKeys: 1
   ;; GNU Emacs >=24.4 sets xterm in this mode and define
