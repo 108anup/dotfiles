@@ -70,7 +70,7 @@ ZSH_CUSTOM=$HOME/.oh-my-zsh-custom
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(jump)
+plugins=(jump colored-man-pages)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -113,10 +113,13 @@ turbo_off_fn(){
 turbo_on_fn(){
     echo "0" > /sys/devices/system/cpu/intel_pstate/no_turbo
 }
+
+# Custom Aliases
 alias ls="exa"
 alias l="exa -lah -a"
 alias la="exa -lah"
 alias ll="exa -lh"
+
 alias turbo_on='bash -c "$(declare -f turbo_on_fn); turbo_on_fn"'
 alias turbo_off='bash -c "$(declare -f turbo_off_fn); turbo_off_fn"'
 
@@ -129,6 +132,7 @@ BASE16_SHELL="$HOME/.config/base16-shell/"
     [ -s "$BASE16_SHELL/profile_helper.sh" ] && \
     eval "$("$BASE16_SHELL/profile_helper.sh")"
 
+# TMUX
 # If not running interactively, do not do anything
 [[ $- != *i* ]] && return
 if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then
