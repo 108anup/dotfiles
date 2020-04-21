@@ -3,40 +3,11 @@
 FULLPATH=$(realpath $0)
 BASEDIR=$(dirname $FULLPATH)
 echo "BASEDIR: $BASEDIR"
-
-UNAME=$(uname -s)
-echo "OS: $UNAME"
-
-if [[ $UNAME == "Darwin" ]] && [[ $1 == "firstrun" ]]; then
-    if [[ -z $(brew --version) ]]; then
-        $BASEDIR/.brew
-    fi
-fi
-
 cd $HOME
 
-if [[ -d "$HOME/.emacs.d" ]]; then
-    echo "Directory $HOME/.emacs.d already exists, assuming spacemacs installation"
-else
-    git clone https://github.com/syl20bnr/spacemacs $HOME/.emacs.d
-fi
-
-if [[ -d "$HOME/.config/base16-shell" ]]; then
-    echo "Directory $HOME/.config/base16-shell/ already exists, assuming base16 installation for shell"
-else
-    git clone https://github.com/chriskempson/base16-shell.git ~/.config/base16-shell
-fi
-
-if [[ -z $(zsh --version) ]]; then
-    echo "Please install zsh"
-    exit 1
-fi
-
-if [[ -d "$HOME/.oh-my-zsh" ]]; then
-    echo "Directory $HOME/.oh-my-zsh already exists, assuming oh-my-zsh installation"
-else
-    sh -c "$(wget -O- https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-fi
+declare -A links
+links[".spacemacs.d"]="$HOME/.spacemacs.d"
+links+=( [".dircolors"]="$HOME/.dircolors" )
 
 exists(){
     [[ -d $1 ]] || [[ -f $1 ]]
@@ -60,23 +31,75 @@ make_link(){
     set +u
 }
 
-declare -A links
+UNAME=$(uname -s)
+echo "OS: $UNAME"
+if [[ $UNAME == "Darwin" ]] && [[ $1 == "firstrun" ]]; then
+    if command -v brew &> /dev/null; then
+        $BASEDIR/brew.sh
+    fi
+fi
 
-links[".spacemacs.d"]="$HOME/.spacemacs.d"
-links+=( [".tmux.conf"]="$HOME/.tmux.conf" \
-                       [".zshrc"]="$HOME/.zshrc" \
-                       [".oh-my-zsh-custom"]="$HOME/.oh-my-zsh-custom" \
-                       ["alacritty.yml"]="$HOME/.config/alacritty/alacritty.yml" \
-                       [".dircolors"]="$HOME/.dircolors" \
-        )
-if [[ $UNAME == "Linux" ]]; then
+if command -v i3 &> /dev/null && [[ $UNAME == "Linux" ]]; then
+    echo "i3 is installed"
     links+=( [".i3"]="$HOME/.i3" )
+fi
+
+if command -v alacritty > /dev/null; then
+    echo "alacritty is installed"
+    links+=( ["alacritty.yml"]="$HOME/.config/alacritty/alacritty.yml" )
+    mkdir -p $HOME/.config/alacritty
+else
+    echo "Alacritty not installed, it needs to be installed manually"
+    # https://github.com/alacritty/alacritty
+fi
+
+if command -v zsh &> /dev/null; then
+    echo "zsh is installed"
+    if [[ -d "$HOME/.oh-my-zsh" ]]; then
+        echo "Directory $HOME/.oh-my-zsh already exists, assuming oh-my-zsh installation"
+    else
+        sh -c "$(wget -O- https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+    fi
+    links+=( [".zshrc"]="$HOME/.zshrc" \
+                       [".oh-my-zsh-custom"]="$HOME/.oh-my-zsh-custom" )
+else
+    echo "Please install zsh"
+fi
+
+if command -v tmux &> /dev/null; then
+    echo "tmux is installed"
+    links+=( [".tmux.conf"]="$HOME/.tmux.conf" )
+else
+    echo "Please install tmux"
+fi
+
+if command -v emacs &> /dev/null; then
+    echo "emacs is installed"
+    if [[ -e "$HOME/.emacs.d/spacemacs.mk" ]]; then
+        echo "$HOME/.emacs.d/spacemacs.mk already exists, assuming spacemacs installation"
+    else
+        if [[ -d "$HOME/.emacs.d" ]]; then
+            mv $HOME/.emacs.d $HOME/.emacs.d.bkp
+        fi
+        if [[ -e "$HOME/.emacs" ]]; then
+            mv $HOME/.emacs $HOME/.emacs.bkp
+        fi
+        git clone https://github.com/syl20bnr/spacemacs $HOME/.emacs.d
+    fi
+
+    if ! exists "$BASEDIR/.spacemacs.d/custom.el"; then
+        cp "$BASEDIR/.spacemacs.d/custom-template.el" "$BASEDIR/.spacemacs.d/custom.el"
+    fi
+else
+    echo "Please install emacs"
+fi
+
+if [[ -d "$HOME/.config/base16-shell" ]]; then
+    echo "Directory $HOME/.config/base16-shell/ already exists, assuming base16 installation for shell"
+else
+    git clone https://github.com/chriskempson/base16-shell.git ~/.config/base16-shell
 fi
 
 for l in ${!links[@]}; do
     make_link ${l} ${links[${l}]}
 done
-
-if ! exists "$BASEDIR/.spacemacs.d/custom.el"; then
-    cp "$BASEDIR/.spacemacs.d/custom-template.el" "$BASEDIR/.spacemacs.d/custom.el"
-fi

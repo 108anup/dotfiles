@@ -1,3 +1,12 @@
+# Taken from: https://gist.github.com/travisfw/6b022c1ca6aaa1197e12d1dfe011ba84
+
+# # These don't work with i3
+# # Window dimensions in character columns and lines
+# # (changes require restart)
+# dimensions:
+#   columns: 120
+#   lines: 60
+
 # Font configuration (changes require restart)
 font:
   # The normal (roman) font face to use.
