@@ -1,5 +1,7 @@
 [[ $TERM == "dumb" ]] && unsetopt zle && PS1='$ ' && return
 
+zstyle :omz:plugins:ssh-agent identities id_rsa_cmu
+
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
@@ -70,7 +72,7 @@ ZSH_CUSTOM=$HOME/.oh-my-zsh-custom
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(jump colored-man-pages zsh-autosuggestions)
+plugins=(jump colored-man-pages zsh-autosuggestions ssh-agent)
 
 source $ZSH/oh-my-zsh.sh
 
