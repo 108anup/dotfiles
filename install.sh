@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-BASEDIR=$(dirname $0)
+FULLPATH=$(realpath $0)
+BASEDIR=$(dirname $FULLPATH)
 echo "BASEDIR: $BASEDIR"
 
 UNAME=$(uname -s)
@@ -64,7 +65,9 @@ declare -A links
 links[".spacemacs.d"]="$HOME/.spacemacs.d"
 links+=( [".tmux.conf"]="$HOME/.tmux.conf" \
                        [".zshrc"]="$HOME/.zshrc" \
-                       [".oh-my-zsh-custom"]="$HOME/.oh-my-zsh-custom" )
+                       [".oh-my-zsh-custom"]="$HOME/.oh-my-zsh-custom" \
+                       ["alacritty.yml"]="$HOME/.config/alacritty/alacritty.yml" \
+        )
 if [[ $UNAME == "Linux" ]]; then
     links+=( [".i3"]="$HOME/.i3" )
 fi
