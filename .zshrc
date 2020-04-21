@@ -102,6 +102,10 @@ EDITOR='emacs'
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
+# Xilinx License
+export XILINXD_LICENSE_FILE="2101@xilinx-lic.ece.cmu.edu"
+
+
 tmux_kill_detached(){
     tmux list-sessions | grep -v "attached" | awk 'BEGIN{FS=":"}{print $1}' | xargs -n 1 tmux kill-session -t
 }

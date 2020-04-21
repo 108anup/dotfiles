@@ -1,0 +1,29 @@
+#+title: Learnings
+
+* TODO Org mode
+* TODO Clipboard
+* Projectile file open
+  M-m p f
+* Searching
+  silver searcher => M-m s a
+* Flycheck
+  Enable flycheck in buffer
+*** Navigate errors using:
+    M-m e
+* Spelling
+  M-m S
+* Navigation
+  C-M-direction => navigate syntactic expression
+* Zoom
+  fold code
+  M-m z .
+* Narrowing
+  M-m n ...
+* Magit
+  M-m g s
+* Imenu
+  M-m j i
+* Undo Tree
+  M-m a u
+* Rings, Registers
+  M-m r

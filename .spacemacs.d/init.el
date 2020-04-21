@@ -52,7 +52,8 @@ values."
      spell-checking
      syntax-checking
      version-control
-     (c-c++ :variables c-c++-enable-clang-support t)
+     gtags
+     c-c++ ;; :variables c-c++-enable-clang-support t)
      (python :variables
              python-backend 'anaconda
              python-test-runner 'pytest)
@@ -60,6 +61,7 @@ values."
      yaml
      cscope
      syntax-checking
+     org
      )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
@@ -138,6 +140,7 @@ values."
    ;; Press <SPC> T n to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
    dotspacemacs-themes '(base16-monokai
+                         monokai
                          spacemacs-dark
                          spacemacs-light)
    ;; If non nil the cursor color matches the state color in GUI Emacs.
@@ -335,6 +338,44 @@ you should place your code here."
   (require 'framemove)
   (windmove-default-keybindings)
   (setq framemove-hook-into-windmove t)
+
+  ;; TRAMP Settings
+  ;; Taken from: https://emacs.stackexchange.com/questions/22306/working-with-tramp-mode-on-slow-connection-emacs-does-network-trip-when-i-start
+  ;;(setq disable-tramp-backups nil) ;; allow all tramp files to be backuped
+  ;;(setq disable-tramp-backups '("su" "sudo")) ;; only 'su' and 'sudo'
+  ;;(setq disable-tramp-backups '("ssh" "sftp")) ;; only 'ssh' and 'sftp'
+  (defvar disable-tramp-backups '(all))
+
+  (eval-after-load "tramp"
+    '(progn
+       ;; Modified from https://www.gnu.org/software/emacs/manual/html_node/tramp/Auto_002dsave-and-Backup.html
+       (setq backup-enable-predicate
+             (lambda (name)
+               (and (normal-backup-enable-predicate name)
+                    ;; Disable all tramp backups
+                    (and disable-tramp-backups
+                         (member 'all disable-tramp-backups)
+                         (not (file-remote-p name 'method)))
+                    (not ;; disable backup for tramp with the listed methods
+                     (let ((method (file-remote-p name 'method)))
+                       (when (stringp method)
+                         (member method disable-tramp-backups)))))))
+
+       (defun tramp-set-auto-save--check (original)
+         (if (funcall backup-enable-predicate (buffer-file-name))
+             (funcall original)
+           (auto-save-mode -1)))
+
+       (advice-add 'tramp-set-auto-save :around #'tramp-set-auto-save--check)
+
+       ;; Use my ~/.ssh/config control master settings according to https://puppet.com/blog/speed-up-ssh-by-reusing-connections
+       (setq tramp-ssh-controlmaster-options "")))
+
+  ;; Don't do projectile search in tramp mode
+  ;; (defadvice projectile-project-root (around ignore-remote first activate)
+  ;;   (unless (file-remote-p default-directory) ad-do-it))
+  ;; If doing ssh-multiplexing, don't need emacs control master
+  (setq tramp-ssh-controlmaster-options "")
 
   ;; Go back which navigating using tags
   (define-key global-map "\M-*" 'pop-tag-mark)
