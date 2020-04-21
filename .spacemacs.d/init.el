@@ -333,6 +333,8 @@ you should place your code here."
 
   ;; p4 syntax highlighting
   (require 'p4-mode)
+  (add-to-list 'auto-mode-alist '("\\.p4\\'" . p4-mode))
+  (add-to-list 'auto-mode-alist '("\\.p4cfg\\'" . json-mode))
 
   ;; Fast switching between frames and windows
   (require 'framemove)
