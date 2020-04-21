@@ -145,6 +145,12 @@ if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ tmux ]] && [
   exec tmux -2
 fi
 
+eval "$(dircolors ~/.dircolors)";
+
+# Same completion colors when using cd as with ls.
+zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
+zstyle ':completion:*:*:*:*:*' menu yes select
+
 # Allow local customizations in the ~/.shell_local_after file
 if [ -f ~/.shell_local_after ]; then
     source ~/.shell_local_after

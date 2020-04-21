@@ -67,6 +67,7 @@ links+=( [".tmux.conf"]="$HOME/.tmux.conf" \
                        [".zshrc"]="$HOME/.zshrc" \
                        [".oh-my-zsh-custom"]="$HOME/.oh-my-zsh-custom" \
                        ["alacritty.yml"]="$HOME/.config/alacritty/alacritty.yml" \
+                       [".dircolors"]="$HOME/.dircolors" \
         )
 if [[ $UNAME == "Linux" ]]; then
     links+=( [".i3"]="$HOME/.i3" )
