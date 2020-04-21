@@ -375,7 +375,6 @@ you should place your code here."
   ;; (defadvice projectile-project-root (around ignore-remote first activate)
   ;;   (unless (file-remote-p default-directory) ad-do-it))
   ;; If doing ssh-multiplexing, don't need emacs control master
-  (setq tramp-ssh-controlmaster-options "")
 
   ;; Go back which navigating using tags
   (define-key global-map "\M-*" 'pop-tag-mark)
