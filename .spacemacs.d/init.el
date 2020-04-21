@@ -332,6 +332,7 @@ you should place your code here."
   (push "~/.spacemacs.d/packages/" load-path)
 
   ;; p4 syntax highlighting
+  ;; http://ergoemacs.org/emacs/emacs_auto-activate_a_major-mode.html
   (require 'p4-mode)
   (add-to-list 'auto-mode-alist '("\\.p4\\'" . p4-mode))
   (add-to-list 'auto-mode-alist '("\\.p4cfg\\'" . json-mode))
