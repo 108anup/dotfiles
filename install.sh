@@ -44,6 +44,12 @@ if command -v i3 &> /dev/null && [[ $UNAME == "Linux" ]]; then
     links+=( [".i3"]="$HOME/.i3" )
 fi
 
+if command -v polybar &> /dev/null && [[ $UNAME == "Linux" ]]; then
+    echo "polybar is installed"
+    links+=( ["polybar"]="$HOME/.config/polybar/config" )
+    mkdir -p $HOME/.config/polybar
+fi
+
 if command -v alacritty > /dev/null; then
     echo "alacritty is installed"
     links+=( ["alacritty.yml"]="$HOME/.config/alacritty/alacritty.yml" )
