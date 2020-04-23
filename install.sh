@@ -46,7 +46,7 @@ fi
 
 if command -v polybar &> /dev/null && [[ $UNAME == "Linux" ]]; then
     echo "polybar is installed"
-    links+=( ["polybar"]="$HOME/.config/polybar/config" )
+    links+=( ["polybar.ini"]="$HOME/.config/polybar/config" )
     mkdir -p $HOME/.config/polybar
 fi
 
