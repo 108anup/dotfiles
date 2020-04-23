@@ -42,12 +42,13 @@ fi
 if command -v i3 &> /dev/null && [[ $UNAME == "Linux" ]]; then
     echo "i3 is installed"
     links+=( [".i3"]="$HOME/.i3" )
-fi
-
-if command -v polybar &> /dev/null && [[ $UNAME == "Linux" ]]; then
-    echo "polybar is installed"
-    links+=( ["polybar.ini"]="$HOME/.config/polybar/config" )
-    mkdir -p $HOME/.config/polybar
+    if command -v polybar &> /dev/null && [[ $UNAME == "Linux" ]]; then
+        echo "polybar is installed"
+        links+=( ["polybar.ini"]="$HOME/.config/polybar/config" )
+        mkdir -p $HOME/.config/polybar
+    else
+        echo "WARN: i3 bar won't work properly.\ni3 is installed and polybar is not installed"
+    fi
 fi
 
 if command -v alacritty > /dev/null; then
