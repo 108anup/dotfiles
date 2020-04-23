@@ -5,9 +5,9 @@ IDENTITIES=()
 if [[ -f $HOME/.ssh/id_rsa_cmu ]]; then
     IDENTITIES+=("id_rsa_cmu")
 fi
-if [[ -f $HOME/.ssh/id_rsa_cmu_emulab ]]; then
-    IDENTITIES+=("id_rsa_cmu_emulab")
-fi
+# if [[ -f $HOME/.ssh/id_rsa_cmu_emulab ]]; then
+#     IDENTITIES+=("id_rsa_cmu_emulab")
+# fi
 if [[ -f $HOME/.ssh/id_rsa ]]; then
     IDENTITIES+=("id_rsa")
 fi
