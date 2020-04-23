@@ -1,7 +1,9 @@
 [[ $TERM == "dumb" ]] && unsetopt zle && PS1='$ ' && return
 
 # From https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/ssh-agent
-zstyle :omz:plugins:ssh-agent identities id_rsa_cmu
+if [[ -f $HOME/.ssh/id_rsa_cmu ]]; then
+    zstyle :omz:plugins:ssh-agent identities id_rsa_cmu
+fi
 
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
