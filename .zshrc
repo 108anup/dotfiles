@@ -1,9 +1,17 @@
 [[ $TERM == "dumb" ]] && unsetopt zle && PS1='$ ' && return
 
 # From https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/ssh-agent
+IDENTITIES=()
 if [[ -f $HOME/.ssh/id_rsa_cmu ]]; then
-    zstyle :omz:plugins:ssh-agent identities id_rsa_cmu
+    IDENTITIES+=("id_rsa_cmu")
 fi
+if [[ -f $HOME/.ssh/id_rsa_cmu_emulab ]]; then
+    IDENTITIES+=("id_rsa_cmu_emulab")
+fi
+if [[ -f $HOME/.ssh/id_rsa ]]; then
+    IDENTITIES+=("id_rsa")
+fi
+zstyle :omz:plugins:ssh-agent identities ${IDENTITIES[@]}
 
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
