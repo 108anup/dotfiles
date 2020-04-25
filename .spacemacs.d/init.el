@@ -57,11 +57,12 @@ values."
      (python :variables
              python-backend 'anaconda
              python-test-runner 'pytest)
-     javascript
+     ;; javascript
      yaml
      cscope
      syntax-checking
      org
+     bibtex
      )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
@@ -328,6 +329,11 @@ This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
 
+
+  ;; ;; Use ELPA
+  ;; (setq configuration-layer-elpa-archives '(("melpa" . "melpa.org/packages/")
+  ;;                                           ("org" . "orgmode.org/elpa/") ("gnu" . "elpa.gnu.org/packages/")))
+
   ;; Custom packages
   (push "~/.spacemacs.d/packages/" load-path)
 
@@ -341,6 +347,35 @@ you should place your code here."
   (require 'framemove)
   (windmove-default-keybindings)
   (setq framemove-hook-into-windmove t)
+  ;; Conflict with org-mode
+  ;; (setq org-support-shift-select 'always)
+  (add-hook 'org-shiftup-final-hook 'windmove-up)
+  (add-hook 'org-shiftleft-final-hook 'windmove-left)
+  (add-hook 'org-shiftdown-final-hook 'windmove-down)
+  (add-hook 'org-shiftright-final-hook 'windmove-right)
+
+  ;; Bibtex
+  (defun my/open-pdf-function (fpath link)
+    (message fpath)
+    (start-process "FoxitReader" "*foxit-reader*" "~/bin/FoxitReader" fpath))
+
+  (eval-after-load "org"
+    '(progn
+       ;; https://lists.gnu.org/archive/html/emacs-orgmode/2016-11/msg00169.html
+       ;; Before adding, remove it (to avoid clogging)
+       (delete '("\\.pdf\\'" . default) org-file-apps)
+       ;; https://lists.gnu.org/archive/html/emacs-orgmode/2016-11/msg00176.html
+       (add-to-list 'org-file-apps
+                    '("\\.pdf\\'" . my/open-pdf-function)
+                    ))
+    )
+
+  (setq org-ref-default-bibliography '("~/Documents/Research/reading-material/references.bib")
+        org-ref-pdf-directory "~/Documents/Research/reading-material" ;; keep the final slash off
+        org-ref-bibliography-notes "~/Documents/Research/reading-material/notes.org"
+        bibtex-completion-pdf-field "file"
+        org-ref-get-pdf-filename-function 'org-ref-get-mendeley-filename)
+  ;; the mendeley function is defined in org-ref-utils.el
 
   ;; TRAMP Settings
   ;; Taken from: https://emacs.stackexchange.com/questions/22306/working-with-tramp-mode-on-slow-connection-emacs-does-network-trip-when-i-start
