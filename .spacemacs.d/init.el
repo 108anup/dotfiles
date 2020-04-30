@@ -52,7 +52,7 @@ values."
      spell-checking
      syntax-checking
      version-control
-     gtags
+     ;; gtags
      c-c++ ;; :variables c-c++-enable-clang-support t)
      (python :variables
              python-backend 'anaconda
@@ -63,12 +63,14 @@ values."
      syntax-checking
      org
      bibtex
+     ;; (multiple-cursors :variables
+     ;;                   multiple-cursors-backend 'mc)
      )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages, then consider creating a layer. You can also put the
    ;; configuration in `dotspacemacs/user-config'.
-   dotspacemacs-additional-packages '(yasnippet-snippets base16-theme)
+   dotspacemacs-additional-packages '(yasnippet-snippets base16-theme multiple-cursors)
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
    ;; A list of packages that will not be installed and loaded.
@@ -355,7 +357,6 @@ you should place your code here."
   (add-hook 'org-shiftright-final-hook 'windmove-right)
 
   ;; Bibtex
-
   (defun my/open-pdf-function (fpath link)
     (message fpath)
     (start-process "FoxitReader" "*foxit-reader*" "~/bin/FoxitReader" fpath))
@@ -377,6 +378,20 @@ you should place your code here."
         bibtex-completion-pdf-field "file"
         org-ref-get-pdf-filename-function 'org-ref-get-mendeley-filename)
   ;; the mendeley function is defined in org-ref-utils.el
+
+  (eval-after-load 'bibtex
+    '(progn
+       (push '("Online" "Online Resource"
+               (("title")
+                ("url")
+                ("urldate"))
+               (("journal"))
+               (("language")
+                ("abstract"))) bibtex-BibTeX-entry-alist)
+       (spacemacs/set-leader-keys-for-major-mode
+         'bibtex-mode "c" 'org-ref-clean-bibtex-entry)
+       )
+    )
 
   ;; TRAMP Settings
   ;; Taken from: https://emacs.stackexchange.com/questions/22306/working-with-tramp-mode-on-slow-connection-emacs-does-network-trip-when-i-start
@@ -415,20 +430,19 @@ you should place your code here."
   ;;   (unless (file-remote-p default-directory) ad-do-it))
   ;; If doing ssh-multiplexing, don't need emacs control master
 
-  ;; Go back which navigating using tags
-  (define-key global-map "\M-*" 'pop-tag-mark)
-
   ;; Multiple cursors
-  (global-set-key (kbd "C-s-c C-s-c") 'mc/edit-lines)
-  (global-set-key (kbd "C->") 'mc/mark-next-like-this)
-  (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
-  (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
-
-  (when (file-exists-p "~/.spacemacs.d/custom-user-config.el")
-    (load-file "~/.spacemacs.d/custom-user-config.el")
+  (require 'multiple-cursors)
+  (eval-after-load 'multiple-cursors
+    '(progn
+       (global-set-key (kbd "C-s-c C-s-c") 'mc/edit-lines)
+       (global-set-key (kbd "C->") 'mc/mark-next-like-this)
+       (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
+       (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
+       (message "Added mc/edit-lines shortcuts")
+       )
     )
 
-  ;; My C/C++ editing settings
+  ;; C/C++ editing settings
   (defun c-lineup-arglist-tabs-only (ignored)
     "Line up argument lists by tabs, not spaces"
     (let* ((anchor (c-langelem-pos c-syntactic-element))
@@ -456,66 +470,75 @@ you should place your code here."
   (push '(other . "linux-tabs-only") c-default-style)
   (push '(other . "linux-spaces-only") c-default-style)
 
-  ;; Keyboard translations for terminal mode
-  ;; Translate C-h to DEL.
-  (keyboard-translate ?\C-h ?\C-?)
+  ;; ;; Keyboard translations for terminal mode
+  ;; ;; Translate C-h to DEL.
+  ;; (keyboard-translate ?\C-h ?\C-?)
 
   ;; Easier Code Navigation
   (global-set-key (kbd "M-n") 'forward-paragraph)
   (global-set-key (kbd "M-p") 'backward-paragraph)
 
-  ;; xterm with the resource ?.VT100.modifyOtherKeys: 1
-  ;; GNU Emacs >=24.4 sets xterm in this mode and define
-  ;; some of the escape sequences but not all of them.
-  (defun character-apply-modifiers (c &rest modifiers)
-    "Apply modifiers to the character C.
-MODIFIERS must be a list of symbols amongst (meta control shift).
-Return an event vector."
-    (if (memq 'control modifiers) (setq c (if (or (and (<= ?@ c) (<= c ?_))
-                                                  (and (<= ?a c) (<= c ?z)))
-                                              (logand c ?\x1f)
-                                            (logior (lsh 1 26) c))))
-    (if (memq 'meta modifiers) (setq c (logior (lsh 1 27) c)))
-    (if (memq 'shift modifiers) (setq c (logior (lsh 1 25) c)))
-    (vector c))
-  (defun my-eval-after-load-xterm ()
-    (when (and (boundp 'xterm-extra-capabilities) (boundp 'xterm-function-map))
-      (let ((c 32))
-        (while (<= c 126)
-          (mapc (lambda (x)
-                  (define-key xterm-function-map (format (car x) c)
-                    (apply 'character-apply-modifiers c (cdr x))))
-                '(;; with ?.VT100.formatOtherKeys: 0
-                  ("\e\[27;3;%d~" meta)
-                  ("\e\[27;5;%d~" control)
-                  ("\e\[27;6;%d~" control shift)
-                  ("\e\[27;7;%d~" control meta)
-                  ("\e\[27;8;%d~" control meta shift)
-                  ;; with ?.VT100.formatOtherKeys: 1
-                  ("\e\[%d;3u" meta)
-                  ("\e\[%d;5u" control)
-                  ("\e\[%d;6u" control shift)
-                  ("\e\[%d;7u" control meta)
-                  ("\e\[%d;8u" control meta shift)))
-          (setq c (1+ c))))))
-  (eval-after-load "xterm" '(my-eval-after-load-xterm))
+  ;; ;; xterm with the resource ?.VT100.modifyOtherKeys: 1
+;;   ;; GNU Emacs >=24.4 sets xterm in this mode and define
+;;   ;; some of the escape sequences but not all of them.
+;;   (defun character-apply-modifiers (c &rest modifiers)
+;;     "Apply modifiers to the character C.
+;; MODIFIERS must be a list of symbols amongst (meta control shift).
+;; Return an event vector."
+;;     (if (memq 'control modifiers) (setq c (if (or (and (<= ?@ c) (<= c ?_))
+;;                                                   (and (<= ?a c) (<= c ?z)))
+;;                                               (logand c ?\x1f)
+;;                                             (logior (lsh 1 26) c))))
+;;     (if (memq 'meta modifiers) (setq c (logior (lsh 1 27) c)))
+;;     (if (memq 'shift modifiers) (setq c (logior (lsh 1 25) c)))
+;;     (vector c))
+;;   (defun my-eval-after-load-xterm ()
+;;     (when (and (boundp 'xterm-extra-capabilities) (boundp 'xterm-function-map))
+;;       (let ((c 32))
+;;         (while (<= c 126)
+;;           (mapc (lambda (x)
+;;                   (define-key xterm-function-map (format (car x) c)
+;;                     (apply 'character-apply-modifiers c (cdr x))))
+;;                 '(;; with ?.VT100.formatOtherKeys: 0
+;;                   ("\e\[27;3;%d~" meta)
+;;                   ("\e\[27;5;%d~" control)
+;;                   ("\e\[27;6;%d~" control shift)
+;;                   ("\e\[27;7;%d~" control meta)
+;;                   ("\e\[27;8;%d~" control meta shift)
+;;                   ;; with ?.VT100.formatOtherKeys: 1
+;;                   ("\e\[%d;3u" meta)
+;;                   ("\e\[%d;5u" control)
+;;                   ("\e\[%d;6u" control shift)
+;;                   ("\e\[%d;7u" control meta)
+;;                   ("\e\[%d;8u" control meta shift)))
+;;           (setq c (1+ c))))))
+;;   (eval-after-load "xterm" '(my-eval-after-load-xterm))
 
   ;; Fix git-gutter errors
-  (with-eval-after-load 'git-gutter+
-    (defun git-gutter+-remote-default-directory (dir file)
-      (let* ((vec (tramp-dissect-file-name file))
-             (method (tramp-file-name-method vec))
-             (user (tramp-file-name-user vec))
-             (domain (tramp-file-name-domain vec))
-             (host (tramp-file-name-host vec))
-             (port (tramp-file-name-port vec)))
-        (tramp-make-tramp-file-name method user domain host port dir)))
+  ;; (with-eval-after-load 'git-gutter+
+  ;;   (defun git-gutter+-remote-default-directory (dir file)
+  ;;     (let* ((vec (tramp-dissect-file-name file))
+  ;;            (method (tramp-file-name-method vec))
+  ;;            (user (tramp-file-name-user vec))
+  ;;            (domain (tramp-file-name-domain vec))
+  ;;            (host (tramp-file-name-host vec))
+  ;;            (port (tramp-file-name-port vec)))
+  ;;       (tramp-make-tramp-file-name method user domain host port dir)))
 
-    (defun git-gutter+-remote-file-path (dir file)
-      (let ((file (tramp-file-name-localname (tramp-dissect-file-name file))))
-        (replace-regexp-in-string (concat "\\`" dir) "" file))))
+  ;;   (defun git-gutter+-remote-file-path (dir file)
+  ;;     (let ((file (tramp-file-name-localname (tramp-dissect-file-name file))))
+  ;;       (replace-regexp-in-string (concat "\\`" dir) "" file))))
+
+  (when (file-exists-p "~/.spacemacs.d/custom-user-config.el")
+    (load-file "~/.spacemacs.d/custom-user-config.el")
+    )
+
   )
 
+(setq custom-file "~/.spacemacs.d/custom.el")
+(load custom-file)
+
+;; Want these to be version controlled so keep in init.el
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -524,6 +547,3 @@ Return an event vector."
  '(hi-yellow ((t (:background "black" :foreground "yellow1"))))
  '(hl-line ((t (:background "#131310"))))
  '(show-paren-match ((t (:background "#131310" :foreground "#66d9ef" :underline t :weight bold)))))
-
-(setq custom-file "~/.spacemacs.d/custom.el")
-(load custom-file)
