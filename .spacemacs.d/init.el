@@ -331,8 +331,7 @@ This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
 
-
-  ;; ;; Use ELPA
+  ;; ;; Use ELPA (develop branch)
   ;; (setq configuration-layer-elpa-archives '(("melpa" . "melpa.org/packages/")
   ;;                                           ("org" . "orgmode.org/elpa/") ("gnu" . "elpa.gnu.org/packages/")))
 
@@ -355,6 +354,22 @@ you should place your code here."
   (add-hook 'org-shiftleft-final-hook 'windmove-left)
   (add-hook 'org-shiftdown-final-hook 'windmove-down)
   (add-hook 'org-shiftright-final-hook 'windmove-right)
+
+  ;; Org-mode
+  ;; TODO: Need to setup custom captures
+  ;; From https://emacs.stackexchange.com/questions/36784/org-capture-link-description-too-long
+  (setq my/line "%(with-current-buffer (org-capture-get :original-file-nondirectory) (thing-at-point 'line t))")
+  ;; (eval-after-load 'org-capture
+  ;;   '(progn
+  ;;      (add-to-list
+  ;;       'org-capture-templates
+  ;;       '(
+  ;;         ("n" "Review Notes"
+  ;;          entry (file+headline, "notes.org" "Code Review")
+  ;;          ,(format "* TODO %%?\n [[%%l][%%f]]\n  %s" my/line))
+  ;;         ))
+  ;;      )
+  ;;   )
 
   ;; Bibtex
   (defun my/open-pdf-function (fpath link)
@@ -390,6 +405,7 @@ you should place your code here."
                 ("abstract"))) bibtex-BibTeX-entry-alist)
        (spacemacs/set-leader-keys-for-major-mode
          'bibtex-mode "c" 'org-ref-clean-bibtex-entry)
+       (message "Updated bibtex settings")
        )
     )
 
@@ -402,7 +418,8 @@ you should place your code here."
 
   (eval-after-load "tramp"
     '(progn
-       ;; Modified from https://www.gnu.org/software/emacs/manual/html_node/tramp/Auto_002dsave-and-Backup.html
+       ;; Modified from
+       ;; https://www.gnu.org/software/emacs/manual/html_node/tramp/Auto_002dsave-and-Backup.html
        (setq backup-enable-predicate
              (lambda (name)
                (and (normal-backup-enable-predicate name)
@@ -422,13 +439,30 @@ you should place your code here."
 
        (advice-add 'tramp-set-auto-save :around #'tramp-set-auto-save--check)
 
-       ;; Use my ~/.ssh/config control master settings according to https://puppet.com/blog/speed-up-ssh-by-reusing-connections
+       ;; Use my ~/.ssh/config control master settings according to
+       ;; https://puppet.com/blog/speed-up-ssh-by-reusing-connections
        (setq tramp-ssh-controlmaster-options "")))
 
   ;; Don't do projectile search in tramp mode
   ;; (defadvice projectile-project-root (around ignore-remote first activate)
   ;;   (unless (file-remote-p default-directory) ad-do-it))
   ;; If doing ssh-multiplexing, don't need emacs control master
+
+  ;; Fix git-gutter errors in tramp mode
+  (with-eval-after-load 'git-gutter+
+    (defun git-gutter+-remote-default-directory (dir file)
+      (let* ((vec (tramp-dissect-file-name file))
+             (method (tramp-file-name-method vec))
+             (user (tramp-file-name-user vec))
+             (domain (tramp-file-name-domain vec))
+             (host (tramp-file-name-host vec))
+             (port (tramp-file-name-port vec)))
+        (tramp-make-tramp-file-name method user domain host port dir)))
+
+    (defun git-gutter+-remote-file-path (dir file)
+      (let ((file (tramp-file-name-localname (tramp-dissect-file-name file))))
+        (replace-regexp-in-string (concat "\\`" dir) "" file))))
+
 
   ;; Multiple cursors
   (require 'multiple-cursors)
@@ -478,7 +512,7 @@ you should place your code here."
   (global-set-key (kbd "M-n") 'forward-paragraph)
   (global-set-key (kbd "M-p") 'backward-paragraph)
 
-  ;; ;; xterm with the resource ?.VT100.modifyOtherKeys: 1
+;;   ;; xterm with the resource ?.VT100.modifyOtherKeys: 1
 ;;   ;; GNU Emacs >=24.4 sets xterm in this mode and define
 ;;   ;; some of the escape sequences but not all of them.
 ;;   (defun character-apply-modifiers (c &rest modifiers)
@@ -513,21 +547,6 @@ you should place your code here."
 ;;                   ("\e\[%d;8u" control meta shift)))
 ;;           (setq c (1+ c))))))
 ;;   (eval-after-load "xterm" '(my-eval-after-load-xterm))
-
-  ;; Fix git-gutter errors
-  ;; (with-eval-after-load 'git-gutter+
-  ;;   (defun git-gutter+-remote-default-directory (dir file)
-  ;;     (let* ((vec (tramp-dissect-file-name file))
-  ;;            (method (tramp-file-name-method vec))
-  ;;            (user (tramp-file-name-user vec))
-  ;;            (domain (tramp-file-name-domain vec))
-  ;;            (host (tramp-file-name-host vec))
-  ;;            (port (tramp-file-name-port vec)))
-  ;;       (tramp-make-tramp-file-name method user domain host port dir)))
-
-  ;;   (defun git-gutter+-remote-file-path (dir file)
-  ;;     (let ((file (tramp-file-name-localname (tramp-dissect-file-name file))))
-  ;;       (replace-regexp-in-string (concat "\\`" dir) "" file))))
 
   (when (file-exists-p "~/.spacemacs.d/custom-user-config.el")
     (load-file "~/.spacemacs.d/custom-user-config.el")
