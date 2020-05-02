@@ -1,0 +1,255 @@
+* p4 syntax highlighting
+** http://ergoemacs.org/emacs/emacs_auto-activate_a_major-mode.html
+   #+begin_src emacs-lisp :tangle yes
+     (require 'p4-mode)
+     (add-to-list 'auto-mode-alist '("\\.p4\\'" . p4-mode))
+     (add-to-list 'auto-mode-alist '("\\.p4cfg\\'" . json-mode))
+   #+end_src
+
+* fast switching between frames and windows
+  #+begin_src emacs-lisp :tangle yes
+    (require 'framemove)
+    (windmove-default-keybindings)
+    (setq framemove-hook-into-windmove t)
+  #+end_src
+** conflict with org-mode
+   #+begin_src emacs-lisp :tangle yes
+   ;; Following line will configure org to give up its bindings
+   ;; While without it, org will use winfmove when it does not 
+   ;; have its own binding
+   ;; (setq org-support-shift-select 'always)
+   (add-hook 'org-shiftup-final-hook 'windmove-up)
+   (add-hook 'org-shiftleft-final-hook 'windmove-left)
+   (add-hook 'org-shiftdown-final-hook 'windmove-down)
+   (add-hook 'org-shiftright-final-hook 'windmove-right)
+   #+end_src
+
+* org mode
+** TODO need to setup custom captures
+** https://emacs.stackexchange.com/questions/36784/org-capture-link-description-too-long
+   #+begin_src emacs-lisp :tangle yes
+     (setq my/line "%(with-current-buffer (org-capture-get :original-file-nondirectory) (thing-at-point 'line t))")
+     ;; (eval-after-load 'org-capture
+     ;;   '(progn
+     ;;      (add-to-list
+     ;;       'org-capture-templates
+     ;;       '(
+     ;;         ("n" "Review Notes"
+     ;;          entry (file+headline, "notes.org" "Code Review")
+     ;;          ,(format "* TODO %%?\n [[%%l][%%f]]\n  %s" my/line))
+     ;;         ))
+     ;;      )
+     ;;   )   
+   #+end_src
+** use tab for indentation in org mode while editing src code
+   #+begin_src emacs-lisp :tangle yes
+     (setq org-src-tab-acts-natively t)
+   #+end_src
+
+* bibtex mode
+** open pdfs with FoxitReader
+   #+begin_src emacs-lisp :tangle yes
+     (defun my/open-pdf-function (fpath link)
+       (message fpath)
+       (start-process "FoxitReader" "*foxit-reader*" "~/bin/FoxitReader" fpath))
+
+     (eval-after-load "org"
+       '(progn
+          ;; https://lists.gnu.org/archive/html/emacs-orgmode/2016-11/msg00169.html
+          ;; Before adding, remove it (to avoid clogging)
+          (delete '("\\.pdf\\'" . default) org-file-apps)
+          ;; https://lists.gnu.org/archive/html/emacs-orgmode/2016-11/msg00176.html
+          (add-to-list 'org-file-apps
+                       '("\\.pdf\\'" . my/open-pdf-function)
+                       ))
+       )
+   #+end_src
+** directory setup
+   #+begin_src emacs-lisp :tangle yes
+     (setq org-ref-default-bibliography '("~/Documents/Research/reading-material/references.bib")
+           org-ref-pdf-directory "~/Documents/Research/reading-material" ;; keep the final slash off
+           org-ref-bibliography-notes "~/Documents/Research/reading-material/notes.org"
+           bibtex-completion-pdf-field "file"
+           org-ref-get-pdf-filename-function 'org-ref-get-mendeley-filename)
+     ;; the mendeley function is defined in org-ref-utils.el
+   #+end_src
+** handle online entries
+   #+begin_src emacs-lisp :tangle yes
+     (eval-after-load 'bibtex
+       '(progn
+          (push '("Online" "Online Resource"
+                  (("title")
+                   ("url")
+                   ("urldate"))
+                  (("journal"))
+                  (("language")
+                   ("abstract"))) bibtex-BibTeX-entry-alist)
+          (spacemacs/set-leader-keys-for-major-mode
+            'bibtex-mode "c" 'org-ref-clean-bibtex-entry)
+          (message "Updated bibtex settings")
+          )
+       )
+   #+end_src
+  
+* tramp mode
+** fast tramp https://emacs.stackexchange.com/questions/22306/working-with-tramp-mode-on-slow-connection-emacs-does-network-trip-when-i-start
+   #+begin_src emacs-lisp :tangle yes
+     ;;(setq disable-tramp-backups nil) ;; allow all tramp files to be backuped
+     ;;(setq disable-tramp-backups '("su" "sudo")) ;; only 'su' and 'sudo'
+     ;;(setq disable-tramp-backups '("ssh" "sftp")) ;; only 'ssh' and 'sftp'
+     (defvar disable-tramp-backups '(all))
+
+     (eval-after-load "tramp"
+       '(progn
+          ;; Modified from
+          ;; https://www.gnu.org/software/emacs/manual/html_node/tramp/Auto_002dsave-and-Backup.html
+          (setq backup-enable-predicate
+                (lambda (name)
+                  (and (normal-backup-enable-predicate name)
+                       ;; Disable all tramp backups
+                       (and disable-tramp-backups
+                            (member 'all disable-tramp-backups)
+                            (not (file-remote-p name 'method)))
+                       (not ;; disable backup for tramp with the listed methods
+                        (let ((method (file-remote-p name 'method)))
+                          (when (stringp method)
+                            (member method disable-tramp-backups)))))))
+
+          (defun tramp-set-auto-save--check (original)
+            (if (funcall backup-enable-predicate (buffer-file-name))
+                (funcall original)
+              (auto-save-mode -1)))
+
+          (advice-add 'tramp-set-auto-save :around #'tramp-set-auto-save--check)
+
+          ;; Use my ~/.ssh/config control master settings according to
+          ;; https://puppet.com/blog/speed-up-ssh-by-reusing-connections
+          (setq tramp-ssh-controlmaster-options "")))
+   #+end_src
+
+** dont use projectile search in tramp mode
+   #+begin_src emacs-lisp :tangle yes
+     ;; (defadvice projectile-project-root (around ignore-remote first activate)
+     ;;   (unless (file-remote-p default-directory) ad-do-it))
+     ;; If doing ssh-multiplexing, don't need emacs control master
+   #+end_src
+** fix gutter errors
+   #+begin_src emacs-lisp :tangle yes
+     (with-eval-after-load 'git-gutter+
+       (defun git-gutter+-remote-default-directory (dir file)
+         (let* ((vec (tramp-dissect-file-name file))
+                (method (tramp-file-name-method vec))
+                (user (tramp-file-name-user vec))
+                (domain (tramp-file-name-domain vec))
+                (host (tramp-file-name-host vec))
+                (port (tramp-file-name-port vec)))
+           (tramp-make-tramp-file-name method user domain host port dir)))
+
+       (defun git-gutter+-remote-file-path (dir file)
+         (let ((file (tramp-file-name-localname (tramp-dissect-file-name file))))
+           (replace-regexp-in-string (concat "\\`" dir) "" file))))
+   #+end_src
+
+* multiple cursors
+  #+begin_src emacs-lisp :tangle yes
+    (require 'multiple-cursors)
+    (eval-after-load 'multiple-cursors
+      '(progn
+         (global-set-key (kbd "C-s-c C-s-c") 'mc/edit-lines)
+         (global-set-key (kbd "C->") 'mc/mark-next-like-this)
+         (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
+         (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
+         (message "Added mc/edit-lines shortcuts")
+         )
+      )
+  #+end_src
+
+* C/C++ editing
+  #+begin_src emacs-lisp :tangle yes
+    (defun c-lineup-arglist-tabs-only (ignored)
+      "Line up argument lists by tabs, not spaces"
+      (let* ((anchor (c-langelem-pos c-syntactic-element))
+             (column (c-langelem-2nd-pos c-syntactic-element))
+             (offset (- (1+ column) anchor))
+             (steps (floor offset c-basic-offset)))
+        (* (max steps 1)
+           c-basic-offset)))
+
+    (c-add-style "linux-tabs-only"
+                 '((tab-width . 8)
+                   (indent-tabs-mode . t)
+                   (c-basic-offset . 8)
+                   (c-offsets-alist
+                    (arglist-cont-nonempty
+                     c-lineup-gcc-asm-reg
+                     c-lineup-arglist-tabs-only))))
+
+    (c-add-style "linux-spaces-only"
+                 '((tab-width . 4)
+                   (indent-tabs-mode . nil)
+                   (c-basic-offset . 4)
+                   ))
+
+    (push '(other . "linux-tabs-only") c-default-style)
+    (push '(other . "linux-spaces-only") c-default-style)
+  #+end_src
+
+* key bindings
+** terminal bindings
+   #+begin_src emacs-lisp :tangle yes
+     ;; ;; Keyboard translations for terminal mode
+     ;; ;; Translate C-h to DEL.
+     ;; (keyboard-translate ?\C-h ?\C-?)
+   #+end_src
+** pass terminal symbols
+   #+begin_src emacs-lisp :tangle yes
+     ;;   ;; xterm with the resource ?.VT100.modifyOtherKeys: 1
+     ;;   ;; GNU Emacs >=24.4 sets xterm in this mode and define
+     ;;   ;; some of the escape sequences but not all of them.
+     ;;   (defun character-apply-modifiers (c &rest modifiers)
+     ;;     "Apply modifiers to the character C.
+     ;; MODIFIERS must be a list of symbols amongst (meta control shift).
+     ;; Return an event vector."
+     ;;     (if (memq 'control modifiers) (setq c (if (or (and (<= ?@ c) (<= c ?_))
+     ;;                                                   (and (<= ?a c) (<= c ?z)))
+     ;;                                               (logand c ?\x1f)
+     ;;                                             (logior (lsh 1 26) c))))
+     ;;     (if (memq 'meta modifiers) (setq c (logior (lsh 1 27) c)))
+     ;;     (if (memq 'shift modifiers) (setq c (logior (lsh 1 25) c)))
+     ;;     (vector c))
+     ;;   (defun my-eval-after-load-xterm ()
+     ;;     (when (and (boundp 'xterm-extra-capabilities) (boundp 'xterm-function-map))
+     ;;       (let ((c 32))
+     ;;         (while (<= c 126)
+     ;;           (mapc (lambda (x)
+     ;;                   (define-key xterm-function-map (format (car x) c)
+     ;;                     (apply 'character-apply-modifiers c (cdr x))))
+     ;;                 '(;; with ?.VT100.formatOtherKeys: 0
+     ;;                   ("\e\[27;3;%d~" meta)
+     ;;                   ("\e\[27;5;%d~" control)
+     ;;                   ("\e\[27;6;%d~" control shift)
+     ;;                   ("\e\[27;7;%d~" control meta)
+     ;;                   ("\e\[27;8;%d~" control meta shift)
+     ;;                   ;; with ?.VT100.formatOtherKeys: 1
+     ;;                   ("\e\[%d;3u" meta)
+     ;;                   ("\e\[%d;5u" control)
+     ;;                   ("\e\[%d;6u" control shift)
+     ;;                   ("\e\[%d;7u" control meta)
+     ;;                   ("\e\[%d;8u" control meta shift)))
+     ;;           (setq c (1+ c))))))
+     ;;   (eval-after-load "xterm" '(my-eval-after-load-xterm))
+
+   #+end_src
+** easy navigation
+   #+begin_src emacs-lisp :tangle yes
+     ;; Easier Code Navigation
+     (global-set-key (kbd "M-n") 'forward-paragraph)
+     (global-set-key (kbd "M-p") 'backward-paragraph)
+   #+end_src
+** open config
+   #+begin_src emacs-lisp :tangle yes
+     (defun spacemacs/find-config-file ()
+       (interactive)
+       (find-file (expand-file-name "user-config.org" dotspacemacs-directory)))
+     (spacemacs/set-leader-keys "fec" 'spacemacs/find-config-file)
+   #+end_src

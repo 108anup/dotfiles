@@ -318,9 +318,22 @@ executes.
  This function is mostly useful for variables that need to be set
 before packages are loaded. If you are unsure, you should try in setting them in
 `dotspacemacs/user-config' first."
+
+  ;; tangle org file whenever it has changes
+  (let ((src (expand-file-name "user-config.org" dotspacemacs-directory))
+        (uc (expand-file-name "user-config.el" dotspacemacs-directory)))
+    (when (file-newer-than-file-p src uc)
+      (call-process
+       (concat invocation-directory invocation-name)
+       nil nil t
+       "-q" "--batch" "--eval" "(require 'ob-tangle)"
+       "--eval" (format "(org-babel-tangle-file \"%s\")" src)))
+    )
+
   (when (file-exists-p "~/.spacemacs.d/custom-user-init.el")
     (load-file "~/.spacemacs.d/custom-user-init.el")
     )
+
   )
 
 (defun dotspacemacs/user-config ()
@@ -331,227 +344,21 @@ This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
 
-  ;; ;; Use ELPA (develop branch)
-  ;; (setq configuration-layer-elpa-archives '(("melpa" . "melpa.org/packages/")
-  ;;                                           ("org" . "orgmode.org/elpa/") ("gnu" . "elpa.gnu.org/packages/")))
+  ;; Use ELPA (develop branch)
+  ;; (setq configuration-layer-elpa-archives
+  ;;       '(("melpa" . "melpa.org/packages/")
+  ;;         ("org" . "orgmode.org/elpa/") ("gnu" . "elpa.gnu.org/packages/")))
 
   ;; Custom packages
   (push "~/.spacemacs.d/packages/" load-path)
 
-  ;; p4 syntax highlighting
-  ;; http://ergoemacs.org/emacs/emacs_auto-activate_a_major-mode.html
-  (require 'p4-mode)
-  (add-to-list 'auto-mode-alist '("\\.p4\\'" . p4-mode))
-  (add-to-list 'auto-mode-alist '("\\.p4cfg\\'" . json-mode))
-
-  ;; Fast switching between frames and windows
-  (require 'framemove)
-  (windmove-default-keybindings)
-  (setq framemove-hook-into-windmove t)
-  ;; Conflict with org-mode
-  ;; (setq org-support-shift-select 'always)
-  (add-hook 'org-shiftup-final-hook 'windmove-up)
-  (add-hook 'org-shiftleft-final-hook 'windmove-left)
-  (add-hook 'org-shiftdown-final-hook 'windmove-down)
-  (add-hook 'org-shiftright-final-hook 'windmove-right)
-
-  ;; Org-mode
-  ;; TODO: Need to setup custom captures
-  ;; From https://emacs.stackexchange.com/questions/36784/org-capture-link-description-too-long
-  (setq my/line "%(with-current-buffer (org-capture-get :original-file-nondirectory) (thing-at-point 'line t))")
-  ;; (eval-after-load 'org-capture
-  ;;   '(progn
-  ;;      (add-to-list
-  ;;       'org-capture-templates
-  ;;       '(
-  ;;         ("n" "Review Notes"
-  ;;          entry (file+headline, "notes.org" "Code Review")
-  ;;          ,(format "* TODO %%?\n [[%%l][%%f]]\n  %s" my/line))
-  ;;         ))
-  ;;      )
-  ;;   )
-
-  ;; Bibtex
-  (defun my/open-pdf-function (fpath link)
-    (message fpath)
-    (start-process "FoxitReader" "*foxit-reader*" "~/bin/FoxitReader" fpath))
-
-  (eval-after-load "org"
-    '(progn
-       ;; https://lists.gnu.org/archive/html/emacs-orgmode/2016-11/msg00169.html
-       ;; Before adding, remove it (to avoid clogging)
-       (delete '("\\.pdf\\'" . default) org-file-apps)
-       ;; https://lists.gnu.org/archive/html/emacs-orgmode/2016-11/msg00176.html
-       (add-to-list 'org-file-apps
-                    '("\\.pdf\\'" . my/open-pdf-function)
-                    ))
-    )
-
-  (setq org-ref-default-bibliography '("~/Documents/Research/reading-material/references.bib")
-        org-ref-pdf-directory "~/Documents/Research/reading-material" ;; keep the final slash off
-        org-ref-bibliography-notes "~/Documents/Research/reading-material/notes.org"
-        bibtex-completion-pdf-field "file"
-        org-ref-get-pdf-filename-function 'org-ref-get-mendeley-filename)
-  ;; the mendeley function is defined in org-ref-utils.el
-
-  (eval-after-load 'bibtex
-    '(progn
-       (push '("Online" "Online Resource"
-               (("title")
-                ("url")
-                ("urldate"))
-               (("journal"))
-               (("language")
-                ("abstract"))) bibtex-BibTeX-entry-alist)
-       (spacemacs/set-leader-keys-for-major-mode
-         'bibtex-mode "c" 'org-ref-clean-bibtex-entry)
-       (message "Updated bibtex settings")
-       )
-    )
-
-  ;; TRAMP Settings
-  ;; Taken from: https://emacs.stackexchange.com/questions/22306/working-with-tramp-mode-on-slow-connection-emacs-does-network-trip-when-i-start
-  ;;(setq disable-tramp-backups nil) ;; allow all tramp files to be backuped
-  ;;(setq disable-tramp-backups '("su" "sudo")) ;; only 'su' and 'sudo'
-  ;;(setq disable-tramp-backups '("ssh" "sftp")) ;; only 'ssh' and 'sftp'
-  (defvar disable-tramp-backups '(all))
-
-  (eval-after-load "tramp"
-    '(progn
-       ;; Modified from
-       ;; https://www.gnu.org/software/emacs/manual/html_node/tramp/Auto_002dsave-and-Backup.html
-       (setq backup-enable-predicate
-             (lambda (name)
-               (and (normal-backup-enable-predicate name)
-                    ;; Disable all tramp backups
-                    (and disable-tramp-backups
-                         (member 'all disable-tramp-backups)
-                         (not (file-remote-p name 'method)))
-                    (not ;; disable backup for tramp with the listed methods
-                     (let ((method (file-remote-p name 'method)))
-                       (when (stringp method)
-                         (member method disable-tramp-backups)))))))
-
-       (defun tramp-set-auto-save--check (original)
-         (if (funcall backup-enable-predicate (buffer-file-name))
-             (funcall original)
-           (auto-save-mode -1)))
-
-       (advice-add 'tramp-set-auto-save :around #'tramp-set-auto-save--check)
-
-       ;; Use my ~/.ssh/config control master settings according to
-       ;; https://puppet.com/blog/speed-up-ssh-by-reusing-connections
-       (setq tramp-ssh-controlmaster-options "")))
-
-  ;; Don't do projectile search in tramp mode
-  ;; (defadvice projectile-project-root (around ignore-remote first activate)
-  ;;   (unless (file-remote-p default-directory) ad-do-it))
-  ;; If doing ssh-multiplexing, don't need emacs control master
-
-  ;; Fix git-gutter errors in tramp mode
-  (with-eval-after-load 'git-gutter+
-    (defun git-gutter+-remote-default-directory (dir file)
-      (let* ((vec (tramp-dissect-file-name file))
-             (method (tramp-file-name-method vec))
-             (user (tramp-file-name-user vec))
-             (domain (tramp-file-name-domain vec))
-             (host (tramp-file-name-host vec))
-             (port (tramp-file-name-port vec)))
-        (tramp-make-tramp-file-name method user domain host port dir)))
-
-    (defun git-gutter+-remote-file-path (dir file)
-      (let ((file (tramp-file-name-localname (tramp-dissect-file-name file))))
-        (replace-regexp-in-string (concat "\\`" dir) "" file))))
-
-
-  ;; Multiple cursors
-  (require 'multiple-cursors)
-  (eval-after-load 'multiple-cursors
-    '(progn
-       (global-set-key (kbd "C-s-c C-s-c") 'mc/edit-lines)
-       (global-set-key (kbd "C->") 'mc/mark-next-like-this)
-       (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
-       (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
-       (message "Added mc/edit-lines shortcuts")
-       )
-    )
-
-  ;; C/C++ editing settings
-  (defun c-lineup-arglist-tabs-only (ignored)
-    "Line up argument lists by tabs, not spaces"
-    (let* ((anchor (c-langelem-pos c-syntactic-element))
-           (column (c-langelem-2nd-pos c-syntactic-element))
-           (offset (- (1+ column) anchor))
-           (steps (floor offset c-basic-offset)))
-      (* (max steps 1)
-         c-basic-offset)))
-
-  (c-add-style "linux-tabs-only"
-               '((tab-width . 8)
-                 (indent-tabs-mode . t)
-                 (c-basic-offset . 8)
-                 (c-offsets-alist
-                  (arglist-cont-nonempty
-                   c-lineup-gcc-asm-reg
-                   c-lineup-arglist-tabs-only))))
-
-  (c-add-style "linux-spaces-only"
-               '((tab-width . 4)
-                 (indent-tabs-mode . nil)
-                 (c-basic-offset . 4)
-                 ))
-
-  (push '(other . "linux-tabs-only") c-default-style)
-  (push '(other . "linux-spaces-only") c-default-style)
-
-  ;; ;; Keyboard translations for terminal mode
-  ;; ;; Translate C-h to DEL.
-  ;; (keyboard-translate ?\C-h ?\C-?)
-
-  ;; Easier Code Navigation
-  (global-set-key (kbd "M-n") 'forward-paragraph)
-  (global-set-key (kbd "M-p") 'backward-paragraph)
-
-;;   ;; xterm with the resource ?.VT100.modifyOtherKeys: 1
-;;   ;; GNU Emacs >=24.4 sets xterm in this mode and define
-;;   ;; some of the escape sequences but not all of them.
-;;   (defun character-apply-modifiers (c &rest modifiers)
-;;     "Apply modifiers to the character C.
-;; MODIFIERS must be a list of symbols amongst (meta control shift).
-;; Return an event vector."
-;;     (if (memq 'control modifiers) (setq c (if (or (and (<= ?@ c) (<= c ?_))
-;;                                                   (and (<= ?a c) (<= c ?z)))
-;;                                               (logand c ?\x1f)
-;;                                             (logior (lsh 1 26) c))))
-;;     (if (memq 'meta modifiers) (setq c (logior (lsh 1 27) c)))
-;;     (if (memq 'shift modifiers) (setq c (logior (lsh 1 25) c)))
-;;     (vector c))
-;;   (defun my-eval-after-load-xterm ()
-;;     (when (and (boundp 'xterm-extra-capabilities) (boundp 'xterm-function-map))
-;;       (let ((c 32))
-;;         (while (<= c 126)
-;;           (mapc (lambda (x)
-;;                   (define-key xterm-function-map (format (car x) c)
-;;                     (apply 'character-apply-modifiers c (cdr x))))
-;;                 '(;; with ?.VT100.formatOtherKeys: 0
-;;                   ("\e\[27;3;%d~" meta)
-;;                   ("\e\[27;5;%d~" control)
-;;                   ("\e\[27;6;%d~" control shift)
-;;                   ("\e\[27;7;%d~" control meta)
-;;                   ("\e\[27;8;%d~" control meta shift)
-;;                   ;; with ?.VT100.formatOtherKeys: 1
-;;                   ("\e\[%d;3u" meta)
-;;                   ("\e\[%d;5u" control)
-;;                   ("\e\[%d;6u" control shift)
-;;                   ("\e\[%d;7u" control meta)
-;;                   ("\e\[%d;8u" control meta shift)))
-;;           (setq c (1+ c))))))
-;;   (eval-after-load "xterm" '(my-eval-after-load-xterm))
+  ;; Load configuration from org file
+  (let ((uc (expand-file-name "user-config.el" dotspacemacs-directory)))
+    (if (file-exists-p uc) (load-file uc)))
 
   (when (file-exists-p "~/.spacemacs.d/custom-user-config.el")
     (load-file "~/.spacemacs.d/custom-user-config.el")
     )
-
   )
 
 (setq custom-file "~/.spacemacs.d/custom.el")
