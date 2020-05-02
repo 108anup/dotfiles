@@ -1,3 +1,5 @@
+Thanks to: https://www.reddit.com/r/emacs/comments/7ntc6p/spacemacs_configuration_in_a_structured_orgmode/
+
 * p4 syntax highlighting
 ** http://ergoemacs.org/emacs/emacs_auto-activate_a_major-mode.html
    #+begin_src emacs-lisp :tangle yes
