@@ -70,7 +70,7 @@ values."
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages, then consider creating a layer. You can also put the
    ;; configuration in `dotspacemacs/user-config'.
-   dotspacemacs-additional-packages '(yasnippet-snippets base16-theme multiple-cursors)
+   dotspacemacs-additional-packages '(yasnippet-snippets base16-theme multiple-cursors outshine)
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
    ;; A list of packages that will not be installed and loaded.
@@ -334,6 +334,8 @@ before packages are loaded. If you are unsure, you should try in setting them in
     (load-file "~/.spacemacs.d/custom-user-init.el")
     )
 
+  (defvar outline-minor-mode-prefix "\M-#")
+
   )
 
 (defun dotspacemacs/user-config ()
@@ -359,6 +361,7 @@ you should place your code here."
   (when (file-exists-p "~/.spacemacs.d/custom-user-config.el")
     (load-file "~/.spacemacs.d/custom-user-config.el")
     )
+
   )
 
 (setq custom-file "~/.spacemacs.d/custom.el")

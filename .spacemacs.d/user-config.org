@@ -255,3 +255,66 @@ Thanks to: https://www.reddit.com/r/emacs/comments/7ntc6p/spacemacs_configuratio
        (find-file (expand-file-name "user-config.org" dotspacemacs-directory)))
      (spacemacs/set-leader-keys "fec" 'spacemacs/find-config-file)
    #+end_src
+* outline mode and outshine 
+** (https://github.com/syl20bnr/spacemacs/issues/5258) 
+** (https://www.modernemacs.com/post/outline-ivy/)
+** enable by default
+   #+begin_src emacs-lisp :tangle yes
+     (require 'outshine)
+     (add-hook 'outline-minor-mode-hook 'outshine-mode)
+     (add-hook 'prog-mode-hook 'outline-minor-mode)
+     ;; '(outshine-preserve-delimiter-whitespace t)
+
+     ;; (add-hook 'emacs-lisp-mode-hook 'outline-minor-mode)
+     ;; (add-hook 'LaTeX-mode-hook 'outline-minor-mode)
+     ;; (add-hook 'picolisp-mode-hook 'outline-minor-mode)
+     ;; (add-hook 'clojure-mode-hook 'outline-minor-mode)
+     ;; (add-hook 'ess-mode-hook 'outline-minor-mode)
+     ;; (add-hook 'ledger-mode-hook 'outline-minor-mode)
+     ;; (add-hook 'message-mode-hook 'outline-minor-mode)
+
+   #+end_src
+** regex for src code (not tangled)
+   #+begin_src emacs-lisp
+     (defun -add-font-lock-kwds (FONT-LOCK-ALIST)
+       (font-lock-add-keywords
+        nil (--map (-let (((rgx uni-point) it))
+                     `(,rgx (0 (progn
+                                 (compose-region (match-beginning 1) (match-end 1)
+                                                 ,(concat "\t" (list uni-point)))
+                                 nil))))
+                   FONT-LOCK-ALIST)))
+
+     (defmacro add-font-locks (FONT-LOCK-HOOKS-ALIST)
+       `(--each ,FONT-LOCK-HOOKS-ALIST
+          (-let (((font-locks . mode-hooks) it))
+            (--each mode-hooks
+              (add-hook it (-partial '-add-font-lock-kwds
+                                     (symbol-value font-locks)))))))
+
+     (defconst emacs-outlines-font-lock-alist
+       ;; Outlines
+       '(("\\(^;;;\\) "          ?■)
+         ("\\(^;;;;\\) "         ?○)
+         ("\\(^;;;;;\\) "        ?✸)
+         ("\\(^;;;;;;\\) "       ?✿)))
+
+     (defconst lisp-outlines-font-lock-alist
+       ;; Outlines
+       '(("\\(^;; \\*\\) "          ?■)
+         ("\\(^;; \\*\\*\\) "       ?○)
+         ("\\(^;; \\*\\*\\*\\) "    ?✸)
+         ("\\(^;; \\*\\*\\*\\*\\) " ?✿)))
+
+     (defconst python-outlines-font-lock-alist
+       '(("\\(^# \\*\\) "          ?■)
+         ("\\(^# \\*\\*\\) "       ?○)
+         ("\\(^# \\*\\*\\*\\) "    ?✸)
+         ("\\(^# \\*\\*\\*\\*\\) " ?✿)))
+
+     (add-font-locks
+      '((emacs-outlines-font-lock-alist emacs-lisp-mode-hook)
+        (lisp-outlines-font-lock-alist clojure-mode-hook hy-mode-hook)
+        (python-outlines-font-lock-alist clojure-mode-hook anaconda-mode-hook)
+        (python-outlines-font-lock-alist python-mode-hook)))
+   #+end_src
