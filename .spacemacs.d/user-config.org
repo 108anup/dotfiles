@@ -28,7 +28,7 @@ Thanks to: https://www.reddit.com/r/emacs/comments/7ntc6p/spacemacs_configuratio
 
 * org mode
 ** TODO need to setup custom captures
-** https://emacs.stackexchange.com/questions/36784/org-capture-link-description-too-long
+** captures (https://emacs.stackexchange.com/questions/36784/org-capture-link-description-too-long)
    #+begin_src emacs-lisp :tangle yes
      (setq my/line "%(with-current-buffer (org-capture-get :original-file-nondirectory) (thing-at-point 'line t))")
      ;; (eval-after-load 'org-capture
@@ -43,9 +43,19 @@ Thanks to: https://www.reddit.com/r/emacs/comments/7ntc6p/spacemacs_configuratio
      ;;      )
      ;;   )   
    #+end_src
+** todo keywords
+   #+begin_src emacs-lisp :tangle yes
+     (setq org-todo-keywords
+           '((sequence "TODO" "CODE" "DISCUSS" "EXPERIMENT" "WRITING" "PAPER" "DONE")))
+   #+end_src
 ** use tab for indentation in org mode while editing src code
    #+begin_src emacs-lisp :tangle yes
      (setq org-src-tab-acts-natively t)
+   #+end_src
+** hydra open for org-ref
+   #+begin_src emacs-lisp :tangle yes
+     (spacemacs/set-leader-keys-for-major-mode
+       'org-mode "o" 'org-ref-cite-hydra/body)
    #+end_src
 
 * bibtex mode
