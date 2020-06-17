@@ -8,6 +8,12 @@ Thanks to: https://www.reddit.com/r/emacs/comments/7ntc6p/spacemacs_configuratio
      (add-to-list 'auto-mode-alist '("\\.p4cfg\\'" . json-mode))
    #+end_src
 
+* compatibility with base16 shell in terminal mode
+** From https://github.com/chriskempson/base16/issues/193
+   #+begin_src emacs-lisp :tangle yes
+     (setq base16-theme-256-color-source 'colors)
+   #+end_src
+
 * fast switching between frames and windows
   #+begin_src emacs-lisp :tangle yes
     (require 'framemove)
