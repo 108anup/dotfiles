@@ -11,6 +11,9 @@ fi
 if [[ -f $HOME/.ssh/id_rsa ]]; then
     IDENTITIES+=("id_rsa")
 fi
+if [[ -f $HOME/.ssh/personal_id_rsa ]]; then
+    IDENTITIES+=("personal_id_rsa")
+fi
 zstyle :omz:plugins:ssh-agent identities ${IDENTITIES[@]}
 
 # If you come from bash you might have to change your $PATH.
@@ -114,6 +117,11 @@ EDITOR='emacs'
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+
+# Get all unicode symbols
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
+export LANGUAGE=en_US.UTF-8
 
 # Xilinx License
 export XILINXD_LICENSE_FILE="2101@xilinx-lic.ece.cmu.edu"
