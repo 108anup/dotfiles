@@ -15,15 +15,15 @@ Thanks to: https://www.reddit.com/r/emacs/comments/7ntc6p/spacemacs_configuratio
     (setq framemove-hook-into-windmove t)
   #+end_src
 ** conflict with org-mode
-   #+begin_src emacs-lisp :tangle yes
-   ;; Following line will configure org to give up its bindings
-   ;; While without it, org will use winfmove when it does not 
-   ;; have its own binding
-   ;; (setq org-support-shift-select 'always)
-   (add-hook 'org-shiftup-final-hook 'windmove-up)
-   (add-hook 'org-shiftleft-final-hook 'windmove-left)
-   (add-hook 'org-shiftdown-final-hook 'windmove-down)
-   (add-hook 'org-shiftright-final-hook 'windmove-right)
+   #+begin_src emacs-lisp
+     ;; Following line will configure org to give up its bindings
+     ;; While without it, org will use winfmove when it does not 
+     ;; have its own binding
+     (setq org-support-shift-select 'always)
+     ;; (add-hook 'org-shiftup-final-hook 'windmove-up)
+     ;; (add-hook 'org-shiftleft-final-hook 'windmove-left)
+     ;; (add-hook 'org-shiftdown-final-hook 'windmove-down)
+     ;; (add-hook 'org-shiftright-final-hook 'windmove-right)
    #+end_src
 
 * org mode
@@ -43,10 +43,19 @@ Thanks to: https://www.reddit.com/r/emacs/comments/7ntc6p/spacemacs_configuratio
      ;;      )
      ;;   )   
    #+end_src
-** todo keywords
+** todo keywords and tags
    #+begin_src emacs-lisp :tangle yes
+     (setq org-use-tag-inheritance nil)
      (setq org-todo-keywords
-           '((sequence "TODO" "CODE" "DISCUSS" "EXPERIMENT" "WRITING" "PAPER" "DONE")))
+           '((sequence "HOLD" "DISCUSS" "TODO" "PROG" "DONE")))
+     (setq org-todo-keyword-faces
+           `(("HOLD" .(:foreground ,(cdr (assoc "HOLD" hl-todo-keyword-faces)) :weight bold))
+             ("DISCUSS" .(:foreground ,(cdr (assoc "DONT" hl-todo-keyword-faces)) :weight bold))
+             ("TODO" .(:foreground ,(cdr (assoc "TODO" hl-todo-keyword-faces)) :weight bold))
+             ("PROG" .(:foreground ,(cdr (assoc "PROG" hl-todo-keyword-faces)) :weight bold))
+             ("DONE" .(:foreground ,(cdr (assoc "DONE" hl-todo-keyword-faces)) :weight bold))
+             )
+           )
    #+end_src
 ** use tab for indentation in org mode while editing src code
    #+begin_src emacs-lisp :tangle yes
@@ -328,3 +337,10 @@ Thanks to: https://www.reddit.com/r/emacs/comments/7ntc6p/spacemacs_configuratio
         (python-outlines-font-lock-alist clojure-mode-hook anaconda-mode-hook)
         (python-outlines-font-lock-alist python-mode-hook)))
    #+end_src
+* python editing
+  #+begin_src emacs-lisp :tangle yes
+    ;; (require 'conda)
+    ;; (custom-set-variables
+    ;;  '(conda-anaconda-home "/home/anupa/miniconda3/"))
+    ;; (setenv "WORKON_HOME" "/home/anupa/miniconda3/envs")
+  #+end_src
