@@ -1,4 +1,11 @@
 # Taken from: https://gist.github.com/travisfw/6b022c1ca6aaa1197e12d1dfe011ba84
+"""
+TODO: automate installation of alacritty on windows if needed.
+Mostly am using Windows terminal.
+For configuring alacritty on windows:
+  path is '%APPDATA%\alacritty\alacritty.yml'
+  https://github.com/alacritty/alacritty
+"""
 
 # # These don't work with i3
 # # Window dimensions in character columns and lines
