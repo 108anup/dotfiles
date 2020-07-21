@@ -32,6 +32,7 @@ values."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
+     html
      csv
      lua
      ;; ----------------------------------------------------------------
@@ -63,6 +64,8 @@ values."
      syntax-checking
      org
      bibtex
+     (gtags :variables
+            gtags-enable-by-default nil)
      ;; (multiple-cursors :variables
      ;;                   multiple-cursors-backend 'mc)
      )
