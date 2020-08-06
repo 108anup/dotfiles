@@ -229,6 +229,14 @@ Thanks to: https://www.reddit.com/r/emacs/comments/7ntc6p/spacemacs_configuratio
     (push '(other . "linux-spaces-only") c-default-style)
   #+end_src
 
+* JS editing
+  #+begin_src emacs-lisp :tangle yes
+    (add-hook 'json-mode-hook
+              (lambda ()
+                (make-local-variable 'js-indent-level)
+                (setq js-indent-level 2)))
+  #+end_src
+
 * key bindings
 ** terminal bindings
    #+begin_src emacs-lisp :tangle yes
