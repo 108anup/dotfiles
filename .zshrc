@@ -177,11 +177,6 @@ eval "$(dircolors ~/.dircolors)";
 zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 zstyle ':completion:*:*:*:*:*' menu yes select
 
-# Allow local customizations in the ~/.shell_local_after file
-if [ -f ~/.shell_local_after ]; then
-    source ~/.shell_local_after
-fi
-
 # if [[ "$TERM" == "dumb" ]]
 # then
 #     unsetopt zle
@@ -191,3 +186,8 @@ fi
 #     unfunction preexec
 #     PS1='$ '
 # fi
+
+# Allow local customizations in the ~/.shell_local_after file
+if [ -f ~/.shell_local_after ]; then
+    source ~/.shell_local_after
+fi

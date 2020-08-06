@@ -358,3 +358,9 @@ Thanks to: https://www.reddit.com/r/emacs/comments/7ntc6p/spacemacs_configuratio
     ;;  '(conda-anaconda-home "/home/anupa/miniconda3/"))
     ;; (setenv "WORKON_HOME" "/home/anupa/miniconda3/envs")
   #+end_src
+* lsp
+  #+begin_src emacs-lisp :tangle yes
+    (setq lsp-keymap-prefix "C-c C-l")
+    (setq lsp-ui-doc-enable nil)
+    ;; (setq lsp-ui-doc-position 'top)
+  #+end_src
