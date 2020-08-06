@@ -370,5 +370,11 @@ Thanks to: https://www.reddit.com/r/emacs/comments/7ntc6p/spacemacs_configuratio
   #+begin_src emacs-lisp :tangle yes
     (setq lsp-keymap-prefix "C-c C-l")
     (setq lsp-ui-doc-enable nil)
+    ;; Performance tuning (https://emacs-lsp.github.io/lsp-mode/page/performance/)
+    (setq read-process-output-max (* 1024 1024)) ;; 1mb
     ;; (setq lsp-ui-doc-position 'top)
+  #+end_src
+* org reload
+  #+begin_src emacs-lisp :tangle yes
+    (org-reload)
   #+end_src
