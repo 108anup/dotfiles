@@ -150,6 +150,10 @@ if type exa > /dev/null; then
     alias l="exa -lah -a"
     alias la="exa -lah"
     alias ll="exa -lh"
+else
+    alias ll='ls -alF'
+    alias la='ls -A'
+    alias l='ls -CF'
 fi
 
 alias turbo_on='bash -c "$(declare -f turbo_on_fn); turbo_on_fn"'
