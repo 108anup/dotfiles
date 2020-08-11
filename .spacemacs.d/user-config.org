@@ -299,8 +299,8 @@ Thanks to: https://www.reddit.com/r/emacs/comments/7ntc6p/spacemacs_configuratio
 * outline mode and outshine 
 ** (https://github.com/syl20bnr/spacemacs/issues/5258) 
 ** (https://www.modernemacs.com/post/outline-ivy/)
-** enable by default
-   #+begin_src emacs-lisp :tangle yes
+** enable by default (not tangled)
+   #+begin_src emacs-lisp
      (require 'outshine)
      (add-hook 'outline-minor-mode-hook 'outshine-mode)
      (add-hook 'prog-mode-hook 'outline-minor-mode)
@@ -371,8 +371,19 @@ Thanks to: https://www.reddit.com/r/emacs/comments/7ntc6p/spacemacs_configuratio
     (setq lsp-keymap-prefix "C-c C-l")
     (setq lsp-ui-doc-enable nil)
     ;; Performance tuning (https://emacs-lsp.github.io/lsp-mode/page/performance/)
-    (setq read-process-output-max (* 1024 1024)) ;; 1mb
+    (setq read-process-output-max (* 4 (* 1024 1024))) ;; 4mb
+    (setq gc-cons-thresholdshold (* 4 100000000)) ;; 400mb
     ;; (setq lsp-ui-doc-position 'top)
+  #+end_src
+* scala editing
+  #+begin_src emacs-lisp :tangle yes
+    (eval-after-load 'scala-mode
+      '(progn
+         ;; (setq scala-indent:align-parameterss nil)
+         (setq scala-indent:default-run-on-strategy
+               scala-indent:reluctant-strategy)
+         )
+      )
   #+end_src
 * org reload
   #+begin_src emacs-lisp :tangle yes

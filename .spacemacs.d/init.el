@@ -69,8 +69,7 @@ This function should only modify configuration layer settings."
      syntax-checking
      org
      bibtex
-     (gtags :variables
-            gtags-enable-by-default nil)
+     gtags
      ;; (multiple-cursors :variables
      ;;                   multiple-cursors-backend 'mc)
 
@@ -79,7 +78,13 @@ This function should only modify configuration layer settings."
      ;; https://github.com/syl20bnr/spacemacs/issues/10051
      ;; https://github.com/emacs-lsp/lsp-mode/issues/398
      (lsp :variables lsp-enable-indentation nil)
-     (scala-lsp)
+     (scala :variables
+            scala-backend 'scala-metals
+            scala-indent:use-javadoc-style t
+            scala-auto-insert-asterisk-in-comments t
+            ;; scala-enable-eldoc t
+            ;; scala-enable-gtags t
+            scala-auto-start-backend t)
      )
 
    ;; List of additional packages that will be installed without being
@@ -94,7 +99,7 @@ This function should only modify configuration layer settings."
    dotspacemacs-frozen-packages '()
 
    ;; A list of packages that will not be installed and loaded.
-   dotspacemacs-excluded-packages '(company-tern ensime)
+   dotspacemacs-excluded-packages '(company-tern)
 
    ;; Defines the behaviour of Spacemacs when installing packages.
    ;; Possible values are `used-only', `used-but-keep-unused' and `all'.
@@ -213,10 +218,11 @@ It should only modify the values of Spacemacs settings."
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press `SPC T n' to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(base16-monokai
+   dotspacemacs-themes '(spacemacs-dark
+                         spacemacs-light
+                         base16-monokai
                          ;; monokai
-                         spacemacs-dark
-                         spacemacs-light)
+                         )
 
    ;; Set the theme for the Spaceline. Supported themes are `spacemacs',
    ;; `all-the-icons', `custom', `doom', `vim-powerline' and `vanilla'. The
@@ -529,7 +535,6 @@ you should place your code here."
   (when (file-exists-p "~/.spacemacs.d/custom-user-config.el")
     (load-file "~/.spacemacs.d/custom-user-config.el")
     )
-
   )
 
 (setq custom-file "~/.spacemacs.d/custom.el")
@@ -541,6 +546,7 @@ you should place your code here."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(hi-yellow ((t (:background "black" :foreground "yellow1"))))
- '(hl-line ((t (:background "#131310"))))
- '(show-paren-match ((t (:background "#131310" :foreground "#66d9ef" :underline t :weight bold)))))
+ ;; '(hi-yellow ((t (:background "black" :foreground "yellow1"))))
+ ;; '(hl-line ((t (:background "#131310"))))
+ ;; '(show-paren-match ((t (:background "#131310" :foreground "#66d9ef" :underline t :weight bold))))
+ )
