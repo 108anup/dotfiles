@@ -169,6 +169,7 @@ bindsym $mod+Ctrl+l exec i3lock -c 000000
 exec_always --no-startup-id /usr/bin/blueman-applet
 exec_always --no-startup-id /usr/bin/nm-applet
 exec_always --no-startup-id /usr/bin/pasystray
+exec_always --no-startup-id /usr/bin/albert
 
 exec_always --no-startup-id ~/.i3/polybar.sh
 exec_always $HOME/.i3_local_startup.sh

@@ -191,6 +191,8 @@ zstyle ':completion:*:*:*:*:*' menu yes select
 #     PS1='$ '
 # fi
 
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
 # Allow local customizations in the ~/.shell_local_after file
 if [ -f ~/.shell_local_after ]; then
     source ~/.shell_local_after
