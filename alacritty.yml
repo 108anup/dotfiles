@@ -1,3 +1,9 @@
+# https://github.com/alacritty/alacritty/issues/1381
+shell:
+  program: /bin/zsh
+  args:
+    - --login
+
 # Taken from: https://gist.github.com/travisfw/6b022c1ca6aaa1197e12d1dfe011ba84
 #
 # """
