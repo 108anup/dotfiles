@@ -55,21 +55,20 @@ This function should only modify configuration layer settings."
             shell-default-position 'bottom)
      spell-checking
      syntax-checking
-     treemacs
      version-control
-     gtags
-     c-c++ ;; :variables c-c++-enable-clang-support t)
+     (c-c++ :variables c-c++-backend 'lsp-clangd)
+     ;; c-c++ ;; :variables c-c++-enable-clang-support t)
      (python :variables
              python-backend 'anaconda
              python-test-runner 'pytest)
      javascript
-     java
+     (java :variables java-backend 'lsp)
      yaml
      cscope
      syntax-checking
      org
      bibtex
-     gtags
+     ;; gtags
      ;; (multiple-cursors :variables
      ;;                   multiple-cursors-backend 'mc)
 
