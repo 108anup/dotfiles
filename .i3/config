@@ -103,7 +103,7 @@ set $notes "9"
 set $cal "10"
 
 # my apps
-assign [class="Firefox"] $web
+# assign [class="Firefox"] $web
 assign [class="Emacs"] $dev
 assign [class="Foxit Reader"] $ref
 assign [class="Nautilus"] 4
@@ -112,11 +112,12 @@ assign [class="notion-desktop"] $notes
 
 # floating settings
 # From: https://github.com/andreatta/config/blob/master/i3/config#L108
-for_window [class="pavucontrol"] floating enable border normal
-for_window [class="blueman-manager"] floating enable border normal
+for_window [class="Pavucontrol"] floating enable border normal
+for_window [class="Blueman-manager"] floating enable border normal
 for_window [window_role=".*Setting.*|.*Preference.*"] floating enable border normal
+for_window [window_role="Organizer"] floating enable border normal
 for_window [class="matplotlib"] floating enable border normal
-for_window [class="gnome-control-center"] floating enable border normal
+for_window [class="Gnome-control-center"] floating enable border normal
 
 # switch to workspace
 bindsym $mod+1 workspace 1
