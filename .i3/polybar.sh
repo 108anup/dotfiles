@@ -8,4 +8,3 @@ while pgrep -x polybar >/dev/null; do sleep 1; done
 
 # Launch polybar
 polybar example -r >> /tmp/polybar.log 2>&1 &
-
