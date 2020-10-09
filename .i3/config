@@ -103,7 +103,7 @@ set $ref "3"
 set $music "6"
 set $meet "7"
 set $social "8"
-set $notes "9"
+set $notes "-1"
 set $cal "10"
 
 # my apps
@@ -227,5 +227,6 @@ exec_always --no-startup-id /usr/bin/nm-applet
 exec --no-startup-id /usr/bin/pasystray
 exec_always --no-startup-id /usr/bin/albert
 
+exec_always --no-startup-id ~/.i3/wacom.sh
 exec_always --no-startup-id ~/.i3/polybar.sh
 exec_always $HOME/.i3_local_startup.sh
