@@ -158,7 +158,10 @@ if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ tmux ]] && [
   exec tmux -2
 fi
 
-eval "$(dircolors ~/.dircolors)";
+UNAME=$(uname -s)
+if [[ $UNAME == "Linux" ]]; then
+    eval "$(dircolors ~/.dircolors)";
+fi
 
 # Same completion colors when using cd as with ls.
 zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
