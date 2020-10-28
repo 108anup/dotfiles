@@ -32,6 +32,7 @@ values."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
+     (rust :variables rust-backend 'racer)
      csv
      lua
      ;; ----------------------------------------------------------------
