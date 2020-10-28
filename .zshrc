@@ -1,16 +1,24 @@
 [[ $TERM == "dumb" ]] && unsetopt zle && PS1='$ ' && return
 
 # From https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/ssh-agent
-IDENTITIES=()
-if [[ -f $HOME/.ssh/id_rsa_cmu ]]; then
-    IDENTITIES+=("id_rsa_cmu")
-fi
-# if [[ -f $HOME/.ssh/id_rsa_cmu_emulab ]]; then
-#     IDENTITIES+=("id_rsa_cmu_emulab")
+IDENTITIES=($(find $HOME/.ssh -type f -name "*rsa*" -not -name "*.pub" -printf "%f\n"))
+# IDENTITIES=()
+# if [[ -f $HOME/.ssh/id_rsa_msr ]]; then
+#     IDENTITIES+=("id_rsa_msr")
 # fi
-if [[ -f $HOME/.ssh/id_rsa ]]; then
-    IDENTITIES+=("id_rsa")
-fi
+# if [[ -f $HOME/.ssh/id_rsa_cmu ]]; then
+#     IDENTITIES+=("id_rsa_cmu")
+# fi
+# # if [[ -f $HOME/.ssh/id_rsa_cmu_emulab ]]; then
+# #     IDENTITIES+=("id_rsa_cmu_emulab")
+# # fi
+# if [[ -f $HOME/.ssh/id_rsa ]]; then
+#     IDENTITIES+=("id_rsa")
+# fi
+# if [[ -f $HOME/.ssh/personal_id_rsa ]]; then
+#     IDENTITIES+=("personal_id_rsa")
+# fi
+# # echo ${IDENTITIES[@]}
 zstyle :omz:plugins:ssh-agent identities ${IDENTITIES[@]}
 
 # If you come from bash you might have to change your $PATH.
@@ -115,6 +123,11 @@ EDITOR='emacs'
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
+# Get all unicode symbols
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
+export LANGUAGE=en_US.UTF-8
+
 # Xilinx License
 export XILINXD_LICENSE_FILE="2101@xilinx-lic.ece.cmu.edu"
 
@@ -137,6 +150,10 @@ if type exa > /dev/null; then
     alias l="exa -lah -a"
     alias la="exa -lah"
     alias ll="exa -lh"
+else
+    alias ll='ls -alF'
+    alias la='ls -A'
+    alias l='ls -CF'
 fi
 
 alias turbo_on='bash -c "$(declare -f turbo_on_fn); turbo_on_fn"'
@@ -167,11 +184,6 @@ fi
 zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 zstyle ':completion:*:*:*:*:*' menu yes select
 
-# Allow local customizations in the ~/.shell_local_after file
-if [ -f ~/.shell_local_after ]; then
-    source ~/.shell_local_after
-fi
-
 # if [[ "$TERM" == "dumb" ]]
 # then
 #     unsetopt zle
@@ -181,3 +193,10 @@ fi
 #     unfunction preexec
 #     PS1='$ '
 # fi
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# Allow local customizations in the ~/.shell_local_after file
+if [ -f ~/.shell_local_after ]; then
+    source ~/.shell_local_after
+fi

@@ -8,6 +8,20 @@ Thanks to: https://www.reddit.com/r/emacs/comments/7ntc6p/spacemacs_configuratio
      (add-to-list 'auto-mode-alist '("\\.p4cfg\\'" . json-mode))
    #+end_src
 
+* json mode
+#+begin_src emacs-lisp :tangle yes
+  ;; (add-hook 'json-mode-hook
+  ;;           (lambda ()
+  ;;             (make-local-variable 'js-indent-level)
+  ;;             (setq js-indent-level 2)))
+#+end_src
+
+* compatibility with base16 shell in terminal mode
+** From https://github.com/chriskempson/base16/issues/193
+   #+begin_src emacs-lisp :tangle yes
+     (setq base16-theme-256-color-source 'colors)
+   #+end_src
+
 * fast switching between frames and windows
   #+begin_src emacs-lisp :tangle yes
     (require 'framemove)
@@ -15,15 +29,15 @@ Thanks to: https://www.reddit.com/r/emacs/comments/7ntc6p/spacemacs_configuratio
     (setq framemove-hook-into-windmove t)
   #+end_src
 ** conflict with org-mode
-   #+begin_src emacs-lisp :tangle yes
-   ;; Following line will configure org to give up its bindings
-   ;; While without it, org will use winfmove when it does not 
-   ;; have its own binding
-   ;; (setq org-support-shift-select 'always)
-   (add-hook 'org-shiftup-final-hook 'windmove-up)
-   (add-hook 'org-shiftleft-final-hook 'windmove-left)
-   (add-hook 'org-shiftdown-final-hook 'windmove-down)
-   (add-hook 'org-shiftright-final-hook 'windmove-right)
+   #+begin_src emacs-lisp
+     ;; Following line will configure org to give up its bindings
+     ;; While without it, org will use winfmove when it does not 
+     ;; have its own binding
+     (setq org-support-shift-select 'always)
+     ;; (add-hook 'org-shiftup-final-hook 'windmove-up)
+     ;; (add-hook 'org-shiftleft-final-hook 'windmove-left)
+     ;; (add-hook 'org-shiftdown-final-hook 'windmove-down)
+     ;; (add-hook 'org-shiftright-final-hook 'windmove-right)
    #+end_src
 
 * org mode
@@ -43,10 +57,19 @@ Thanks to: https://www.reddit.com/r/emacs/comments/7ntc6p/spacemacs_configuratio
      ;;      )
      ;;   )   
    #+end_src
-** todo keywords
+** todo keywords and tags
    #+begin_src emacs-lisp :tangle yes
+     (setq org-use-tag-inheritance nil)
      (setq org-todo-keywords
-           '((sequence "TODO" "CODE" "DISCUSS" "EXPERIMENT" "WRITING" "PAPER" "DONE")))
+           '((sequence "HOLD" "DISCUSS" "TODO" "PROG" "DONE")))
+     (setq org-todo-keyword-faces
+           `(("HOLD" .(:foreground ,(cdr (assoc "HOLD" hl-todo-keyword-faces)) :weight bold))
+             ("DISCUSS" .(:foreground ,(cdr (assoc "DONT" hl-todo-keyword-faces)) :weight bold))
+             ("TODO" .(:foreground ,(cdr (assoc "TODO" hl-todo-keyword-faces)) :weight bold))
+             ("PROG" .(:foreground ,(cdr (assoc "PROG" hl-todo-keyword-faces)) :weight bold))
+             ("DONE" .(:foreground ,(cdr (assoc "DONE" hl-todo-keyword-faces)) :weight bold))
+             )
+           )
    #+end_src
 ** use tab for indentation in org mode while editing src code
    #+begin_src emacs-lisp :tangle yes
@@ -206,6 +229,14 @@ Thanks to: https://www.reddit.com/r/emacs/comments/7ntc6p/spacemacs_configuratio
     (push '(other . "linux-spaces-only") c-default-style)
   #+end_src
 
+* JS editing
+  #+begin_src emacs-lisp :tangle yes
+    (add-hook 'json-mode-hook
+              (lambda ()
+                (make-local-variable 'js-indent-level)
+                (setq js-indent-level 2)))
+  #+end_src
+
 * key bindings
 ** terminal bindings
    #+begin_src emacs-lisp :tangle yes
@@ -265,11 +296,12 @@ Thanks to: https://www.reddit.com/r/emacs/comments/7ntc6p/spacemacs_configuratio
        (find-file (expand-file-name "user-config.org" dotspacemacs-directory)))
      (spacemacs/set-leader-keys "fec" 'spacemacs/find-config-file)
    #+end_src
+
 * outline mode and outshine 
 ** (https://github.com/syl20bnr/spacemacs/issues/5258) 
 ** (https://www.modernemacs.com/post/outline-ivy/)
-** enable by default
-   #+begin_src emacs-lisp :tangle yes
+** enable by default (not tangled)
+   #+begin_src emacs-lisp
      (require 'outshine)
      (add-hook 'outline-minor-mode-hook 'outshine-mode)
      (add-hook 'prog-mode-hook 'outline-minor-mode)
@@ -328,3 +360,59 @@ Thanks to: https://www.reddit.com/r/emacs/comments/7ntc6p/spacemacs_configuratio
         (python-outlines-font-lock-alist clojure-mode-hook anaconda-mode-hook)
         (python-outlines-font-lock-alist python-mode-hook)))
    #+end_src
+
+* python editing
+  #+begin_src emacs-lisp :tangle yes
+    ;; (require 'conda)
+    ;; (custom-set-variables
+    ;;  '(conda-anaconda-home "/home/anupa/miniconda3/"))
+    ;; (setenv "WORKON_HOME" "/home/anupa/miniconda3/envs")
+  #+end_src
+
+* lsp
+  #+begin_src emacs-lisp :tangle yes
+    (setq lsp-keymap-prefix "C-c C-l")
+    (setq lsp-ui-doc-enable nil)
+    ;; Performance tuning (https://emacs-lsp.github.io/lsp-mode/page/performance/)
+    (setq read-process-output-max (* (* 1024 1024))) ;; 1mb
+    (setq gc-cons-thresholdshold (* 100000000)) ;; 100mb
+    ;; (setq lsp-ui-doc-position 'top)
+  #+end_src
+
+* scala editing
+  #+begin_src emacs-lisp :tangle yes
+    (eval-after-load 'scala-mode
+      '(progn
+         ;; (setq scala-indent:align-parameterss nil)
+         ;; (setq scala-indent:default-run-on-strategy
+         ;;       scala-indent:reluctant-strategy)
+         (setq lsp-metals-treeview-show-when-views-received nil)
+         )
+      )
+  #+end_src
+
+* org reload
+  #+begin_src emacs-lisp :tangle yes
+    (org-reload)
+  #+end_src
+
+* protobuf
+#+begin_src emacs-lisp :tangle yes
+  (defconst my-protobuf-style
+    '((c-basic-offset . 2)
+      (indent-tabs-mode . nil)))
+
+  (add-hook 'protobuf-mode-hook
+            (lambda () (c-add-style "my-style" my-protobuf-style t)))
+#+end_src
+
+* flycheck
+#+begin_src emacs-lisp :tangle yes
+  (setq-default flycheck-disabled-checkers '(python-mypy python-pylint))
+#+end_src
+
+* latex
+#+begin_src emacs-lisp :tangle yes
+  (add-hook 'doc-view-mode-hook 'auto-revert-mode)
+#+end_src
+

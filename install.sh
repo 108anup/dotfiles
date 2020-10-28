@@ -6,8 +6,7 @@ echo "BASEDIR: $BASEDIR"
 cd $HOME
 
 declare -A links
-links[".spacemacs.d"]="$HOME/.spacemacs.d"
-links+=( [".dircolors"]="$HOME/.dircolors" )
+links[".dircolors"]="$HOME/.dircolors"
 
 exists(){
     [[ -d $1 ]] || [[ -f $1 ]]
@@ -97,6 +96,7 @@ if command -v emacs &> /dev/null; then
     if ! exists "$BASEDIR/.spacemacs.d/custom.el"; then
         cp "$BASEDIR/.spacemacs.d/custom-template.el" "$BASEDIR/.spacemacs.d/custom.el"
     fi
+    links[".spacemacs.d"]="$HOME/.spacemacs.d"
 else
     echo "Please install emacs"
 fi
