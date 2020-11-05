@@ -372,7 +372,7 @@ Thanks to: https://www.reddit.com/r/emacs/comments/7ntc6p/spacemacs_configuratio
 * lsp
   #+begin_src emacs-lisp :tangle yes
     (setq lsp-keymap-prefix "C-c C-l")
-    (setq lsp-ui-doc-enable nil)
+    ;; (setq lsp-ui-doc-enable nil)
     ;; Performance tuning (https://emacs-lsp.github.io/lsp-mode/page/performance/)
     (setq read-process-output-max (* (* 1024 1024))) ;; 1mb
     (setq gc-cons-thresholdshold (* 100000000)) ;; 100mb
@@ -416,3 +416,9 @@ Thanks to: https://www.reddit.com/r/emacs/comments/7ntc6p/spacemacs_configuratio
   (add-hook 'doc-view-mode-hook 'auto-revert-mode)
 #+end_src
 
+* java
+#+begin_src emacs-lisp :tangle yes
+  (setq lsp-java-vmargs
+        (list "-noverify" "-Xmx2G" "-XX:+UseG1GC" "-XX:+UseStringDeduplication")
+        )
+#+end_src
