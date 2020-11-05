@@ -3,8 +3,9 @@
 #PROMPT="%{$fg[yellow]%}[%*] %(?:%{$fg_bold[green]%}➜ :%{$fg_bold[red]%}➜ )"
 #PROMPT+=' %{$fg[cyan]%}%c%{$reset_color%} $(git_prompt_info)'
 
-# Time, PWD, Prompt
-PROMPT="%{$fg[yellow]%}[%*] %{$fg_bold[cyan]%}%c "
+# Host, Time, PWD, Prompt
+PROMPT="%{$fg_bold[red]%}@%M %{$reset_color%}"
+PROMPT+="%{$fg[yellow]%}[%*] %{$fg_bold[cyan]%}%c "
 PROMPT+='%(?:%{$fg_bold[green]%}➜ :%{$fg_bold[red]%}➜ ) %{$reset_color%}'
 
 
