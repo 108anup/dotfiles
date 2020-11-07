@@ -7,6 +7,7 @@ cd $HOME
 
 declare -A links
 links[".dircolors"]="$HOME/.dircolors"
+links[".condarc"]="$HOME/.condarc"
 
 exists(){
     [[ -d $1 ]] || [[ -f $1 ]]
