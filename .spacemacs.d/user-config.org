@@ -421,4 +421,17 @@ Thanks to: https://www.reddit.com/r/emacs/comments/7ntc6p/spacemacs_configuratio
   (setq lsp-java-vmargs
         (list "-noverify" "-Xmx2G" "-XX:+UseG1GC" "-XX:+UseStringDeduplication")
         )
+  (add-hook 'java-mode-hook (lambda ()
+                              (setq c-basic-offset 2)))
+#+end_src
+
+* helm
+#+begin_src emacs-lisp :tangle yes
+    ;; (setq completion-styles
+    ;;       `(
+    ;;         basic partial-completion emacs22 initials
+    ;;               ,(if (version<= emacs-version "27.0") 'helm-flex 'flex)
+    ;;               ))
+  (setq completion-styles
+          `('flex))
 #+end_src

@@ -65,7 +65,8 @@ if command -v zsh &> /dev/null; then
     if [[ -d "$HOME/.oh-my-zsh" ]]; then
         echo "Directory $HOME/.oh-my-zsh already exists, assuming oh-my-zsh installation"
     else
-        sh -c "$(wget -O- https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+        sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+        mv $HOME/.zshrc $HOME/.zshrc.oh-my-zsh.bkp
     fi
     links+=( [".zshrc"]="$HOME/.zshrc" \
                        [".oh-my-zsh-custom"]="$HOME/.oh-my-zsh-custom" )
