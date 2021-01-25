@@ -9,6 +9,26 @@ declare -A links
 links[".dircolors"]="$HOME/.dircolors"
 links[".condarc"]="$HOME/.condarc"
 
+declare -A to_install
+to_install+=(
+    ["emacs"]=true
+    ["base16"]=true
+    ["alacritty"]=true
+    ["zsh"]=true
+    ["i3"]=true
+    ["tmux"]=true
+)
+
+remote=""
+remote=$1
+
+if [[ $remote == "remote" ]]; then
+    to_install["emacs"]=false
+    to_install["base16"]=false
+    to_install["alacritty"]=false
+    to_install["i3"]=false
+fi
+
 exists(){
     [[ -d $1 ]] || [[ -f $1 ]]
 }
@@ -39,7 +59,7 @@ if [[ $UNAME == "Darwin" ]] && [[ $1 == "firstrun" ]]; then
     fi
 fi
 
-if command -v i3 &> /dev/null && [[ $UNAME == "Linux" ]]; then
+if command -v i3 &> /dev/null && [[ $UNAME == "Linux" ]] && [[ ${to_install["i3"]} = true ]]; then
     echo "i3 is installed"
     links+=( [".i3"]="$HOME/.i3" )
     if command -v polybar &> /dev/null && [[ $UNAME == "Linux" ]]; then
@@ -51,7 +71,7 @@ if command -v i3 &> /dev/null && [[ $UNAME == "Linux" ]]; then
     fi
 fi
 
-if command -v alacritty > /dev/null; then
+if command -v alacritty > /dev/null && [[ ${to_install["alacritty"]} = true ]]; then
     echo "alacritty is installed"
     links+=( ["alacritty.yml"]="$HOME/.config/alacritty/alacritty.yml" )
     mkdir -p $HOME/.config/alacritty
@@ -60,7 +80,7 @@ else
     # https://github.com/alacritty/alacritty
 fi
 
-if command -v zsh &> /dev/null; then
+if command -v zsh &> /dev/null && [[ ${to_install["zsh"]} = true ]]; then
     echo "zsh is installed"
     if [[ -d "$HOME/.oh-my-zsh" ]]; then
         echo "Directory $HOME/.oh-my-zsh already exists, assuming oh-my-zsh installation"
@@ -74,14 +94,14 @@ else
     echo "Please install zsh"
 fi
 
-if command -v tmux &> /dev/null; then
+if command -v tmux &> /dev/null && [[ ${to_install["tmux"]} = true ]]; then
     echo "tmux is installed"
     links+=( [".tmux.conf"]="$HOME/.tmux.conf" )
 else
     echo "Please install tmux"
 fi
 
-if command -v emacs &> /dev/null; then
+if command -v emacs &> /dev/null && [[ ${to_install["emacs"]} = true ]]; then
     echo "emacs is installed"
     if [[ -e "$HOME/.emacs.d/spacemacs.mk" ]]; then
         echo "$HOME/.emacs.d/spacemacs.mk already exists, assuming spacemacs installation"
@@ -103,10 +123,12 @@ else
     echo "Please install emacs"
 fi
 
-if [[ -d "$HOME/.config/base16-shell" ]]; then
-    echo "Directory $HOME/.config/base16-shell/ already exists, assuming base16 installation for shell"
-else
-    git clone https://github.com/chriskempson/base16-shell.git ~/.config/base16-shell
+if [[ ${to_install["base16"]} = true ]]; then
+   if [[ -d "$HOME/.config/base16-shell" ]]; then
+       echo "Directory $HOME/.config/base16-shell/ already exists, assuming base16 installation for shell"
+   else
+       git clone https://github.com/chriskempson/base16-shell.git ~/.config/base16-shell
+   fi
 fi
 
 for l in ${!links[@]}; do

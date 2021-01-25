@@ -110,6 +110,7 @@ set $cal "10"
 # assign [class="Firefox"] $web
 assign [class="Emacs"] $dev
 assign [class="Foxit Reader"] $ref
+assign [class="Evince"] $ref
 assign [class="Nautilus"] 4
 assign [class="zoom"] $meet
 assign [class="notion-desktop"] $notes
