@@ -58,13 +58,15 @@ This function should only modify configuration layer settings."
      spell-checking
      syntax-checking
      version-control
+     ;; (c-c++ :variables c-c++-backend 'lsp-clangd)
      (c-c++ :variables c-c++-backend 'lsp-clangd)
      (cmake :variables
             cmake-backend 'lsp
             cmake-enable-cmake-ide-support t)
-     (python :variables
-             python-backend 'anaconda
-             python-test-runner 'pytest)
+     ;; (python :variables
+     ;;         python-backend 'anaconda
+     ;;         python-test-runner 'pytest)
+     python
      javascript
      (java :variables java-backend 'lsp)
      yaml
