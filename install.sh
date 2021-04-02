@@ -100,6 +100,7 @@ if command -v tmux &> /dev/null && [[ ${to_install["tmux"]} = true ]]; then
 else
     echo "Please install tmux"
 fi
+echo "Please manually initialize plugins using:\n $> git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm"
 
 if command -v emacs &> /dev/null && [[ ${to_install["emacs"]} = true ]]; then
     echo "emacs is installed"
