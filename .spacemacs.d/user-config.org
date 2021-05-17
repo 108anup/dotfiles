@@ -428,9 +428,12 @@ Thanks to: https://www.reddit.com/r/emacs/comments/7ntc6p/spacemacs_configuratio
 #+begin_src emacs-lisp :tangle yes
   (setq lsp-java-vmargs
         (list "-noverify" "-Xmx2G" "-XX:+UseG1GC" "-XX:+UseStringDeduplication")
-        )
+          )
   (add-hook 'java-mode-hook (lambda ()
                               (setq c-basic-offset 2)))
+  (setq lsp-java-configuration-runtimes '[(:name "JavaSE-1.8"
+                                                 :path "/home/anupa/.sdkman/candidates/java/8.0.271-oracle"
+                                                 :default t)])
 #+end_src
 
 * helm
