@@ -166,7 +166,7 @@ fi
 alias turbo_on='bash -c "$(declare -f turbo_on_fn); turbo_on_fn"'
 alias turbo_off='bash -c "$(declare -f turbo_off_fn); turbo_off_fn"'
 
-alias emacsc="emacsclient -c"
+alias emacsc="emacsclient -a '' -c"
 alias sudo="sudo "
 
 # Base16 Shell
