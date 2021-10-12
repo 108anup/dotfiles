@@ -17,6 +17,7 @@ to_install+=(
     ["zsh"]=true
     ["i3"]=true
     ["tmux"]=true
+    ["redshift"]=true
 )
 
 remote=""
@@ -79,6 +80,16 @@ else
     echo "Alacritty not installed, it needs to be installed manually"
     # https://github.com/alacritty/alacritty
 fi
+
+if command -v redshift -h > /dev/null && [[ ${to_install["redshift"]} = true ]]; then
+    echo "redshift is installed"
+    links+=( ["redshift.conf"]="$HOME/.config/redshift/redshift.conf" )
+    mkdir -p $HOME/.config/redshift
+else
+    echo "Redshift, it needs to be installed manually"
+    echo "E.g., sudo apt-get install redshift-gtk"
+fi
+
 
 if command -v zsh &> /dev/null && [[ ${to_install["zsh"]} = true ]]; then
     echo "zsh is installed"
