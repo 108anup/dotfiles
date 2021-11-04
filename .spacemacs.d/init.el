@@ -32,7 +32,13 @@ This function should only modify configuration layer settings."
 
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(ruby
+   '(
+     (python :variables python-backend 'lsp python-lsp-server 'pyright)
+     ;; (python :variables
+     ;;         python-backend 'anaconda
+     ;;         python-test-runner 'pytest)
+     ;; (python :variables python-backend 'lsp python-lsp-server 'pyls)
+     ruby
      (rust :variables rust-backend 'lsp)
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
@@ -74,10 +80,6 @@ This function should only modify configuration layer settings."
      (cmake :variables
             cmake-backend 'lsp
             cmake-enable-cmake-ide-support t)
-     ;; (python :variables
-     ;;         python-backend 'anaconda
-     ;;         python-test-runner 'pytest)
-     (python :variables python-backend 'lsp python-lsp-server 'pyls)
      javascript
      (java :variables java-backend 'lsp)
      yaml

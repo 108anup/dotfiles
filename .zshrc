@@ -7,6 +7,7 @@ if [[ $UNAME == "Darwin" ]]; then
 else
     # From https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/ssh-agent
     IDENTITIES=($(find $HOME/.ssh -type f -name "*rsa*" -not -name "*.pub" -printf "%f\n"))
+    IDENTITIES=($(find $HOME/.ssh -type f -name "*ed25519*" -not -name "*.pub" -printf "%f\n"))
     # IDENTITIES=()
     # if [[ -f $HOME/.ssh/id_rsa_msr ]]; then
     #     IDENTITIES+=("id_rsa_msr")
