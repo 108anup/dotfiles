@@ -12,9 +12,11 @@ links[".condarc"]="$HOME/.condarc"
 declare -A to_install
 to_install+=(
     ["emacs"]=true
+    ["spacemacs"]=true
     ["base16"]=true
     ["alacritty"]=true
     ["zsh"]=true
+    ["ohmyzsh"]=true
     ["i3"]=true
     ["tmux"]=true
     ["redshift"]=true
@@ -24,7 +26,7 @@ remote=""
 remote=$1
 
 if [[ $remote == "remote" ]]; then
-    to_install["emacs"]=false
+    to_install["spacemacs"]=false
     to_install["base16"]=false
     to_install["alacritty"]=false
     to_install["i3"]=false
@@ -90,8 +92,16 @@ else
     echo "E.g., sudo apt-get install redshift-gtk"
 fi
 
+if ! command -v zsh &> /dev/null && [[ ${to_install["zsh"]} = true ]]; then
+    if [[ $UNAME == "Linux" ]] && command -v apt &> /dev/null; then
+        sudo apt update
+        sudo apt install zsh
+    else
+        echo "Only apt package manager supported currently. Please install zsh manually."
+    fi
+fi
 
-if command -v zsh &> /dev/null && [[ ${to_install["zsh"]} = true ]]; then
+if command -v zsh &> /dev/null && [[ ${to_install["ohmyzsh"]} = true ]]; then
     echo "zsh is installed"
     if [[ -d "$HOME/.oh-my-zsh" ]]; then
         echo "Directory $HOME/.oh-my-zsh already exists, assuming oh-my-zsh installation"
@@ -102,19 +112,43 @@ if command -v zsh &> /dev/null && [[ ${to_install["zsh"]} = true ]]; then
     links+=( [".zshrc"]="$HOME/.zshrc" \
                        [".oh-my-zsh-custom"]="$HOME/.oh-my-zsh-custom" )
 else
-    echo "Please install zsh"
+    echo "Skipping ohmyzsh installation as zsh is not installed."
+fi
+
+if ! command -v tmux &> /dev/null && [[ ${to_install["tmux"]} = true ]]; then
+   if [[ $UNAME == "Linux" ]] && command -v apt &> /dev/null; then
+       sudo apt update
+       sudo apt install tmux
+   else
+       echo "Only apt package manager supported currently. Please install tmux manually."
+   fi
 fi
 
 if command -v tmux &> /dev/null && [[ ${to_install["tmux"]} = true ]]; then
     echo "tmux is installed"
     links+=( [".tmux.conf"]="$HOME/.tmux.conf" )
+    if [[ -d "$HOME/.tmux/plugins/tpm" ]]; then
+        echo "tmux plugin manager is already installed. If needed, reload config (Prefix + r) and install plugins (Prefix + I)."
+    else
+        git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+        echo "Reload config (Prefix + r) and install plugins (Prefix + I)."
+    fi
 else
-    echo "Please install tmux"
+    echo "Not linking tmux config as tmux is not installed."
 fi
-echo "Please manually initialize plugins using:\n $> git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm"
-echo "Then reload config (Prefix + r) and install plugins (Prefix + I)."
 
-if command -v emacs &> /dev/null && [[ ${to_install["emacs"]} = true ]]; then
+if ! command -v emacs &> /dev/null && [[ ${to_install["emacs"]} = true ]]; then
+    if [[ $UNAME == "Linux" ]] && command -v apt &> /dev/null; then
+        sudo add-apt-repository ppa:kelleyk/emacs
+        sudo apt update
+        sudo apt install emacs27
+        echo "Rerun script to install spacemacs"
+    else
+        echo "Only apt package manager supported currently. Please install emacs manually."
+    fi
+fi
+
+if command -v emacs &> /dev/null && [[ ${to_install["spacemacs"]} = true ]]; then
     echo "emacs is installed"
     if [[ -e "$HOME/.emacs.d/spacemacs.mk" ]]; then
         echo "$HOME/.emacs.d/spacemacs.mk already exists, assuming spacemacs installation"
@@ -133,7 +167,7 @@ if command -v emacs &> /dev/null && [[ ${to_install["emacs"]} = true ]]; then
     fi
     links[".spacemacs.d"]="$HOME/.spacemacs.d"
 else
-    echo "Please install emacs"
+    echo "Skipping spacemacs installation as emacs is not installed"
 fi
 
 if [[ ${to_install["base16"]} = true ]]; then
