@@ -95,7 +95,7 @@ fi
 if ! command -v zsh &> /dev/null && [[ ${to_install["zsh"]} = true ]]; then
     if [[ $UNAME == "Linux" ]] && command -v apt &> /dev/null; then
         sudo apt update
-        sudo apt install zsh
+        sudo apt install -y zsh
     else
         echo "Only apt package manager supported currently. Please install zsh manually."
     fi
@@ -118,7 +118,7 @@ fi
 if ! command -v tmux &> /dev/null && [[ ${to_install["tmux"]} = true ]]; then
    if [[ $UNAME == "Linux" ]] && command -v apt &> /dev/null; then
        sudo apt update
-       sudo apt install tmux
+       sudo apt install -y tmux
    else
        echo "Only apt package manager supported currently. Please install tmux manually."
    fi
@@ -141,7 +141,7 @@ if ! command -v emacs &> /dev/null && [[ ${to_install["emacs"]} = true ]]; then
     if [[ $UNAME == "Linux" ]] && command -v apt &> /dev/null; then
         sudo add-apt-repository ppa:kelleyk/emacs
         sudo apt update
-        sudo apt install emacs27
+        sudo apt install -y emacs27
         echo "Rerun script to install spacemacs"
     else
         echo "Only apt package manager supported currently. Please install emacs manually."
