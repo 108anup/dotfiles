@@ -39,18 +39,19 @@ This function should only modify configuration layer settings."
      ;; Uncomment some layer names and press `SPC f e R' (Vim style) or
      ;; `M-m f e R' (Emacs style) to install them.
      ;; ----------------------------------------------------------------
-     (auto-completion :variables
-                      auto-completion-return-key-behavior 'complete
-                      auto-completion-tab-key-behavior 'cycle
-                      auto-completion-complete-with-key-sequence nil
-                      auto-completion-complete-with-key-sequence-delay 0.1
-                      auto-completion-minimum-prefix-length 2
-                      auto-completion-idle-delay 0.2
-                      auto-completion-private-snippets-directory nil
-                      auto-completion-enable-snippets-in-popup nil
-                      auto-completion-enable-help-tooltip nil
-                      auto-completion-use-company-box nil
-                      auto-completion-enable-sort-by-usage nil)
+     ;; (auto-completion :variables
+     ;;                  auto-completion-return-key-behavior 'complete
+     ;;                  auto-completion-tab-key-behavior 'cycle
+     ;;                  auto-completion-complete-with-key-sequence nil
+     ;;                  auto-completion-complete-with-key-sequence-delay 0.1
+     ;;                  auto-completion-minimum-prefix-length 2
+     ;;                  auto-completion-idle-delay 0.2
+     ;;                  auto-completion-private-snippets-directory nil
+     ;;                  auto-completion-enable-snippets-in-popup nil
+     ;;                  auto-completion-enable-help-tooltip nil
+     ;;                  auto-completion-use-company-box nil
+     ;;                  auto-completion-enable-sort-by-usage nil)
+     auto-completion
      dap
      protobuf
      windows-scripts
@@ -77,7 +78,7 @@ This function should only modify configuration layer settings."
      ;; (python :variables
      ;;         python-backend 'anaconda
      ;;         python-test-runner 'pytest)
-     (python :variables python-backend 'lsp python-lsp-server 'pyls)
+     (python :variables python-backend 'lsp python-lsp-server 'pyright)
      javascript
      (java :variables java-backend 'lsp)
      yaml
@@ -101,8 +102,9 @@ This function should only modify configuration layer settings."
             ;; scala-enable-eldoc t
             ;; scala-enable-gtags t
             scala-auto-start-backend t)
-     (latex :variables
-            latex-enable-folding t)
+     ;; (latex :variables
+     ;;        latex-enable-folding t)
+     (latex :variables latex-backend 'company-auctex)
      )
 
    ;; List of additional packages that will be installed without being
