@@ -7,6 +7,7 @@ if [[ $UNAME == "Darwin" ]]; then
 else
     # From https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/ssh-agent
     IDENTITIES=($(find $HOME/.ssh -type f -name "*rsa*" -not -name "*.pub" -printf "%f\n"))
+    IDENTITIES=($(find $HOME/.ssh -type f -name "*ed25519*" -not -name "*.pub" -printf "%f\n"))
     # IDENTITIES=()
     # if [[ -f $HOME/.ssh/id_rsa_msr ]]; then
     #     IDENTITIES+=("id_rsa_msr")
@@ -177,10 +178,10 @@ BASE16_SHELL="$HOME/.config/base16-shell/"
 
 # TMUX
 # If not running interactively, do not do anything
-[[ $- != *i* ]] && return
-if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ tmux ]] && [[ ! "$TERM" =~ eterm-color ]] && [ -z "$TMUX" ]; then
-  exec tmux -2
-fi
+# [[ $- != *i* ]] && return
+# if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ tmux ]] && [[ ! "$TERM" =~ eterm-color ]] && [ -z "$TMUX" ]; then
+#   exec tmux -2
+# fi
 
 UNAME=$(uname -s)
 if [[ $UNAME == "Linux" ]]; then

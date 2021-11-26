@@ -32,7 +32,13 @@ This function should only modify configuration layer settings."
 
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(vimscript
+   '(
+     (python :variables python-backend 'lsp python-lsp-server 'pyright)
+     ;; (python :variables
+     ;;         python-backend 'anaconda
+     ;;         python-test-runner 'pytest)
+     ;; (python :variables python-backend 'lsp python-lsp-server 'pyls)
+     ruby
      (rust :variables rust-backend 'lsp)
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
