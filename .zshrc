@@ -137,7 +137,7 @@ export LANG=en_US.UTF-8
 export LANGUAGE=en_US.UTF-8
 
 # Xilinx License
-export XILINXD_LICENSE_FILE="2101@xilinx-lic.ece.cmu.edu"
+# export XILINXD_LICENSE_FILE="2101@xilinx-lic.ece.cmu.edu"
 
 
 tmux_kill_detached(){
