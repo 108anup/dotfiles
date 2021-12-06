@@ -102,8 +102,9 @@ This function should only modify configuration layer settings."
      ;;        ;; scala-enable-eldoc t
      ;;        ;; scala-enable-gtags t
      ;;        scala-auto-start-backend t)
-     (latex :variables
-            latex-enable-folding t)
+     ;; (latex :variables
+     ;;        latex-enable-folding t)
+     (latex :variables latex-backend 'company-auctex)
      )
 
    ;; List of additional packages that will be installed without being
