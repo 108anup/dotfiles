@@ -38,54 +38,53 @@ This function should only modify configuration layer settings."
      ;;         python-backend 'anaconda
      ;;         python-test-runner 'pytest)
      ;; (python :variables python-backend 'lsp python-lsp-server 'pyls)
-     ruby
-     (rust :variables rust-backend 'lsp)
+     ;; ruby
+     ;; (rust :variables rust-backend 'lsp)
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
      ;; Uncomment some layer names and press `SPC f e R' (Vim style) or
      ;; `M-m f e R' (Emacs style) to install them.
      ;; ----------------------------------------------------------------
-     (auto-completion :variables
-                      auto-completion-return-key-behavior 'complete
-                      auto-completion-tab-key-behavior 'cycle
-                      auto-completion-complete-with-key-sequence nil
-                      auto-completion-complete-with-key-sequence-delay 0.1
-                      auto-completion-minimum-prefix-length 2
-                      auto-completion-idle-delay 0.2
-                      auto-completion-private-snippets-directory nil
-                      auto-completion-enable-snippets-in-popup nil
-                      auto-completion-enable-help-tooltip nil
-                      auto-completion-use-company-box nil
-                      auto-completion-enable-sort-by-usage nil)
+     ;; (auto-completion :variables
+     ;;                  auto-completion-return-key-behavior 'complete
+     ;;                  auto-completion-tab-key-behavior 'cycle
+     ;;                  auto-completion-complete-with-key-sequence nil
+     ;;                  auto-completion-complete-with-key-sequence-delay 0.1
+     ;;                  auto-completion-minimum-prefix-length 2
+     ;;                  auto-completion-idle-delay 0.2
+     ;;                  auto-completion-private-snippets-directory nil
+     ;;                  auto-completion-enable-snippets-in-popup nil
+     ;;                  auto-completion-enable-help-tooltip nil
+     ;;                  auto-completion-use-company-box nil
+     ;;                  auto-completion-enable-sort-by-usage nil)
+     auto-completion
      dap
-     protobuf
-     windows-scripts
-     html
-     csv
-     lua
+     ;; protobuf
+     ;; windows-scripts
+     ;; html
+     ;; csv
+     ;; lua
      helm
      better-defaults
      emacs-lisp
      git
-     markdown
-     org
-     (shell :variables
-            shell-default-height 30
-            shell-default-position 'bottom)
+     ;; markdown
+     ;; org
+     ;; (shell :variables
+     ;;        shell-default-height 30
+     ;;        shell-default-position 'bottom)
      spell-checking
      syntax-checking
      version-control
      ;; (c-c++ :variables c-c++-backend 'lsp-clangd)
-     (c-c++ :variables c-c++-backend 'lsp-clangd)
-     (cmake :variables
-            cmake-backend 'lsp
-            cmake-enable-cmake-ide-support t)
-     javascript
-     (java :variables java-backend 'lsp)
-     yaml
+     ;; (c-c++ :variables c-c++-backend 'lsp-clangd)
+     ;; (cmake :variables
+     ;;        cmake-backend 'lsp
+     ;;        cmake-enable-cmake-ide-support t)
+     ;; javascript
+     ;; (java :variables java-backend 'lsp)
+     ;; yaml
      cscope
-     syntax-checking
-     org
      bibtex
      ;; gtags
      ;; (multiple-cursors :variables
@@ -96,13 +95,13 @@ This function should only modify configuration layer settings."
      ;; https://github.com/syl20bnr/spacemacs/issues/10051
      ;; https://github.com/emacs-lsp/lsp-mode/issues/398
      (lsp :variables lsp-enable-indentation nil)
-     (scala :variables
-            scala-backend 'scala-metals
-            scala-indent:use-javadoc-style t
-            scala-auto-insert-asterisk-in-comments t
-            ;; scala-enable-eldoc t
-            ;; scala-enable-gtags t
-            scala-auto-start-backend t)
+     ;; (scala :variables
+     ;;        scala-backend 'scala-metals
+     ;;        scala-indent:use-javadoc-style t
+     ;;        scala-auto-insert-asterisk-in-comments t
+     ;;        ;; scala-enable-eldoc t
+     ;;        ;; scala-enable-gtags t
+     ;;        scala-auto-start-backend t)
      (latex :variables
             latex-enable-folding t)
      )
