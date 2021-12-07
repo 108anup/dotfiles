@@ -208,3 +208,6 @@ zstyle ':completion:*:*:*:*:*' menu yes select
 if [ -f ~/.shell_local_after ]; then
     source ~/.shell_local_after
 fi
+
+# ================ ANY TEXT AFTER THIS IS ADDED BY AUTO-GENERATED TOOLS ================
+# ================ SUCH TEXT WILL BE MOVED TO $HOME/.zshenv             ================

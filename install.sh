@@ -20,6 +20,7 @@ to_install+=(
     ["i3"]=true
     ["tmux"]=true
     ["redshift"]=true
+    ["conda"]=true
 )
 
 remote=""
@@ -60,6 +61,13 @@ if [[ $UNAME == "Darwin" ]] && [[ $1 == "firstrun" ]]; then
     if command -v brew &> /dev/null; then
         $BASEDIR/brew.sh
     fi
+fi
+
+if [[ $UNAME == "Linux" ]] && command -v apt &> /dev/null; then
+    sudo apt update
+    sudo apt install -y build-essential python3 python git g++ gcc tree
+else
+    echo "Only apt package manager supported currently. You many need to install build-essential and similar packages manually."
 fi
 
 if command -v i3 &> /dev/null && [[ $UNAME == "Linux" ]] && [[ ${to_install["i3"]} = true ]]; then
@@ -139,7 +147,7 @@ fi
 
 if ! command -v emacs &> /dev/null && [[ ${to_install["emacs"]} = true ]]; then
     if [[ $UNAME == "Linux" ]] && command -v apt &> /dev/null; then
-        sudo add-apt-repository ppa:kelleyk/emacs
+        sudo add-apt-repository -y ppa:kelleyk/emacs
         sudo apt update
         sudo apt install -y emacs27
         echo "Rerun script to install spacemacs"
@@ -176,6 +184,26 @@ if [[ ${to_install["base16"]} = true ]]; then
    else
        git clone https://github.com/chriskempson/base16-shell.git ~/.config/base16-shell
    fi
+fi
+
+if [[ ${to_install["conda"]} = true ]]; then
+    if [[ -d "$HOME/miniconda3" ]]; then
+        echo "Directory $HOME/miniconda3 already exists, assuming conda installation"
+    else
+        cd /tmp
+        wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+        chmod u+x ./Miniconda3-latest-Linux-x86_64.sh
+        ./Miniconda3-latest-Linux-x86_64.sh -b -u
+        rm ./Miniconda3-latest-Linux-x86_64.sh
+        cd $HOME
+
+        eval "$($HOME/miniconda3/bin/conda shell.zsh hook)"
+        conda init zsh
+        conda create -yn wbase python=3 numpy scipy jupyter matplotlib pip
+        conda activate wbase
+        echo -e "\nconda activate wbase" >> $HOME/.zshrc
+        $BASEDIR/clean_zshrc.sh
+    fi
 fi
 
 for l in ${!links[@]}; do
