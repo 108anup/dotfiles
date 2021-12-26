@@ -4,27 +4,11 @@ UNAME=$(uname -s)
 IDENTITIES=""
 if [[ $UNAME == "Darwin" ]]; then
     IDENTITIES=($(find $HOME/.ssh -type f -name "*rsa*" -not -name "*.pub" -exec basename {} \;))
+    IDENTITIES+=($(find $HOME/.ssh -type f -name "*ed25519*" -not -name "*.pub" -exec basename {} \;))
 else
     # From https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/ssh-agent
     IDENTITIES=($(find $HOME/.ssh -type f -name "*rsa*" -not -name "*.pub" -printf "%f\n"))
-    IDENTITIES=($(find $HOME/.ssh -type f -name "*ed25519*" -not -name "*.pub" -printf "%f\n"))
-    # IDENTITIES=()
-    # if [[ -f $HOME/.ssh/id_rsa_msr ]]; then
-    #     IDENTITIES+=("id_rsa_msr")
-    # fi
-    # if [[ -f $HOME/.ssh/id_rsa_cmu ]]; then
-    #     IDENTITIES+=("id_rsa_cmu")
-    # fi
-    # # if [[ -f $HOME/.ssh/id_rsa_cmu_emulab ]]; then
-    # #     IDENTITIES+=("id_rsa_cmu_emulab")
-    # # fi
-    # if [[ -f $HOME/.ssh/id_rsa ]]; then
-    #     IDENTITIES+=("id_rsa")
-    # fi
-    # if [[ -f $HOME/.ssh/personal_id_rsa ]]; then
-    #     IDENTITIES+=("personal_id_rsa")
-    # fi
-    # # echo ${IDENTITIES[@]}
+    IDENTITIES+=($(find $HOME/.ssh -type f -name "*ed25519*" -not -name "*.pub" -printf "%f\n"))
 fi
 
 zstyle :omz:plugins:ssh-agent identities ${IDENTITIES[@]}
