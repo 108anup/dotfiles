@@ -152,6 +152,15 @@ turbo_on_fn(){
     echo "0" > /sys/devices/system/cpu/intel_pstate/no_turbo
 }
 
+local_forward(){
+    host=$1
+    port=$2
+    if [[ -z $host ]] || [[ -z $port ]]; then
+        echo "Usage: local_forward HOST PORT"
+    fi
+    ssh -nNL ${port}:localhost:${port} ${host}
+}
+
 # Custom Aliases
 if type exa > /dev/null; then
     alias ls="exa"
