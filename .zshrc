@@ -3,12 +3,12 @@
 UNAME=$(uname -s)
 IDENTITIES=""
 if [[ $UNAME == "Darwin" ]]; then
-    IDENTITIES=($(find $HOME/.ssh -type f -name "*rsa*" -not -name "*.pub" -exec basename {} \;))
-    IDENTITIES+=($(find $HOME/.ssh -type f -name "*ed25519*" -not -name "*.pub" -exec basename {} \;))
+    IDENTITIES=($(find $HOME/.ssh -maxdepth 1 -type f -name "*rsa*" -not -name "*.pub" -exec basename {} \;))
+    IDENTITIES+=($(find $HOME/.ssh -maxdepth 1 -type f -name "*ed25519*" -not -name "*.pub" -exec basename {} \;))
 else
     # From https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/ssh-agent
-    IDENTITIES=($(find $HOME/.ssh -type f -name "*rsa*" -not -name "*.pub" -printf "%f\n"))
-    IDENTITIES+=($(find $HOME/.ssh -type f -name "*ed25519*" -not -name "*.pub" -printf "%f\n"))
+    IDENTITIES=($(find $HOME/.ssh -maxdepth 1 -type f -name "*rsa*" -not -name "*.pub" -printf "%f\n"))
+    IDENTITIES+=($(find $HOME/.ssh -maxdepth 1 -type f -name "*ed25519*" -not -name "*.pub" -printf "%f\n"))
 fi
 
 zstyle :omz:plugins:ssh-agent identities ${IDENTITIES[@]}
