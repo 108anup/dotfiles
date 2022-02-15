@@ -9,6 +9,8 @@ get_content(){
 
 get_content >> $HOME/.zshenv
 num_lines=$(get_content | wc -l)
-cat $HOME/.zshrc | head -n "-$num_lines" > $HOME/.zshrc.tmp  # I think due to piping can't directly write to .zshrc
+total_lines=$(cat ~/.zshrc | wc -l)
+lines_to_keep=$((total_lines - num_lines))
+cat $HOME/.zshrc | head -n "$lines_to_keep" > $HOME/.zshrc.tmp  # I think due to piping can't directly write to .zshrc
 cat $HOME/.zshrc.tmp > $HOME/.zshrc
 rm $HOME/.zshrc.tmp
