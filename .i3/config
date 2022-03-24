@@ -111,6 +111,8 @@ set $cal "10"
 # my apps
 # assign [class="Firefox"] $web
 assign [class="Emacs"] $dev
+assign [class="jetbrains-idea"] $dev
+assign [class="code"] $dev
 assign [class="Foxit Reader"] $ref
 assign [class="Evince"] $ref
 assign [class="Nautilus"] $dir
