@@ -118,6 +118,8 @@ assign [class="Evince"] $ref
 assign [class="Nautilus"] $dir
 assign [class="zoom"] $meet
 assign [class="notion-desktop"] $notes
+assign [class="Microsoft Teams - Insiders"] $social
+assign [class="Code"] $dev
 
 # floating settings
 # From: https://github.com/andreatta/config/blob/master/i3/config#L108
