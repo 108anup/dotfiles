@@ -1,0 +1,1 @@
+*/5 * * * * rclone bisync -v box:BoxSync ~/BoxSync --log-file ~/.box-rclone-bisync.log

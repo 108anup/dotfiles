@@ -104,7 +104,8 @@ This function should only modify configuration layer settings."
      ;;        scala-auto-start-backend t)
      ;; (latex :variables
      ;;        latex-enable-folding t)
-     (latex :variables latex-backend 'company-auctex)
+     ;; (latex :variables latex-backend 'company-auctex)
+     (latex :variables latex-backend 'lsp)
      )
 
    ;; List of additional packages that will be installed without being
