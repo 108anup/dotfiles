@@ -113,6 +113,7 @@ set $cal "10"
 assign [class="Emacs"] $dev
 assign [class="jetbrains-idea"] $dev
 assign [class="code"] $dev
+assign [class="Code"] $dev
 assign [class="Foxit Reader"] $ref
 assign [class="Evince"] $ref
 assign [class="Nautilus"] $dir
@@ -121,7 +122,7 @@ assign [class="notion-desktop"] $notes
 assign [class="Todoist"] $notes
 assign [class="Microsoft Teams - Preview"] $social
 assign [class="Microsoft Teams - Insiders"] $social
-assign [class="Code"] $dev
+assign [class="Slack"] $social
 
 # floating settings
 # From: https://github.com/andreatta/config/blob/master/i3/config#L108
