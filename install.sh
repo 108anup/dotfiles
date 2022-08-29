@@ -6,13 +6,25 @@ echo "BASEDIR: $BASEDIR"
 cd $HOME
 
 declare -A links
-links[".dircolors"]="$HOME/.dircolors"
+# links[".dircolors"]="$HOME/.dircolors"
 links[".condarc"]="$HOME/.condarc"
 
 declare -A to_install
+# to_install+=(
+#     ["emacs"]=true
+#     ["spacemacs"]=true
+#     ["base16"]=true
+#     ["alacritty"]=true
+#     ["zsh"]=true
+#     ["ohmyzsh"]=true
+#     ["i3"]=true
+#     ["tmux"]=true
+#     ["redshift"]=true
+#     ["conda"]=true
+# )
+
 to_install+=(
     ["emacs"]=true
-    ["spacemacs"]=true
     ["base16"]=true
     ["alacritty"]=true
     ["zsh"]=true
@@ -21,6 +33,7 @@ to_install+=(
     ["tmux"]=true
     ["redshift"]=true
     ["conda"]=true
+    ["fonts"]=true
 )
 
 remote=""
@@ -65,39 +78,49 @@ fi
 
 if [[ $UNAME == "Linux" ]] && command -v apt &> /dev/null; then
     sudo apt update
-    sudo apt install -y build-essential python3 python git g++ gcc tree
+    sudo apt install -y build-essential curl git g++ gcc tree
 else
-    echo "Only apt package manager supported currently. You many need to install build-essential and similar packages manually."
+    echo "ERROR: Only apt package manager supported currently. You many need to install build-essential and similar packages manually."
 fi
 
-if command -v i3 &> /dev/null && [[ $UNAME == "Linux" ]] && [[ ${to_install["i3"]} = true ]]; then
-    echo "i3 is installed"
-    links+=( [".i3"]="$HOME/.i3" )
-    if command -v polybar &> /dev/null && [[ $UNAME == "Linux" ]]; then
-        echo "polybar is installed"
-        links+=( ["polybar.ini"]="$HOME/.config/polybar/config" )
-        mkdir -p $HOME/.config/polybar
+if ! command -v i3 &> /dev/null && [[ ${to_install["i3"]} = true ]]; then
+    sudo apt install i3 polybar
+    if command -v i3 &> /dev/null && [[ $UNAME == "Linux" ]]; then
+	echo "i3 is installed"
+	links+=( [".i3"]="$HOME/.i3" )
+	if command -v polybar &> /dev/null && [[ $UNAME == "Linux" ]]; then
+            echo "polybar is installed"
+            links+=( ["polybar.ini"]="$HOME/.config/polybar/config" )
+            mkdir -p $HOME/.config/polybar
+	else
+            echo "ERROR: i3 bar won't work properly."
+	    echo "ERROR: i3 is installed and polybar is not installed"
+	fi
     else
-        echo "WARN: i3 bar won't work properly.\ni3 is installed and polybar is not installed"
+	echo "ERROR: Unable to install i3."
     fi
 fi
 
-if command -v alacritty > /dev/null && [[ ${to_install["alacritty"]} = true ]]; then
-    echo "alacritty is installed"
-    links+=( ["alacritty.yml"]="$HOME/.config/alacritty/alacritty.yml" )
-    mkdir -p $HOME/.config/alacritty
-else
-    echo "Alacritty not installed, it needs to be installed manually"
-    # https://github.com/alacritty/alacritty
+if ! command -v alacritty &> /dev/null && [[ ${to_install["alacritty"]} = true ]]; then
+    if command -v alacritty > /dev/null; then
+	echo "alacritty is installed"
+	links+=( ["alacritty.yml"]="$HOME/.config/alacritty/alacritty.yml" )
+	mkdir -p $HOME/.config/alacritty
+    else
+	echo "ERROR: Alacritty not installed, it needs to be installed manually"
+	# https://github.com/alacritty/alacritty
+    fi
 fi
 
-if command -v redshift -h > /dev/null && [[ ${to_install["redshift"]} = true ]]; then
-    echo "redshift is installed"
-    links+=( ["redshift.conf"]="$HOME/.config/redshift/redshift.conf" )
-    mkdir -p $HOME/.config/redshift
-else
-    echo "Redshift, it needs to be installed manually"
-    echo "E.g., sudo apt-get install redshift-gtk"
+if ! command -v redshift-gtk &> /dev/null && [[ ${to_install["redshift"]} = true ]]; then
+    sudo apt install redshift-gtk
+    if command -v redshift -h > /dev/null; then
+	echo "redshift is installed"
+	links+=( ["redshift.conf"]="$HOME/.config/redshift/redshift.conf" )
+	mkdir -p $HOME/.config/redshift
+    else
+	echo "ERROR: Unable to install redshift"
+    fi
 fi
 
 if ! command -v zsh &> /dev/null && [[ ${to_install["zsh"]} = true ]]; then
@@ -149,7 +172,7 @@ if ! command -v emacs &> /dev/null && [[ ${to_install["emacs"]} = true ]]; then
     if [[ $UNAME == "Linux" ]] && command -v apt &> /dev/null; then
         sudo add-apt-repository -y ppa:kelleyk/emacs
         sudo apt update
-        sudo apt install -y emacs27
+        sudo apt install -y emacs28
         echo "Rerun script to install spacemacs"
     else
         echo "Only apt package manager supported currently. Please install emacs manually."
@@ -204,6 +227,27 @@ if [[ ${to_install["conda"]} = true ]]; then
         echo -e "\nconda activate wbase" >> $HOME/.zshrc
         $BASEDIR/clean_zshrc.sh
     fi
+fi
+
+if [[ ${to_install["fonts"]} = true ]]; then
+    ls ~/.local/share/fonts/ | grep SourceCodePro
+    found=$?
+    if [[ $found != 0 ]]; then
+	cur_dir = $(pwd)
+	mkdir ~/tmp-fonts
+	cd ~/tmp-fonts
+	wget https://github.com/adobe-fonts/source-code-pro/archive/2.030R-ro/1.050R-it.zip
+	unzip 1.050R-it.zip
+	fontpath="${XDG_DATA_HOME:-$HOME/.local/share}"/fonts
+	mkdir -p $fontpath
+	cp source-code-pro-*-it/OTF/*.otf $fontpath
+	fc-cache -f -v
+	rm -fr ~/tmp-fonts
+	cd $cur_dir
+    else
+	echo "Fonts already installed."
+    fi
+
 fi
 
 for l in ${!links[@]}; do

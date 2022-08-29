@@ -177,7 +177,7 @@ BASE16_SHELL="$HOME/.config/base16-shell/"
 # fi
 
 UNAME=$(uname -s)
-if [[ $UNAME == "Linux" ]]; then
+if [[ $UNAME == "Linux" ]] && [[ -f ~/.dircolors ]]; then
     eval "$(dircolors ~/.dircolors)";
 fi
 
