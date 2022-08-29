@@ -8,6 +8,7 @@ cd $HOME
 declare -A links
 # links[".dircolors"]="$HOME/.dircolors"
 links[".condarc"]="$HOME/.condarc"
+links+=( ["redshift.conf"]="$HOME/.config/redshift/redshift.conf" )
 
 declare -A to_install
 # to_install+=(
@@ -34,6 +35,7 @@ to_install+=(
     ["redshift"]=true
     ["conda"]=true
     ["fonts"]=true
+    ["snaps"]=true
 )
 
 remote=""
@@ -78,7 +80,7 @@ fi
 
 if [[ $UNAME == "Linux" ]] && command -v apt &> /dev/null; then
     sudo apt update
-    sudo apt install -y build-essential curl git g++ gcc tree
+    sudo apt install -y build-essential curl git g++ gcc tree htop net-tools
 else
     echo "ERROR: Only apt package manager supported currently. You many need to install build-essential and similar packages manually."
 fi
@@ -116,7 +118,6 @@ if ! command -v redshift-gtk &> /dev/null && [[ ${to_install["redshift"]} = true
     sudo apt install redshift-gtk
     if command -v redshift -h > /dev/null; then
 	echo "redshift is installed"
-	links+=( ["redshift.conf"]="$HOME/.config/redshift/redshift.conf" )
 	mkdir -p $HOME/.config/redshift
     else
 	echo "ERROR: Unable to install redshift"
@@ -230,6 +231,7 @@ if [[ ${to_install["conda"]} = true ]]; then
 fi
 
 if [[ ${to_install["fonts"]} = true ]]; then
+    # https://askubuntu.com/questions/193072/how-to-use-the-adobe-source-code-pro-font
     ls ~/.local/share/fonts/ | grep SourceCodePro
     found=$?
     if [[ $found != 0 ]]; then
@@ -249,6 +251,19 @@ if [[ ${to_install["fonts"]} = true ]]; then
     fi
 
 fi
+
+if command -v yandex-disk &> /dev/null && [[ ${install["yandex"]} ]]; then
+    echo "deb http://repo.yandex.ru/yandex-disk/deb/ stable main" | \
+	sudo tee -a /etc/apt/sources.list.d/yandex-disk.list > /dev/null && wget http://repo.yandex.ru/yandex-disk/YANDEX-DISK-KEY.GPG -O- | \
+	    sudo apt-key add - && sudo apt-get update && sudo apt-get install -y yandex-disk
+fi
+
+
+if [[ ${install["snaps"]} ]]; then
+    sudo snap install notion-snap slack todoist
+fi
+
+echo "Install albert, alacritty, teams manually for now."
 
 for l in ${!links[@]}; do
     make_link ${l} ${links[${l}]}
