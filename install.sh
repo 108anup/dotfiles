@@ -80,13 +80,13 @@ fi
 
 if [[ $UNAME == "Linux" ]] && command -v apt &> /dev/null; then
     sudo apt update
-    sudo apt install -y build-essential curl git g++ gcc tree htop net-tools
+    sudo apt install -y build-essential curl git g++ gcc tree htop net-tools python3
 else
     echo "ERROR: Only apt package manager supported currently. You many need to install build-essential and similar packages manually."
 fi
 
 if ! command -v i3 &> /dev/null && [[ ${to_install["i3"]} = true ]]; then
-    sudo apt install i3 polybar
+    sudo apt install i3 polybar blueman pavuctrl
     if command -v i3 &> /dev/null && [[ $UNAME == "Linux" ]]; then
 	echo "i3 is installed"
 	links+=( [".i3"]="$HOME/.i3" )
@@ -103,14 +103,21 @@ if ! command -v i3 &> /dev/null && [[ ${to_install["i3"]} = true ]]; then
     fi
 fi
 
-if ! command -v alacritty &> /dev/null && [[ ${to_install["alacritty"]} = true ]]; then
+if [[ ${to_install["alacritty"]} = true ]]; then
+    if ! command -v alacritty &> /dev/null; then
+	sudo apt install -y cmake pkg-config libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3
+	if ! command -v cargo &> /dev/null; then
+	    # Install rust
+	    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+	fi
+	cargo install alacritty
+    fi
     if command -v alacritty > /dev/null; then
 	echo "alacritty is installed"
 	links+=( ["alacritty.yml"]="$HOME/.config/alacritty/alacritty.yml" )
 	mkdir -p $HOME/.config/alacritty
     else
-	echo "ERROR: Alacritty not installed, it needs to be installed manually"
-	# https://github.com/alacritty/alacritty
+	echo "ERROR: Alacritty is not installed"
     fi
 fi
 
@@ -139,7 +146,7 @@ if command -v zsh &> /dev/null && [[ ${to_install["ohmyzsh"]} = true ]]; then
         echo "Directory $HOME/.oh-my-zsh already exists, assuming oh-my-zsh installation"
     else
         sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
-        mv $HOME/.zshrc $HOME/.zshrc.oh-my-zsh.bkp
+        # mv $HOME/.zshrc $HOME/.zshrc.oh-my-zsh.bkp
     fi
     links+=( [".zshrc"]="$HOME/.zshrc" \
                        [".oh-my-zsh-custom"]="$HOME/.oh-my-zsh-custom" )
@@ -226,7 +233,6 @@ if [[ ${to_install["conda"]} = true ]]; then
         conda create -yn wbase python=3 numpy scipy jupyter matplotlib pip
         conda activate wbase
         echo -e "\nconda activate wbase" >> $HOME/.zshrc
-        $BASEDIR/clean_zshrc.sh
     fi
 fi
 
@@ -261,10 +267,21 @@ fi
 
 if [[ ${install["snaps"]} ]]; then
     sudo snap install notion-snap slack todoist
+
+    if ! command -v teams &> /dev/null; then
+	# Install teams
+	curl https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
+	sudo sh -c \
+	     'echo "deb [arch=amd64] https://packages.microsoft.com/repos/ms-teams stable main" > /etc/apt/sources.list.d/teams.list'
+	sudo apt update
+	sudo apt install teams
+    fi
 fi
 
-echo "Install albert, alacritty, teams manually for now."
+echo "Install albert, zoom, ssh-server, latex manually for now."
 
 for l in ${!links[@]}; do
     make_link ${l} ${links[${l}]}
 done
+
+$BASEDIR/clean_zshrc.sh
