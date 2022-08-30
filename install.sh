@@ -35,7 +35,7 @@ to_install+=(
     ["redshift"]=true
     ["conda"]=true
     ["fonts"]=true
-    ["snaps"]=true
+    ["apps"]=true
 )
 
 remote=""
@@ -265,7 +265,7 @@ if command -v yandex-disk &> /dev/null && [[ ${install["yandex"]} ]]; then
 fi
 
 
-if [[ ${install["snaps"]} ]]; then
+if [[ ${install["apps"]} ]]; then
     sudo snap install notion-snap slack todoist
 
     if ! command -v teams &> /dev/null; then
@@ -276,9 +276,41 @@ if [[ ${install["snaps"]} ]]; then
 	sudo apt update
 	sudo apt install teams
     fi
+
+    if ! command -v code &> /dev/null; then
+	sudo apt-get install wget gpg
+	wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
+	sudo install -D -o root -g root -m 644 packages.microsoft.gpg /etc/apt/keyrings/packages.microsoft.gpg
+	sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list'
+	rm -f packages.microsoft.gpg
+	sudo apt install apt-transport-https
+	sudo apt update
+	sudo apt install code # or code-insiders
+    fi
+
+    if ! command -v zoom &> /dev/null; then
+	sudo wget https://zoom.us/client/latest/zoom_amd64.deb
+	sudo apt install ./zoom_amd64.deb
+	rm -fr ./zoom_amd64.deb
+    fi
 fi
 
-echo "Install albert, zoom, ssh-server, latex manually for now."
+echo "Install albert, latex, ssh-server."
+
+# https://software.opensuse.org/download.html?project=home:manuelschneid3r&package=albert
+# echo 'deb http://download.opensuse.org/repositories/home:/manuelschneid3r/xUbuntu_22.04/ /' | sudo tee /etc/apt/sources.list.d/home:manuelschneid3r.list
+# curl -fsSL https://download.opensuse.org/repositories/home:manuelschneid3r/xUbuntu_22.04/Release.key | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/home_manuelschneid3r.gpg > /dev/null
+# sudo apt update
+# sudo apt install albert
+
+# https://tug.org/texlive/quickinstall.html
+# cd /tmp # working directory of your choice
+# wget https://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz
+# zcat install-tl-unx.tar.gz | tar xf -
+# cd install-tl-*
+# perl ./install-tl --no-interaction
+
+# sudo apt-get install openssh-server
 
 for l in ${!links[@]}; do
     make_link ${l} ${links[${l}]}
