@@ -111,6 +111,8 @@ if [[ ${to_install["alacritty"]} = true ]]; then
 	    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 	fi
 	cargo install alacritty
+	sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator $(which alacritty) 50
+	echo "Run if still not default: sudo update-alternatives --config x-terminal-emulator"
     fi
     if command -v alacritty > /dev/null; then
 	echo "alacritty is installed"
@@ -238,7 +240,7 @@ fi
 
 if [[ ${to_install["fonts"]} = true ]]; then
     # https://askubuntu.com/questions/193072/how-to-use-the-adobe-source-code-pro-font
-    ls ~/.local/share/fonts/ | grep SourceCodePro
+    ls ~/.local/share/fonts/ | grep SourceCodePro > /dev/null
     found=$?
     if [[ $found != 0 ]]; then
 	cur_dir = $(pwd)
@@ -295,7 +297,7 @@ if [[ ${install["apps"]} ]]; then
     fi
 fi
 
-echo "Install albert, latex, ssh-server."
+echo "WARN: Install albert, latex, ssh-server manually."
 
 # https://software.opensuse.org/download.html?project=home:manuelschneid3r&package=albert
 # echo 'deb http://download.opensuse.org/repositories/home:/manuelschneid3r/xUbuntu_22.04/ /' | sudo tee /etc/apt/sources.list.d/home:manuelschneid3r.list
