@@ -258,14 +258,25 @@ if [[ ${to_install["fonts"]} = true ]]; then
 	cur_dir = $(pwd)
 	mkdir ~/tmp-fonts
 	cd ~/tmp-fonts
+
+	# Source code pro (editor)
 	wget https://github.com/adobe-fonts/source-code-pro/archive/2.030R-ro/1.050R-it.zip
 	unzip 1.050R-it.zip
 	fontpath="${XDG_DATA_HOME:-$HOME/.local/share}"/fonts
 	mkdir -p $fontpath
 	cp source-code-pro-*-it/OTF/*.otf $fontpath
 	fc-cache -f -v
+
+	# Siji (polybar)
+	git clone https://github.com/stark/siji && cd siji
+	./install.sh
+	# https://github.com/stark/siji/issues/28
+	echo "WARN: If siji does not work, 'sudo rm /etc/fonts/70-no-bitmaps.conf'"
 	rm -fr ~/tmp-fonts
 	cd $cur_dir
+
+	# Unifont and noto color emoji (polybar)
+	sudo apt install -y unifont fonts-noto-color-emoji
     else
 	echo "Fonts already installed."
     fi
