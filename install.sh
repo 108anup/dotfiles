@@ -11,41 +11,49 @@ links[".condarc"]="$HOME/.condarc"
 links+=( ["redshift.conf"]="$HOME/.config/redshift/redshift.conf" )
 
 declare -A to_install
-# to_install+=(
-#     ["emacs"]=true
-#     ["spacemacs"]=true
-#     ["base16"]=true
-#     ["alacritty"]=true
-#     ["zsh"]=true
-#     ["ohmyzsh"]=true
-#     ["i3"]=true
-#     ["tmux"]=true
-#     ["redshift"]=true
-#     ["conda"]=true
-# )
-
-to_install+=(
-    ["emacs"]=true
-    ["base16"]=true
-    ["alacritty"]=true
-    ["zsh"]=true
-    ["ohmyzsh"]=true
-    ["i3"]=true
-    ["tmux"]=true
-    ["redshift"]=true
-    ["conda"]=true
-    ["fonts"]=true
-    ["apps"]=true
-)
-
 remote=""
 remote=$1
 
 if [[ $remote == "remote" ]]; then
-    to_install["spacemacs"]=false
-    to_install["base16"]=false
-    to_install["alacritty"]=false
-    to_install["i3"]=false
+    to_install+=(
+	["emacs"]=true
+	["zsh"]=true
+	["ohmyzsh"]=true
+	["tmux"]=true
+	["conda"]=true
+	["rust"]=true
+    )
+else
+
+    # to_install+=(
+    #     ["emacs"]=true
+    #     ["spacemacs"]=true
+    #     ["base16"]=true
+    #     ["alacritty"]=true
+    #     ["zsh"]=true
+    #     ["ohmyzsh"]=true
+    #     ["i3"]=true
+    #     ["tmux"]=true
+    #     ["redshift"]=true
+    #     ["conda"]=true
+    # )
+
+    to_install+=(
+	["emacs"]=true
+	["base16"]=true
+	["alacritty"]=true
+	["zsh"]=true
+	["ohmyzsh"]=true
+	["i3"]=true
+	["tmux"]=true
+	["redshift"]=true
+	["conda"]=true
+	["fonts"]=true
+	["apps"]=true
+	["yandex"]=true
+	["rclone"]=true
+	["rust"]=true
+    )
 fi
 
 exists(){
@@ -103,13 +111,17 @@ if ! command -v i3 &> /dev/null && [[ ${to_install["i3"]} = true ]]; then
     fi
 fi
 
+if [[ ${to_install["rust"]} = true ]]; then
+    sudo apt install -y cmake pkg-config libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3
+    if ! command -v cargo &> /dev/null; then
+	# Install rust
+	curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+    fi
+    cargo install exa
+fi
+
 if [[ ${to_install["alacritty"]} = true ]]; then
     if ! command -v alacritty &> /dev/null; then
-	sudo apt install -y cmake pkg-config libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3
-	if ! command -v cargo &> /dev/null; then
-	    # Install rust
-	    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-	fi
 	cargo install alacritty
 	sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator $(which alacritty) 50
 	echo "Run if still not default: sudo update-alternatives --config x-terminal-emulator"
@@ -260,10 +272,17 @@ if [[ ${to_install["fonts"]} = true ]]; then
 
 fi
 
+if command -v rclone &> /dev/null && [[ ${install["rclone"]} ]]; then
+    sudo -v ; curl https://rclone.org/install.sh | sudo bash
+    echo "TODO: 'rclone config' manually"
+    echo "TODO: setup cron entry manually 'rclone bisync box:BoxSync ~/BoxSync -vvv --log-file ~/.rclone-box-bisync."
+fi
+
 if command -v yandex-disk &> /dev/null && [[ ${install["yandex"]} ]]; then
     echo "deb http://repo.yandex.ru/yandex-disk/deb/ stable main" | \
 	sudo tee -a /etc/apt/sources.list.d/yandex-disk.list > /dev/null && wget http://repo.yandex.ru/yandex-disk/YANDEX-DISK-KEY.GPG -O- | \
 	    sudo apt-key add - && sudo apt-get update && sudo apt-get install -y yandex-disk
+    echo "INFO: 'yandex-disk setup' manually"
 fi
 
 
