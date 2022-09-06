@@ -16,12 +16,12 @@ remote=$1
 
 if [[ $remote == "remote" ]]; then
     to_install+=(
-	["emacs"]=true
-	["zsh"]=true
-	["ohmyzsh"]=true
-	["tmux"]=true
-	["conda"]=true
-	["rust"]=true
+	      ["emacs"]=true
+	      ["zsh"]=true
+	      ["ohmyzsh"]=true
+	      ["tmux"]=true
+	      ["conda"]=true
+	      ["rust"]=true
     )
 else
 
@@ -39,20 +39,20 @@ else
     # )
 
     to_install+=(
-	["emacs"]=true
-	["base16"]=true
-	["alacritty"]=true
-	["zsh"]=true
-	["ohmyzsh"]=true
-	["i3"]=true
-	["tmux"]=true
-	["redshift"]=true
-	["conda"]=true
-	["fonts"]=true
-	["apps"]=true
-	["yandex"]=true
-	["rclone"]=true
-	["rust"]=true
+	      ["emacs"]=true
+	      ["base16"]=true
+	      ["alacritty"]=true
+	      ["zsh"]=true
+	      ["ohmyzsh"]=true
+	      ["i3"]=true
+	      ["tmux"]=true
+	      ["redshift"]=true
+	      ["conda"]=true
+	      ["fonts"]=true
+	      ["apps"]=true
+	      ["yandex"]=true
+	      ["rclone"]=true
+	      ["rust"]=true
     )
 fi
 
@@ -96,52 +96,52 @@ fi
 if ! command -v i3 &> /dev/null && [[ ${to_install["i3"]} = true ]]; then
     sudo apt install i3 polybar blueman pavuctrl
     if command -v i3 &> /dev/null && [[ $UNAME == "Linux" ]]; then
-	echo "i3 is installed"
-	links+=( [".i3"]="$HOME/.i3" )
-	if command -v polybar &> /dev/null && [[ $UNAME == "Linux" ]]; then
+	      echo "i3 is installed"
+	      links+=( [".i3"]="$HOME/.i3" )
+	      if command -v polybar &> /dev/null && [[ $UNAME == "Linux" ]]; then
             echo "polybar is installed"
             links+=( ["polybar.ini"]="$HOME/.config/polybar/config" )
             mkdir -p $HOME/.config/polybar
-	else
+	      else
             echo "ERROR: i3 bar won't work properly."
-	    echo "ERROR: i3 is installed and polybar is not installed"
-	fi
+	          echo "ERROR: i3 is installed and polybar is not installed"
+	      fi
     else
-	echo "ERROR: Unable to install i3."
+	      echo "ERROR: Unable to install i3."
     fi
 fi
 
 if [[ ${to_install["rust"]} = true ]]; then
     sudo apt install -y cmake pkg-config libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3
     if ! command -v cargo &> /dev/null; then
-	# Install rust
-	curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+	      # Install rust
+	      curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
     fi
     cargo install exa
 fi
 
 if [[ ${to_install["alacritty"]} = true ]]; then
     if ! command -v alacritty &> /dev/null; then
-	cargo install alacritty
-	sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator $(which alacritty) 50
-	echo "Run if still not default: sudo update-alternatives --config x-terminal-emulator"
+	      cargo install alacritty
+	      sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator $(which alacritty) 50
+	      echo "Run if still not default: sudo update-alternatives --config x-terminal-emulator"
     fi
     if command -v alacritty > /dev/null; then
-	echo "alacritty is installed"
-	links+=( ["alacritty.yml"]="$HOME/.config/alacritty/alacritty.yml" )
-	mkdir -p $HOME/.config/alacritty
+	      echo "alacritty is installed"
+	      links+=( ["alacritty.yml"]="$HOME/.config/alacritty/alacritty.yml" )
+	      mkdir -p $HOME/.config/alacritty
     else
-	echo "ERROR: Alacritty is not installed"
+	      echo "ERROR: Alacritty is not installed"
     fi
 fi
 
 if ! command -v redshift-gtk &> /dev/null && [[ ${to_install["redshift"]} = true ]]; then
     sudo apt install redshift-gtk
     if command -v redshift -h > /dev/null; then
-	echo "redshift is installed"
-	mkdir -p $HOME/.config/redshift
+	      echo "redshift is installed"
+	      mkdir -p $HOME/.config/redshift
     else
-	echo "ERROR: Unable to install redshift"
+	      echo "ERROR: Unable to install redshift"
     fi
 fi
 
@@ -169,12 +169,12 @@ else
 fi
 
 if ! command -v tmux &> /dev/null && [[ ${to_install["tmux"]} = true ]]; then
-   if [[ $UNAME == "Linux" ]] && command -v apt &> /dev/null; then
-       sudo apt update
-       sudo apt install -y tmux
-   else
-       echo "Only apt package manager supported currently. Please install tmux manually."
-   fi
+    if [[ $UNAME == "Linux" ]] && command -v apt &> /dev/null; then
+        sudo apt update
+        sudo apt install -y tmux
+    else
+        echo "Only apt package manager supported currently. Please install tmux manually."
+    fi
 fi
 
 if command -v tmux &> /dev/null && [[ ${to_install["tmux"]} = true ]]; then
@@ -224,11 +224,11 @@ else
 fi
 
 if [[ ${to_install["base16"]} = true ]]; then
-   if [[ -d "$HOME/.config/base16-shell" ]]; then
-       echo "Directory $HOME/.config/base16-shell/ already exists, assuming base16 installation for shell"
-   else
-       git clone https://github.com/chriskempson/base16-shell.git ~/.config/base16-shell
-   fi
+    if [[ -d "$HOME/.config/base16-shell" ]]; then
+        echo "Directory $HOME/.config/base16-shell/ already exists, assuming base16 installation for shell"
+    else
+        git clone https://github.com/chriskempson/base16-shell.git ~/.config/base16-shell
+    fi
 fi
 
 if [[ ${to_install["conda"]} = true ]]; then
@@ -255,30 +255,30 @@ if [[ ${to_install["fonts"]} = true ]]; then
     ls ~/.local/share/fonts/ | grep SourceCodePro > /dev/null
     found=$?
     if [[ $found != 0 ]]; then
-	cur_dir = $(pwd)
-	mkdir ~/tmp-fonts
-	cd ~/tmp-fonts
+	      cur_dir = $(pwd)
+	      mkdir ~/tmp-fonts
+	      cd ~/tmp-fonts
 
-	# Source code pro (editor)
-	wget https://github.com/adobe-fonts/source-code-pro/archive/2.030R-ro/1.050R-it.zip
-	unzip 1.050R-it.zip
-	fontpath="${XDG_DATA_HOME:-$HOME/.local/share}"/fonts
-	mkdir -p $fontpath
-	cp source-code-pro-*-it/OTF/*.otf $fontpath
-	fc-cache -f -v
+	      # Source code pro (editor)
+	      wget https://github.com/adobe-fonts/source-code-pro/archive/2.030R-ro/1.050R-it.zip
+	      unzip 1.050R-it.zip
+	      fontpath="${XDG_DATA_HOME:-$HOME/.local/share}"/fonts
+	      mkdir -p $fontpath
+	      cp source-code-pro-*-it/OTF/*.otf $fontpath
+	      fc-cache -f -v
 
-	# Siji (polybar)
-	git clone https://github.com/stark/siji && cd siji
-	./install.sh
-	# https://github.com/stark/siji/issues/28
-	echo "WARN: If siji does not work, 'sudo rm /etc/fonts/70-no-bitmaps.conf'"
-	rm -fr ~/tmp-fonts
-	cd $cur_dir
+	      # Siji (polybar)
+	      git clone https://github.com/stark/siji && cd siji
+	      ./install.sh
+	      # https://github.com/stark/siji/issues/28
+	      echo "WARN: If siji does not work, 'sudo rm /etc/fonts/70-no-bitmaps.conf'"
+	      rm -fr ~/tmp-fonts
+	      cd $cur_dir
 
-	# Unifont and noto color emoji (polybar)
-	sudo apt install -y unifont fonts-noto-color-emoji
+	      # Unifont and noto color emoji (polybar)
+	      sudo apt install -y unifont fonts-noto-color-emoji
     else
-	echo "Fonts already installed."
+	      echo "Fonts already installed."
     fi
 
 fi
@@ -291,8 +291,8 @@ fi
 
 if command -v yandex-disk &> /dev/null && [[ ${install["yandex"]} ]]; then
     echo "deb http://repo.yandex.ru/yandex-disk/deb/ stable main" | \
-	sudo tee -a /etc/apt/sources.list.d/yandex-disk.list > /dev/null && wget http://repo.yandex.ru/yandex-disk/YANDEX-DISK-KEY.GPG -O- | \
-	    sudo apt-key add - && sudo apt-get update && sudo apt-get install -y yandex-disk
+	      sudo tee -a /etc/apt/sources.list.d/yandex-disk.list > /dev/null && wget http://repo.yandex.ru/yandex-disk/YANDEX-DISK-KEY.GPG -O- | \
+	          sudo apt-key add - && sudo apt-get update && sudo apt-get install -y yandex-disk
     echo "INFO: 'yandex-disk setup' manually"
 fi
 
@@ -301,29 +301,29 @@ if [[ ${install["apps"]} ]]; then
     sudo snap install notion-snap slack todoist
 
     if ! command -v teams &> /dev/null; then
-	# Install teams
-	curl https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
-	sudo sh -c \
-	     'echo "deb [arch=amd64] https://packages.microsoft.com/repos/ms-teams stable main" > /etc/apt/sources.list.d/teams.list'
-	sudo apt update
-	sudo apt install teams
+	      # Install teams
+	      curl https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
+	      sudo sh -c \
+	           'echo "deb [arch=amd64] https://packages.microsoft.com/repos/ms-teams stable main" > /etc/apt/sources.list.d/teams.list'
+	      sudo apt update
+	      sudo apt install teams
     fi
 
     if ! command -v code &> /dev/null; then
-	sudo apt-get install wget gpg
-	wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
-	sudo install -D -o root -g root -m 644 packages.microsoft.gpg /etc/apt/keyrings/packages.microsoft.gpg
-	sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list'
-	rm -f packages.microsoft.gpg
-	sudo apt install apt-transport-https
-	sudo apt update
-	sudo apt install code # or code-insiders
+	      sudo apt-get install wget gpg
+	      wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
+	      sudo install -D -o root -g root -m 644 packages.microsoft.gpg /etc/apt/keyrings/packages.microsoft.gpg
+	      sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list'
+	      rm -f packages.microsoft.gpg
+	      sudo apt install apt-transport-https
+	      sudo apt update
+	      sudo apt install code # or code-insiders
     fi
 
     if ! command -v zoom &> /dev/null; then
-	sudo wget https://zoom.us/client/latest/zoom_amd64.deb
-	sudo apt install ./zoom_amd64.deb
-	rm -fr ./zoom_amd64.deb
+	      sudo wget https://zoom.us/client/latest/zoom_amd64.deb
+	      sudo apt install ./zoom_amd64.deb
+	      rm -fr ./zoom_amd64.deb
     fi
 fi
 
