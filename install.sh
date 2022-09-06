@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# set -x
+
 FULLPATH=$(realpath $0)
 BASEDIR=$(dirname $FULLPATH)
 echo "BASEDIR: $BASEDIR"
@@ -286,13 +288,13 @@ if [[ ${to_install["fonts"]} = true ]]; then
 
 fi
 
-if command -v rclone &> /dev/null && [[ ${install["rclone"]} ]]; then
+if ! command -v rclone &> /dev/null && [[ ${to_install["rclone"]} == "true" ]]; then
     sudo -v ; curl https://rclone.org/install.sh | sudo bash
     echo "TODO: 'rclone config' manually"
     echo "TODO: setup cron entry manually 'rclone bisync box:BoxSync ~/BoxSync -vvv --log-file ~/.rclone-box-bisync."
 fi
 
-if command -v yandex-disk &> /dev/null && [[ ${install["yandex"]} ]]; then
+if ! command -v yandex-disk &> /dev/null && [[ ${to_install["yandex"]} == "true" ]]; then
     echo "deb http://repo.yandex.ru/yandex-disk/deb/ stable main" | \
 	      sudo tee -a /etc/apt/sources.list.d/yandex-disk.list > /dev/null && wget http://repo.yandex.ru/yandex-disk/YANDEX-DISK-KEY.GPG -O- | \
 	          sudo apt-key add - && sudo apt-get update && sudo apt-get install -y yandex-disk
@@ -300,8 +302,8 @@ if command -v yandex-disk &> /dev/null && [[ ${install["yandex"]} ]]; then
 fi
 
 
-if [[ ${install["apps"]} ]]; then
-    sudo snap install notion-snap slack todoist
+if [[ ${to_install["apps"]} == "true" ]]; then
+    # sudo snap install notion-snap slack todoist  # Only on Ubuntu 22.04 onwards.
 
     if ! command -v teams &> /dev/null; then
 	      # Install teams
@@ -328,9 +330,9 @@ if [[ ${install["apps"]} ]]; then
 	      sudo apt-get install ./zoom_amd64.deb
 	      rm -fr ./zoom_amd64.deb
     fi
-fi
 
-echo "WARN: Install albert, latex, ssh-server manually."
+    echo "WARN: Install albert, latex, ssh-server manually."
+fi
 
 # https://software.opensuse.org/download.html?project=home:manuelschneid3r&package=albert
 # echo 'deb http://download.opensuse.org/repositories/home:/manuelschneid3r/xUbuntu_22.04/ /' | sudo tee /etc/apt/sources.list.d/home:manuelschneid3r.list
@@ -352,3 +354,5 @@ for l in ${!links[@]}; do
 done
 
 $BASEDIR/clean_zshrc.sh
+
+# set +x
