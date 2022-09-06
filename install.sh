@@ -86,15 +86,15 @@ if [[ $UNAME == "Darwin" ]] && [[ $1 == "firstrun" ]]; then
     fi
 fi
 
-if [[ $UNAME == "Linux" ]] && command -v apt &> /dev/null; then
-    sudo apt update
-    sudo apt install -y build-essential curl git g++ gcc tree htop net-tools python3
+if [[ $UNAME == "Linux" ]] && command -v apt-get &> /dev/null; then
+    sudo apt-get update > /dev/null
+    sudo apt-get install -y build-essential curl git g++ gcc tree htop net-tools python3 > /dev/null
 else
-    echo "ERROR: Only apt package manager supported currently. You many need to install build-essential and similar packages manually."
+    echo "ERROR: Only apt-get package manager supported currently. You many need to install build-essential and similar packages manually."
 fi
 
 if ! command -v i3 &> /dev/null && [[ ${to_install["i3"]} = true ]]; then
-    sudo apt install i3 polybar blueman pavuctrl
+    sudo apt-get install i3 polybar blueman pavuctrl
     if command -v i3 &> /dev/null && [[ $UNAME == "Linux" ]]; then
 	      echo "i3 is installed"
 	      links+=( [".i3"]="$HOME/.i3" )
@@ -112,12 +112,14 @@ if ! command -v i3 &> /dev/null && [[ ${to_install["i3"]} = true ]]; then
 fi
 
 if [[ ${to_install["rust"]} = true ]]; then
-    sudo apt install -y cmake pkg-config libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3
     if ! command -v cargo &> /dev/null; then
+        sudo apt-get install -y cmake pkg-config libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3
 	      # Install rust
 	      curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
     fi
-    cargo install exa
+    if ! command -v exa &> /dev/null; then
+        cargo install exa
+    fi
 fi
 
 if [[ ${to_install["alacritty"]} = true ]]; then
@@ -136,7 +138,7 @@ if [[ ${to_install["alacritty"]} = true ]]; then
 fi
 
 if ! command -v redshift-gtk &> /dev/null && [[ ${to_install["redshift"]} = true ]]; then
-    sudo apt install redshift-gtk
+    sudo apt-get install redshift-gtk
     if command -v redshift -h > /dev/null; then
 	      echo "redshift is installed"
 	      mkdir -p $HOME/.config/redshift
@@ -146,11 +148,11 @@ if ! command -v redshift-gtk &> /dev/null && [[ ${to_install["redshift"]} = true
 fi
 
 if ! command -v zsh &> /dev/null && [[ ${to_install["zsh"]} = true ]]; then
-    if [[ $UNAME == "Linux" ]] && command -v apt &> /dev/null; then
-        sudo apt update
-        sudo apt install -y zsh
+    if [[ $UNAME == "Linux" ]] && command -v apt-get &> /dev/null; then
+        sudo apt-get update
+        sudo apt-get install -y zsh
     else
-        echo "Only apt package manager supported currently. Please install zsh manually."
+        echo "Only apt-get package manager supported currently. Please install zsh manually."
     fi
 fi
 
@@ -169,11 +171,11 @@ else
 fi
 
 if ! command -v tmux &> /dev/null && [[ ${to_install["tmux"]} = true ]]; then
-    if [[ $UNAME == "Linux" ]] && command -v apt &> /dev/null; then
-        sudo apt update
-        sudo apt install -y tmux
+    if [[ $UNAME == "Linux" ]] && command -v apt-get &> /dev/null; then
+        sudo apt-get update
+        sudo apt-get install -y tmux
     else
-        echo "Only apt package manager supported currently. Please install tmux manually."
+        echo "Only apt-get package manager supported currently. Please install tmux manually."
     fi
 fi
 
@@ -191,13 +193,13 @@ else
 fi
 
 if ! command -v emacs &> /dev/null && [[ ${to_install["emacs"]} = true ]]; then
-    if [[ $UNAME == "Linux" ]] && command -v apt &> /dev/null; then
+    if [[ $UNAME == "Linux" ]] && command -v apt-get &> /dev/null; then
         sudo add-apt-repository -y ppa:kelleyk/emacs
-        sudo apt update
-        sudo apt install -y emacs28
+        sudo apt-get update
+        sudo apt-get install -y emacs28
         echo "Rerun script to install spacemacs"
     else
-        echo "Only apt package manager supported currently. Please install emacs manually."
+        echo "Only apt-get package manager supported currently. Please install emacs manually."
     fi
 fi
 
@@ -272,11 +274,12 @@ if [[ ${to_install["fonts"]} = true ]]; then
 	      ./install.sh
 	      # https://github.com/stark/siji/issues/28
 	      echo "WARN: If siji does not work, 'sudo rm /etc/fonts/70-no-bitmaps.conf'"
+
 	      rm -fr ~/tmp-fonts
 	      cd $cur_dir
 
 	      # Unifont and noto color emoji (polybar)
-	      sudo apt install -y unifont fonts-noto-color-emoji
+	      sudo apt-get install -y unifont fonts-noto-color-emoji
     else
 	      echo "Fonts already installed."
     fi
@@ -305,8 +308,8 @@ if [[ ${install["apps"]} ]]; then
 	      curl https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
 	      sudo sh -c \
 	           'echo "deb [arch=amd64] https://packages.microsoft.com/repos/ms-teams stable main" > /etc/apt/sources.list.d/teams.list'
-	      sudo apt update
-	      sudo apt install teams
+	      sudo apt-get update
+	      sudo apt-get install teams
     fi
 
     if ! command -v code &> /dev/null; then
@@ -315,14 +318,14 @@ if [[ ${install["apps"]} ]]; then
 	      sudo install -D -o root -g root -m 644 packages.microsoft.gpg /etc/apt/keyrings/packages.microsoft.gpg
 	      sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list'
 	      rm -f packages.microsoft.gpg
-	      sudo apt install apt-transport-https
-	      sudo apt update
-	      sudo apt install code # or code-insiders
+	      sudo apt-get install apt-transport-https
+	      sudo apt-get update
+	      sudo apt-get install code # or code-insiders
     fi
 
     if ! command -v zoom &> /dev/null; then
 	      sudo wget https://zoom.us/client/latest/zoom_amd64.deb
-	      sudo apt install ./zoom_amd64.deb
+	      sudo apt-get install ./zoom_amd64.deb
 	      rm -fr ./zoom_amd64.deb
     fi
 fi
@@ -332,8 +335,8 @@ echo "WARN: Install albert, latex, ssh-server manually."
 # https://software.opensuse.org/download.html?project=home:manuelschneid3r&package=albert
 # echo 'deb http://download.opensuse.org/repositories/home:/manuelschneid3r/xUbuntu_22.04/ /' | sudo tee /etc/apt/sources.list.d/home:manuelschneid3r.list
 # curl -fsSL https://download.opensuse.org/repositories/home:manuelschneid3r/xUbuntu_22.04/Release.key | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/home_manuelschneid3r.gpg > /dev/null
-# sudo apt update
-# sudo apt install albert
+# sudo apt-get update
+# sudo apt-get install albert
 
 # https://tug.org/texlive/quickinstall.html
 # cd /tmp # working directory of your choice
