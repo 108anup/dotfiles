@@ -1,0 +1,10 @@
+Thanks to: https://www.reddit.com/r/emacs/comments/7ntc6p/spacemacs_configuration_in_a_structured_orgmode/
+
+* key bindings
+** open config
+#+begin_src emacs-lisp :tangle yes
+  ;; (defun spacemacs/find-config-file ()
+  ;;   (interactive)
+  ;;   (find-file (expand-file-name "user-config.org" dotspacemacs-directory)))
+  ;; (spacemacs/set-leader-keys "fec" 'spacemacs/find-config-file)
+#+end_src
