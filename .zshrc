@@ -163,6 +163,7 @@ alias turbo_off='bash -c "$(declare -f turbo_off_fn); turbo_off_fn"'
 alias emacsc="emacsclient -a '' -c"
 alias sudo="sudo "
 alias sudoe='sudo env "PATH=$PATH" '
+alias socks="ssh -D 1337 -C -q -N"
 
 # Base16 Shell
 BASE16_SHELL="$HOME/.config/base16-shell/"
