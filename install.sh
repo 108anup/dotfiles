@@ -116,8 +116,9 @@ fi
 if [[ ${to_install["rust"]} = true ]]; then
     if ! command -v cargo &> /dev/null; then
         sudo apt-get install -y cmake pkg-config libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3
-	      # Install rust
-	      curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+        # Install rust
+        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+        source $HOME/.cargo/env
     fi
     if ! command -v exa &> /dev/null; then
         cargo install exa
