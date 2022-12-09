@@ -10,7 +10,6 @@ cd $HOME
 declare -A links
 # links[".dircolors"]="$HOME/.dircolors"
 links[".condarc"]="$HOME/.condarc"
-links+=( ["redshift.conf"]="$HOME/.config/redshift/redshift.conf" )
 
 declare -A to_install
 remote=""
@@ -19,6 +18,7 @@ remote=$1
 if [[ $remote == "remote" ]]; then
     to_install+=(
 	      ["emacs"]=true
+	      ["base16"]=true
 	      ["zsh"]=true
 	      ["ohmyzsh"]=true
 	      ["tmux"]=true
@@ -116,8 +116,9 @@ fi
 if [[ ${to_install["rust"]} = true ]]; then
     if ! command -v cargo &> /dev/null; then
         sudo apt-get install -y cmake pkg-config libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3
-	      # Install rust
-	      curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+        # Install rust
+        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+        source $HOME/.cargo/env
     fi
     if ! command -v exa &> /dev/null; then
         cargo install exa
@@ -144,6 +145,7 @@ if ! command -v redshift-gtk &> /dev/null && [[ ${to_install["redshift"]} = true
     if command -v redshift -h > /dev/null; then
 	      echo "redshift is installed"
 	      mkdir -p $HOME/.config/redshift
+	      links+=( ["redshift.conf"]="$HOME/.config/redshift/redshift.conf" )
     else
 	      echo "ERROR: Unable to install redshift"
     fi
@@ -232,25 +234,6 @@ if [[ ${to_install["base16"]} = true ]]; then
         echo "Directory $HOME/.config/base16-shell/ already exists, assuming base16 installation for shell"
     else
         git clone https://github.com/chriskempson/base16-shell.git ~/.config/base16-shell
-    fi
-fi
-
-if [[ ${to_install["conda"]} = true ]]; then
-    if [[ -d "$HOME/miniconda3" ]]; then
-        echo "Directory $HOME/miniconda3 already exists, assuming conda installation"
-    else
-        cd /tmp
-        wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
-        chmod u+x ./Miniconda3-latest-Linux-x86_64.sh
-        ./Miniconda3-latest-Linux-x86_64.sh -b -u
-        rm ./Miniconda3-latest-Linux-x86_64.sh
-        cd $HOME
-
-        eval "$($HOME/miniconda3/bin/conda shell.zsh hook)"
-        conda init zsh
-        conda create -yn wbase python=3 numpy scipy jupyter matplotlib pip
-        conda activate wbase
-        echo -e "\nconda activate wbase" >> $HOME/.zshrc
     fi
 fi
 
@@ -352,6 +335,27 @@ fi
 for l in ${!links[@]}; do
     make_link ${l} ${links[${l}]}
 done
+
+# Install conda after zshrc is updated...
+if [[ ${to_install["conda"]} = true ]]; then
+    if [[ -d "$HOME/miniconda3" ]]; then
+        echo "Directory $HOME/miniconda3 already exists, assuming conda installation"
+    else
+        cd /tmp
+        wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+        chmod u+x ./Miniconda3-latest-Linux-x86_64.sh
+        ./Miniconda3-latest-Linux-x86_64.sh -b -u
+        rm ./Miniconda3-latest-Linux-x86_64.sh
+        cd $HOME
+
+        eval "$($HOME/miniconda3/bin/conda shell.zsh hook)"
+        conda init zsh
+        conda create -yn wbase python=3 numpy scipy jupyter matplotlib pip
+        conda activate wbase
+        echo -e "\nconda activate wbase" >> $HOME/.zshrc
+    fi
+fi
+
 
 $BASEDIR/clean_zshrc.sh
 
