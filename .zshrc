@@ -163,6 +163,8 @@ alias turbo_off='bash -c "$(declare -f turbo_off_fn); turbo_off_fn"'
 alias emacsc="emacsclient -a '' -c"
 alias sudo="sudo "
 alias sudoe='sudo env "PATH=$PATH" '
+# gr: git root. root of git tree
+alias gr='r=$(git rev-parse --git-dir) && r=$(cd "$r" && pwd)/ && cd "${r%%/.git/*}"'
 
 # Base16 Shell
 BASE16_SHELL="$HOME/.config/base16-shell/"
