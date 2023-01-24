@@ -242,6 +242,9 @@ if [[ ${to_install["fonts"]} = true ]]; then
     ls ~/.local/share/fonts/ | grep SourceCodePro > /dev/null
     found=$?
     if [[ $found != 0 ]]; then
+	      fontpath="${XDG_DATA_HOME:-$HOME/.local/share}"/fonts
+	      mkdir -p $fontpath
+
 	      cur_dir = $(pwd)
 	      mkdir ~/tmp-fonts
 	      cd ~/tmp-fonts
@@ -249,9 +252,18 @@ if [[ ${to_install["fonts"]} = true ]]; then
 	      # Source code pro (editor)
 	      wget https://github.com/adobe-fonts/source-code-pro/archive/2.030R-ro/1.050R-it.zip
 	      unzip 1.050R-it.zip
-	      fontpath="${XDG_DATA_HOME:-$HOME/.local/share}"/fonts
-	      mkdir -p $fontpath
 	      cp source-code-pro-*-it/OTF/*.otf $fontpath
+
+	      # Source serif pro
+	      wget https://github.com/adobe-fonts/source-serif-pro/archive/2.000R.zip
+	      unzip 2.000R.zip
+	      cp source-serif-*R/OTF/*.otf $fontpath
+
+	      # Source sans pro (presentations)
+	      wget https://github.com/adobe-fonts/source-sans-pro/archive/2.020R-ro/1.075R-it.zip
+	      unzip 1.075R-it.zip
+	      cp source-sans-*-it/OTF/*.otf $fontpath
+	      
 	      fc-cache -f -v
 
 	      # Siji (polybar)
