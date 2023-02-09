@@ -171,8 +171,10 @@ alias socks="ssh -D 1337 -C -q -N"
 BASE16_SHELL="$HOME/.config/base16-shell/"
 [ -n "$PS1" ] && \
     [ -s "$BASE16_SHELL/profile_helper.sh" ] && \
-        source "$BASE16_SHELL/profile_helper.sh" && \
-		base16_monokai
+        source "$BASE16_SHELL/profile_helper.sh"
+if [[ -f "$BASE16_SHELL/profile_helper.sh" ]]; then
+    base16_monokai
+fi
 
 # TMUX
 # If not running interactively, do not do anything
