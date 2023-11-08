@@ -58,6 +58,8 @@ else
     )
 fi
 
+echo ${!to_install[@]}
+
 exists(){
     [[ -d $1 ]] || [[ -f $1 ]]
 }

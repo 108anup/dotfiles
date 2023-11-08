@@ -240,4 +240,4 @@ exec_always --no-startup-id /usr/bin/albert
 
 exec_always --no-startup-id ~/.i3/wacom.sh
 exec_always --no-startup-id ~/.i3/polybar.sh
-exec_always $HOME/.i3_local_startup.sh
+exec_always ~/.i3_local_startup.sh
