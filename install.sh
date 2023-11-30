@@ -84,10 +84,9 @@ make_link(){
 
 UNAME=$(uname -s)
 echo "OS: $UNAME"
-if [[ $UNAME == "Darwin" ]] && [[ $1 == "firstrun" ]]; then
-    if command -v brew &> /dev/null; then
-        $BASEDIR/brew.sh
-    fi
+if [[ $UNAME == "Darwin" ]]; then
+    echo "Please use mac_install.sh."
+    exit 1
 fi
 
 if [[ $UNAME == "Linux" ]] && command -v apt-get &> /dev/null; then
