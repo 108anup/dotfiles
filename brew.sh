@@ -14,6 +14,7 @@ brew install --cask slack
 brew install --cask visual-studio-code
 brew install --cask zoom
 brew install --cask miniconda
+brew install --cask bitwarden
 
 brew tap homebrew/cask-fonts
 brew install font-source-code-pro
