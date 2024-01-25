@@ -32,7 +32,7 @@ This function should only modify configuration layer settings."
 
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(
+   '(python
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
      ;; Uncomment some layer names and press `SPC f e R' (Vim style) or
@@ -45,7 +45,7 @@ This function should only modify configuration layer settings."
      helm
      ;; lsp
      ;; markdown
-     ;; multiple-cursors
+     (multiple-cursors :variables multiple-cursors-backend 'mc)
      ;; org
      ;; (shell :variables
      ;;        shell-default-height 30
