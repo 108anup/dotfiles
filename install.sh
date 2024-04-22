@@ -17,7 +17,6 @@ remote=$1
 
 if [[ $remote == "remote" ]]; then
     to_install+=(
-	      ["emacs"]=true
 	      ["base16"]=true
 	      ["zsh"]=true
 	      ["ohmyzsh"]=true
