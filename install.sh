@@ -10,6 +10,7 @@ cd $HOME
 declare -A links
 # links[".dircolors"]="$HOME/.dircolors"
 links[".condarc"]="$HOME/.condarc"
+links["sshrc"]="$HOME/.ssh/rc"
 
 declare -A to_install
 remote=""
