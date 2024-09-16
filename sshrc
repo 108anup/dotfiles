@@ -1,3 +1,6 @@
-if [ ! -S ~/.ssh/ssh_auth_sock ] && [ -S "$SSH_AUTH_SOCK" ]; then
+# https://werat.dev/blog/happy-ssh-agent-forwarding/
+# https://gist.github.com/martijnvermaat/8070533
+
+if [ -n "$SSH_TTY" ] && [ -S "$SSH_AUTH_SOCK" ]; then
     ln -sf $SSH_AUTH_SOCK ~/.ssh/ssh_auth_sock
 fi
