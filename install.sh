@@ -250,16 +250,16 @@ if [[ ${to_install["fonts"]} = true ]]; then
 fi
 
 if ! command -v rclone &> /dev/null && [[ ${to_install["rclone"]} == "true" ]]; then
-    sudo -v ; curl https://rclone.org/install.sh | sudo bash
+    sudo apt install rclone
     echo "TODO: 'rclone config' manually"
-    echo "TODO: setup cron entry manually 'rclone bisync box:BoxSync ~/BoxSync -vvv --log-file ~/.rclone-box-bisync."
+    echo "TODO: setup cron entry manually. See ~/dotfiles/cron"
 fi
 
 if ! command -v yandex-disk &> /dev/null && [[ ${to_install["yandex"]} == "true" ]]; then
     echo "deb http://repo.yandex.ru/yandex-disk/deb/ stable main" | \
     sudo tee -a /etc/apt/sources.list.d/yandex-disk.list > /dev/null && wget http://repo.yandex.ru/yandex-disk/YANDEX-DISK-KEY.GPG -O- | \
     sudo apt-key add - && sudo apt update && sudo apt install -y yandex-disk
-    echo "INFO: 'yandex-disk setup' manually"
+    echo "TODO: 'yandex-disk setup' manually"
 fi
 
 
@@ -272,9 +272,9 @@ if [[ ${to_install["apps"]} == "true" ]]; then
         echo "ERROR: snap not installed. Please install manually."
     fi
     if [[ $UNAME == "Linux" ]] && command -v apt &> /dev/null; then
-        sudo apt install -y texlive-full openssh-server
+        sudo apt install -y texlive-full openssh-server feh
     else
-        echo "ERROR: Only apt package manager supported currently. Please install texlive-full and openssh-server manually."
+        echo "ERROR: Only apt package manager supported currently. Please install apps manually."
     fi
     echo "WARN: Install albert, picom or xcompgr manually."
     # https://software.opensuse.org/download.html?project=home:manuelschneid3r&package=albert
