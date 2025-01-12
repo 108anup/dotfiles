@@ -235,6 +235,7 @@ bindsym $mod+Ctrl+l exec i3lock -c AAAAAA
 # my applets/tray icons
 exec_always --no-startup-id /usr/bin/blueman-applet
 exec_always --no-startup-id /usr/bin/nm-applet
+exec_always --no-startup-id /usr/bin/picom
 exec --no-startup-id /usr/bin/pasystray
 exec_always --no-startup-id /usr/bin/albert
 

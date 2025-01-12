@@ -272,11 +272,11 @@ if [[ ${to_install["apps"]} == "true" ]]; then
         echo "ERROR: snap not installed. Please install manually."
     fi
     if [[ $UNAME == "Linux" ]] && command -v apt &> /dev/null; then
-        sudo apt install -y texlive-full openssh-server feh
+        sudo apt install -y texlive-full openssh-server feh picom
     else
         echo "ERROR: Only apt package manager supported currently. Please install apps manually."
     fi
-    echo "WARN: Install albert, picom or xcompgr manually."
+    echo "WARN: Install albert manually."
     # https://software.opensuse.org/download.html?project=home:manuelschneid3r&package=albert
     # echo 'deb http://download.opensuse.org/repositories/home:/manuelschneid3r/xUbuntu_22.04/ /' | sudo tee /etc/apt/sources.list.d/home:manuelschneid3r.list
     # curl -fsSL https://download.opensuse.org/repositories/home:manuelschneid3r/xUbuntu_22.04/Release.key | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/home_manuelschneid3r.gpg > /dev/null
@@ -318,3 +318,13 @@ fi
 $BASEDIR/clean_zshrc.sh
 
 # set +x
+
+# ------------------------------------------------------------------------------
+# Manual stuff right now:
+# ------------------------------------------------------------------------------
+# TODO automate: Need to manually delete zshrc.
+# TODO automate: Need to run install twice (for zshrc and rust interaction)
+# TODO automate: albert install (because commands are specific to OS version)
+# TODO automate: .ssh and ssh_config.d
+# yandex config
+# box config
