@@ -18,28 +18,28 @@ remote=$1
 
 if [[ $remote == "remote" ]]; then
     to_install+=(
-	      ["base16"]=true
-	      ["zsh"]=true
-	      ["ohmyzsh"]=true
-	      ["tmux"]=true
-	      ["conda"]=true
-	      ["rust"]=true
+        ["base16"]=true
+        ["zsh"]=true
+        ["ohmyzsh"]=true
+        ["tmux"]=true
+        ["conda"]=true
+        ["rust"]=true
     )
 else
     to_install+=(
-          ["apps"]=true
-          ["fonts"]=true
-	      ["emacs"]=true
-	      ["base16"]=true
-	      ["alacritty"]=true
-	      ["zsh"]=true
-	      ["ohmyzsh"]=true
-	      ["i3"]=true
-	      ["tmux"]=true
-	      ["conda"]=true
-	      ["yandex"]=true
-	      ["rclone"]=true
-	      ["rust"]=true
+        ["apps"]=true
+        ["fonts"]=true
+        ["emacs"]=true
+        ["base16"]=true
+        ["alacritty"]=true
+        ["zsh"]=true
+        ["ohmyzsh"]=true
+        ["i3"]=true
+        ["tmux"]=true
+        ["conda"]=true
+        ["yandex"]=true
+        ["rclone"]=true
+        ["rust"]=true
     )
 fi
 
@@ -84,18 +84,18 @@ fi
 if ! command -v i3 &> /dev/null && [[ ${to_install["i3"]} = true ]]; then
     sudo apt install -y i3 polybar blueman pavuctrl
     if command -v i3 &> /dev/null && [[ $UNAME == "Linux" ]]; then
-	      echo "i3 is installed"
-	      links+=( [".i3"]="$HOME/.i3" )
-	      if command -v polybar &> /dev/null && [[ $UNAME == "Linux" ]]; then
+        echo "i3 is installed"
+        links+=( [".i3"]="$HOME/.i3" )
+        if command -v polybar &> /dev/null && [[ $UNAME == "Linux" ]]; then
             echo "polybar is installed"
             links+=( ["polybar.ini"]="$HOME/.config/polybar/config" )
             mkdir -p $HOME/.config/polybar
-	      else
+        else
             echo "ERROR: i3 bar won't work properly."
-	          echo "ERROR: i3 is installed and polybar is not installed"
-	      fi
+            echo "ERROR: i3 is installed and polybar is not installed"
+        fi
     else
-	      echo "ERROR: Unable to install i3."
+        echo "ERROR: Unable to install i3."
     fi
 fi
 
@@ -113,16 +113,16 @@ fi
 
 if [[ ${to_install["alacritty"]} = true ]]; then
     if ! command -v alacritty &> /dev/null; then
-	      cargo install alacritty
-	      sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator $(which alacritty) 50
-	      echo "Run if still not default: sudo update-alternatives --config x-terminal-emulator"
+        cargo install alacritty
+        sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator $(which alacritty) 50
+        echo "Run if still not default: sudo update-alternatives --config x-terminal-emulator"
     fi
     if command -v alacritty > /dev/null; then
-	      echo "alacritty is installed"
-	      links+=( ["alacritty.toml"]="$HOME/.config/alacritty/alacritty.toml" )
-	      mkdir -p $HOME/.config/alacritty
+        echo "alacritty is installed"
+        links+=( ["alacritty.toml"]="$HOME/.config/alacritty/alacritty.toml" )
+        mkdir -p $HOME/.config/alacritty
     else
-	      echo "ERROR: Alacritty is not installed"
+        echo "ERROR: Alacritty is not installed"
     fi
 fi
 
@@ -153,8 +153,10 @@ if command -v zsh &> /dev/null && [[ ${to_install["ohmyzsh"]} = true ]]; then
         sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
         # mv $HOME/.zshrc $HOME/.zshrc.oh-my-zsh.bkp
     fi
-    links+=( [".zshrc"]="$HOME/.zshrc" \
-                       [".oh-my-zsh-custom"]="$HOME/.oh-my-zsh-custom" )
+    links+=(
+        [".zshrc"]="$HOME/.zshrc"
+        [".oh-my-zsh-custom"]="$HOME/.oh-my-zsh-custom"
+    )
 else
     echo "Skipping ohmyzsh installation as zsh is not installed."
 fi
@@ -201,49 +203,49 @@ if [[ ${to_install["fonts"]} = true ]]; then
     ls ~/.local/share/fonts/ | grep SourceCodePro > /dev/null
     found=$?
     if [[ $found != 0 ]]; then
-	      fontpath="${XDG_DATA_HOME:-$HOME/.local/share}"/fonts
-	      mkdir -p $fontpath
+        fontpath="${XDG_DATA_HOME:-$HOME/.local/share}"/fonts
+        mkdir -p $fontpath
 
-	      cur_dir = $(pwd)
-	      mkdir ~/tmp-fonts
-	      cd ~/tmp-fonts
+        cur_dir = $(pwd)
+        mkdir ~/tmp-fonts
+        cd ~/tmp-fonts
 
-	      # Source code pro (editor)
-          wget https://github.com/adobe-fonts/source-code-pro/releases/download/2.042R-u%2F1.062R-i%2F1.026R-vf/OTF-source-code-pro-2.042R-u_1.062R-i.zip
-          unzip OTF-source-code-pro-2.042R-u_1.062R-i.zip
+        # Source code pro (editor)
+        wget https://github.com/adobe-fonts/source-code-pro/releases/download/2.042R-u%2F1.062R-i%2F1.026R-vf/OTF-source-code-pro-2.042R-u_1.062R-i.zip
+        unzip OTF-source-code-pro-2.042R-u_1.062R-i.zip
 
-	      # Source sans pro (presentations)
-	      wget https://github.com/adobe-fonts/source-sans/releases/download/3.052R/OTF-source-sans-3.052R.zip
-	      unzip OTF-source-sans-3.052R.zip
+        # Source sans pro (presentations)
+        wget https://github.com/adobe-fonts/source-sans/releases/download/3.052R/OTF-source-sans-3.052R.zip
+        unzip OTF-source-sans-3.052R.zip
 
-	      # Source serif pro
-          wget https://github.com/adobe-fonts/source-serif/releases/download/4.005R/source-serif-4.005_Desktop.zip
-          unzip source-serif-4.005_Desktop.zip
-          cp source-serif-*/OTF/*.otf $fontpath
+        # Source serif pro
+        wget https://github.com/adobe-fonts/source-serif/releases/download/4.005R/source-serif-4.005_Desktop.zip
+        unzip source-serif-4.005_Desktop.zip
+        cp source-serif-*/OTF/*.otf $fontpath
 
-          cp OTF/*.otf $fontpath
-          sudo cp $fontpath /usr/local/share/fonts/  # the snap version of vscode does not look at user fonts it seems.
-	      fc-cache -f -v
+        cp OTF/*.otf $fontpath
+        sudo cp $fontpath /usr/local/share/fonts/  # the snap version of vscode does not look at user fonts it seems.
+        fc-cache -f -v
 
-	      # Siji (polybar)
-	      git clone https://github.com/stark/siji && cd siji
-	      ./install.sh
-	      # https://github.com/stark/siji/issues/28
-	      echo "WARN: If siji does not work, 'sudo rm /etc/fonts/70-no-bitmaps.conf'"
+        # Siji (polybar)
+        git clone https://github.com/stark/siji && cd siji
+        ./install.sh
+        # https://github.com/stark/siji/issues/28
+        echo "WARN: If siji does not work, 'sudo rm /etc/fonts/70-no-bitmaps.conf'"
 
-            # Successfully installed siji.pcf -> /home/anupa/.local/share/fonts
-            # Add the following snippet in your custom startup script that gets executed during xlogin:
+        # Successfully installed siji.pcf -> /home/anupa/.local/share/fonts
+        # Add the following snippet in your custom startup script that gets executed during xlogin:
 
-            #     xset +fp /home/anupa/.local/share/fonts
-            #     xset fp rehash
+        #     xset +fp /home/anupa/.local/share/fonts
+        #     xset fp rehash
 
-	      rm -fr ~/tmp-fonts
-	      cd $cur_dir
+        rm -fr ~/tmp-fonts
+        cd $cur_dir
 
-	      # Unifont and noto color emoji (polybar)
-	      sudo apt install -y unifont fonts-noto-color-emoji
+        # Unifont and noto color emoji (polybar)
+        sudo apt install -y unifont fonts-noto-color-emoji
     else
-	      echo "Fonts already installed."
+        echo "Fonts already installed."
     fi
 fi
 
@@ -255,8 +257,8 @@ fi
 
 if ! command -v yandex-disk &> /dev/null && [[ ${to_install["yandex"]} == "true" ]]; then
     echo "deb http://repo.yandex.ru/yandex-disk/deb/ stable main" | \
-	      sudo tee -a /etc/apt/sources.list.d/yandex-disk.list > /dev/null && wget http://repo.yandex.ru/yandex-disk/YANDEX-DISK-KEY.GPG -O- | \
-	          sudo apt-key add - && sudo apt update && sudo apt install -y yandex-disk
+    sudo tee -a /etc/apt/sources.list.d/yandex-disk.list > /dev/null && wget http://repo.yandex.ru/yandex-disk/YANDEX-DISK-KEY.GPG -O- | \
+    sudo apt-key add - && sudo apt update && sudo apt install -y yandex-disk
     echo "INFO: 'yandex-disk setup' manually"
 fi
 
@@ -274,7 +276,7 @@ if [[ ${to_install["apps"]} == "true" ]]; then
     else
         echo "ERROR: Only apt package manager supported currently. Please install texlive-full and openssh-server manually."
     fi
-    echo "WARN: Install albert manually."
+    echo "WARN: Install albert, picom or xcompgr manually."
     # https://software.opensuse.org/download.html?project=home:manuelschneid3r&package=albert
     # echo 'deb http://download.opensuse.org/repositories/home:/manuelschneid3r/xUbuntu_22.04/ /' | sudo tee /etc/apt/sources.list.d/home:manuelschneid3r.list
     # curl -fsSL https://download.opensuse.org/repositories/home:manuelschneid3r/xUbuntu_22.04/Release.key | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/home_manuelschneid3r.gpg > /dev/null
