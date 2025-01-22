@@ -27,6 +27,7 @@ if [[ $remote == "remote" ]]; then
     )
 else
     to_install+=(
+        ["redshift"]=true
         ["apps"]=true
         ["fonts"]=true
         ["emacs"]=true
@@ -126,16 +127,16 @@ if [[ ${to_install["alacritty"]} = true ]]; then
     fi
 fi
 
-# if ! command -v redshift-gtk &> /dev/null && [[ ${to_install["redshift"]} = true ]]; then
-#     sudo apt install redshift-gtk
-#     if command -v redshift -h > /dev/null; then
-# 	      echo "redshift is installed"
-# 	      mkdir -p $HOME/.config/redshift
-# 	      links+=( ["redshift.conf"]="$HOME/.config/redshift/redshift.conf" )
-#     else
-# 	      echo "ERROR: Unable to install redshift"
-#     fi
-# fi
+if ! command -v redshift-gtk &> /dev/null && [[ ${to_install["redshift"]} = true ]]; then
+    sudo apt install -y redshift-gtk
+    if command -v redshift -h > /dev/null; then
+        links+=( ["redshift.conf"]="$HOME/.config/redshift.conf" )
+	    echo "redshift is installed"
+	    mkdir -p $HOME/.config/redshift
+    else
+	    echo "ERROR: Unable to install redshift"
+    fi
+fi
 
 if ! command -v zsh &> /dev/null && [[ ${to_install["zsh"]} = true ]]; then
     if [[ $UNAME == "Linux" ]] && command -v apt &> /dev/null; then
