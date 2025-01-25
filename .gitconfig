@@ -1,0 +1,5 @@
+[user]
+	email = anupa@andrew.cmu.edu
+	name = Anup Agarwal
+[credential]
+	helper = cache --timeout=86400

@@ -11,6 +11,7 @@ declare -A links
 # links[".dircolors"]="$HOME/.dircolors"
 links[".condarc"]="$HOME/.condarc"
 links["sshrc"]="$HOME/.ssh/rc"
+links[".gitconfig"]="$HOME/.gitconfig"
 
 declare -A to_install
 remote=""
