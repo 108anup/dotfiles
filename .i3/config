@@ -233,11 +233,12 @@ bindsym $mod+Ctrl+Down move workspace to output down
 bindsym $mod+Ctrl+l exec i3lock -c AAAAAA
 
 # my applets/tray icons
-exec_always --no-startup-id /usr/bin/blueman-applet
-exec_always --no-startup-id /usr/bin/nm-applet
+exec --no-startup-id /usr/bin/blueman-applet
+exec --no-startup-id /usr/bin/nm-applet
+exec --no-startup-id /usr/bin/picom
 exec --no-startup-id /usr/bin/pasystray
-exec_always --no-startup-id /usr/bin/albert
+exec --no-startup-id /usr/bin/albert
 
-exec_always --no-startup-id ~/.i3/wacom.sh
-exec_always --no-startup-id ~/.i3/polybar.sh
-exec_always ~/.i3_local_startup.sh
+exec --no-startup-id ~/.i3/wacom.sh
+exec --no-startup-id ~/.i3/polybar.sh
+exec --no-startup-id ~/.i3_local_startup.sh

@@ -1,0 +1,21 @@
+[env]
+TERM = "xterm-256color"
+WINIT_X11_SCALE_FACTOR = "1.0"
+
+[font]
+size = 13
+
+[font.bold]
+family = "Source Code Pro"
+
+[font.italic]
+family = "Source Code Pro"
+
+[font.normal]
+family = "Source Code Pro"
+
+[terminal]
+
+[terminal.shell]
+args = ["--login"]
+program = "/bin/zsh"

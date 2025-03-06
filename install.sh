@@ -11,6 +11,7 @@ declare -A links
 # links[".dircolors"]="$HOME/.dircolors"
 links[".condarc"]="$HOME/.condarc"
 links["sshrc"]="$HOME/.ssh/rc"
+links[".gitconfig"]="$HOME/.gitconfig"
 
 declare -A to_install
 remote=""
@@ -18,43 +19,29 @@ remote=$1
 
 if [[ $remote == "remote" ]]; then
     to_install+=(
-	      ["base16"]=true
-	      ["zsh"]=true
-	      ["ohmyzsh"]=true
-	      ["tmux"]=true
-	      ["conda"]=true
-	      ["rust"]=true
+        ["base16"]=true
+        ["zsh"]=true
+        ["ohmyzsh"]=true
+        ["tmux"]=true
+        ["conda"]=true
+        ["rust"]=true
     )
 else
-
-    # to_install+=(
-    #     ["emacs"]=true
-    #     ["spacemacs"]=true
-    #     ["base16"]=true
-    #     ["alacritty"]=true
-    #     ["zsh"]=true
-    #     ["ohmyzsh"]=true
-    #     ["i3"]=true
-    #     ["tmux"]=true
-    #     ["redshift"]=true
-    #     ["conda"]=true
-    # )
-
     to_install+=(
-	      ["emacs"]=true
-	      ["base16"]=true
-	      ["alacritty"]=true
-	      ["zsh"]=true
-	      ["ohmyzsh"]=true
-	      ["i3"]=true
-	      ["tmux"]=true
-	      ["redshift"]=true
-	      ["conda"]=true
-	      ["fonts"]=true
-	      ["apps"]=true
-	      ["yandex"]=true
-	      ["rclone"]=true
-	      ["rust"]=true
+        ["redshift"]=true
+        ["apps"]=true
+        ["fonts"]=true
+        ["emacs"]=true
+        ["base16"]=true
+        ["alacritty"]=true
+        ["zsh"]=true
+        ["ohmyzsh"]=true
+        ["i3"]=true
+        ["tmux"]=true
+        ["conda"]=true
+        ["yandex"]=true
+        ["rclone"]=true
+        ["rust"]=true
     )
 fi
 
@@ -89,34 +76,34 @@ if [[ $UNAME == "Darwin" ]]; then
     exit 1
 fi
 
-if [[ $UNAME == "Linux" ]] && command -v apt-get &> /dev/null; then
-    sudo apt-get update > /dev/null
-    sudo apt-get install -y build-essential curl git g++ gcc tree htop net-tools python3 > /dev/null
+if [[ $UNAME == "Linux" ]] && command -v apt &> /dev/null; then
+    sudo apt update
+    sudo apt install -y build-essential curl git g++ gcc tree htop net-tools python3
 else
-    echo "ERROR: Only apt-get package manager supported currently. You many need to install build-essential and similar packages manually."
+    echo "ERROR: Only apt package manager supported currently. You many need to install build-essential and similar packages manually."
 fi
 
 if ! command -v i3 &> /dev/null && [[ ${to_install["i3"]} = true ]]; then
-    sudo apt-get install i3 polybar blueman pavuctrl
+    sudo apt install -y i3 polybar blueman pavuctrl
     if command -v i3 &> /dev/null && [[ $UNAME == "Linux" ]]; then
-	      echo "i3 is installed"
-	      links+=( [".i3"]="$HOME/.i3" )
-	      if command -v polybar &> /dev/null && [[ $UNAME == "Linux" ]]; then
+        echo "i3 is installed"
+        links+=( [".i3"]="$HOME/.i3" )
+        if command -v polybar &> /dev/null && [[ $UNAME == "Linux" ]]; then
             echo "polybar is installed"
             links+=( ["polybar.ini"]="$HOME/.config/polybar/config" )
             mkdir -p $HOME/.config/polybar
-	      else
+        else
             echo "ERROR: i3 bar won't work properly."
-	          echo "ERROR: i3 is installed and polybar is not installed"
-	      fi
+            echo "ERROR: i3 is installed and polybar is not installed"
+        fi
     else
-	      echo "ERROR: Unable to install i3."
+        echo "ERROR: Unable to install i3."
     fi
 fi
 
 if [[ ${to_install["rust"]} = true ]]; then
     if ! command -v cargo &> /dev/null; then
-        sudo apt-get install -y cmake pkg-config libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3
+        sudo apt install -y cmake pkg-config libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3
         # Install rust
         curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
         source $HOME/.cargo/env
@@ -128,36 +115,35 @@ fi
 
 if [[ ${to_install["alacritty"]} = true ]]; then
     if ! command -v alacritty &> /dev/null; then
-	      cargo install alacritty
-	      sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator $(which alacritty) 50
-	      echo "Run if still not default: sudo update-alternatives --config x-terminal-emulator"
+        cargo install alacritty
+        sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator $(which alacritty) 50
+        echo "Run if still not default: sudo update-alternatives --config x-terminal-emulator"
     fi
     if command -v alacritty > /dev/null; then
-	      echo "alacritty is installed"
-	      links+=( ["alacritty.yml"]="$HOME/.config/alacritty/alacritty.yml" )
-	      mkdir -p $HOME/.config/alacritty
+        echo "alacritty is installed"
+        links+=( ["alacritty.toml"]="$HOME/.config/alacritty/alacritty.toml" )
+        mkdir -p $HOME/.config/alacritty
     else
-	      echo "ERROR: Alacritty is not installed"
+        echo "ERROR: Alacritty is not installed"
     fi
 fi
 
 if ! command -v redshift-gtk &> /dev/null && [[ ${to_install["redshift"]} = true ]]; then
-    sudo apt-get install redshift-gtk
+    sudo apt install -y redshift-gtk
     if command -v redshift -h > /dev/null; then
-	      echo "redshift is installed"
-	      mkdir -p $HOME/.config/redshift
-	      links+=( ["redshift.conf"]="$HOME/.config/redshift/redshift.conf" )
+        links+=( ["redshift.conf"]="$HOME/.config/redshift.conf" )
+	    echo "redshift is installed"
+	    mkdir -p $HOME/.config/redshift
     else
-	      echo "ERROR: Unable to install redshift"
+	    echo "ERROR: Unable to install redshift"
     fi
 fi
 
 if ! command -v zsh &> /dev/null && [[ ${to_install["zsh"]} = true ]]; then
-    if [[ $UNAME == "Linux" ]] && command -v apt-get &> /dev/null; then
-        sudo apt-get update
-        sudo apt-get install -y zsh
+    if [[ $UNAME == "Linux" ]] && command -v apt &> /dev/null; then
+        sudo apt install -y zsh
     else
-        echo "Only apt-get package manager supported currently. Please install zsh manually."
+        echo "Only apt package manager supported currently. Please install zsh manually."
     fi
 fi
 
@@ -169,18 +155,19 @@ if command -v zsh &> /dev/null && [[ ${to_install["ohmyzsh"]} = true ]]; then
         sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
         # mv $HOME/.zshrc $HOME/.zshrc.oh-my-zsh.bkp
     fi
-    links+=( [".zshrc"]="$HOME/.zshrc" \
-                       [".oh-my-zsh-custom"]="$HOME/.oh-my-zsh-custom" )
+    links+=(
+        [".zshrc"]="$HOME/.zshrc"
+        [".oh-my-zsh-custom"]="$HOME/.oh-my-zsh-custom"
+    )
 else
     echo "Skipping ohmyzsh installation as zsh is not installed."
 fi
 
 if ! command -v tmux &> /dev/null && [[ ${to_install["tmux"]} = true ]]; then
-    if [[ $UNAME == "Linux" ]] && command -v apt-get &> /dev/null; then
-        sudo apt-get update
-        sudo apt-get install -y tmux
+    if [[ $UNAME == "Linux" ]] && command -v apt &> /dev/null; then
+        sudo apt install -y tmux
     else
-        echo "Only apt-get package manager supported currently. Please install tmux manually."
+        echo "Only apt package manager supported currently. Please install tmux manually."
     fi
 fi
 
@@ -198,36 +185,11 @@ else
 fi
 
 if ! command -v emacs &> /dev/null && [[ ${to_install["emacs"]} = true ]]; then
-    if [[ $UNAME == "Linux" ]] && command -v apt-get &> /dev/null; then
-        sudo add-apt-repository -y ppa:kelleyk/emacs
-        sudo apt-get update
-        sudo apt-get install -y emacs28
-        echo "Rerun script to install spacemacs"
+    if [[ $UNAME == "Linux" ]] && command -v apt &> /dev/null; then
+        sudo apt install -y emacs
     else
-        echo "Only apt-get package manager supported currently. Please install emacs manually."
+        echo "Only apt package manager supported currently. Please install emacs manually."
     fi
-fi
-
-if command -v emacs &> /dev/null && [[ ${to_install["spacemacs"]} = true ]]; then
-    echo "emacs is installed"
-    if [[ -e "$HOME/.emacs.d/spacemacs.mk" ]]; then
-        echo "$HOME/.emacs.d/spacemacs.mk already exists, assuming spacemacs installation"
-    else
-        if [[ -d "$HOME/.emacs.d" ]]; then
-            mv $HOME/.emacs.d $HOME/.emacs.d.bkp
-        fi
-        if [[ -e "$HOME/.emacs" ]]; then
-            mv $HOME/.emacs $HOME/.emacs.bkp
-        fi
-        git clone https://github.com/syl20bnr/spacemacs $HOME/.emacs.d
-    fi
-
-    if ! exists "$BASEDIR/.spacemacs.d/custom.el"; then
-        cp "$BASEDIR/.spacemacs.d/custom-template.el" "$BASEDIR/.spacemacs.d/custom.el"
-    fi
-    links[".spacemacs.d"]="$HOME/.spacemacs.d"
-else
-    echo "Skipping spacemacs installation as emacs is not installed"
 fi
 
 if [[ ${to_install["base16"]} = true ]]; then
@@ -243,111 +205,96 @@ if [[ ${to_install["fonts"]} = true ]]; then
     ls ~/.local/share/fonts/ | grep SourceCodePro > /dev/null
     found=$?
     if [[ $found != 0 ]]; then
-	      fontpath="${XDG_DATA_HOME:-$HOME/.local/share}"/fonts
-	      mkdir -p $fontpath
+        fontpath="${XDG_DATA_HOME:-$HOME/.local/share}"/fonts
+        mkdir -p $fontpath
 
-	      cur_dir = $(pwd)
-	      mkdir ~/tmp-fonts
-	      cd ~/tmp-fonts
+        cur_dir = $(pwd)
+        mkdir ~/tmp-fonts
+        cd ~/tmp-fonts
 
-	      # Source code pro (editor)
-	      wget https://github.com/adobe-fonts/source-code-pro/archive/2.030R-ro/1.050R-it.zip
-	      unzip 1.050R-it.zip
-	      cp source-code-pro-*-it/OTF/*.otf $fontpath
+        # Source code pro (editor)
+        wget https://github.com/adobe-fonts/source-code-pro/releases/download/2.042R-u%2F1.062R-i%2F1.026R-vf/OTF-source-code-pro-2.042R-u_1.062R-i.zip
+        unzip OTF-source-code-pro-2.042R-u_1.062R-i.zip
 
-	      # Source serif pro
-	      wget https://github.com/adobe-fonts/source-serif-pro/archive/2.000R.zip
-	      unzip 2.000R.zip
-	      cp source-serif-*R/OTF/*.otf $fontpath
+        # Source sans pro (presentations)
+        wget https://github.com/adobe-fonts/source-sans/releases/download/3.052R/OTF-source-sans-3.052R.zip
+        unzip OTF-source-sans-3.052R.zip
 
-	      # Source sans pro (presentations)
-	      wget https://github.com/adobe-fonts/source-sans-pro/archive/2.020R-ro/1.075R-it.zip
-	      unzip 1.075R-it.zip
-	      cp source-sans-*-it/OTF/*.otf $fontpath
-	      
-	      fc-cache -f -v
+        # Source serif pro
+        wget https://github.com/adobe-fonts/source-serif/releases/download/4.005R/source-serif-4.005_Desktop.zip
+        unzip source-serif-4.005_Desktop.zip
+        cp source-serif-*/OTF/*.otf $fontpath
 
-	      # Siji (polybar)
-	      git clone https://github.com/stark/siji && cd siji
-	      ./install.sh
-	      # https://github.com/stark/siji/issues/28
-	      echo "WARN: If siji does not work, 'sudo rm /etc/fonts/70-no-bitmaps.conf'"
+        cp OTF/*.otf $fontpath
+        sudo cp $fontpath /usr/local/share/fonts/  # the snap version of vscode does not look at user fonts it seems.
+        fc-cache -f -v
 
-	      rm -fr ~/tmp-fonts
-	      cd $cur_dir
+        # Siji (polybar)
+        git clone https://github.com/stark/siji && cd siji
+        ./install.sh
+        # https://github.com/stark/siji/issues/28
+        echo "WARN: If siji does not work, 'sudo rm /etc/fonts/70-no-bitmaps.conf'"
 
-	      # Unifont and noto color emoji (polybar)
-	      sudo apt-get install -y unifont fonts-noto-color-emoji
+        # Successfully installed siji.pcf -> /home/anupa/.local/share/fonts
+        # Add the following snippet in your custom startup script that gets executed during xlogin:
+
+        #     xset +fp /home/anupa/.local/share/fonts
+        #     xset fp rehash
+
+        rm -fr ~/tmp-fonts
+        cd $cur_dir
+
+        # Unifont and noto color emoji (polybar)
+        sudo apt install -y unifont fonts-noto-color-emoji
     else
-	      echo "Fonts already installed."
+        echo "Fonts already installed."
     fi
-
 fi
 
 if ! command -v rclone &> /dev/null && [[ ${to_install["rclone"]} == "true" ]]; then
-    sudo -v ; curl https://rclone.org/install.sh | sudo bash
+    sudo apt install rclone
     echo "TODO: 'rclone config' manually"
-    echo "TODO: setup cron entry manually 'rclone bisync box:BoxSync ~/BoxSync -vvv --log-file ~/.rclone-box-bisync."
+    echo "TODO: setup cron entry manually. See ~/dotfiles/cron"
 fi
 
 if ! command -v yandex-disk &> /dev/null && [[ ${to_install["yandex"]} == "true" ]]; then
     echo "deb http://repo.yandex.ru/yandex-disk/deb/ stable main" | \
-	      sudo tee -a /etc/apt/sources.list.d/yandex-disk.list > /dev/null && wget http://repo.yandex.ru/yandex-disk/YANDEX-DISK-KEY.GPG -O- | \
-	          sudo apt-key add - && sudo apt-get update && sudo apt-get install -y yandex-disk
-    echo "INFO: 'yandex-disk setup' manually"
+    sudo tee -a /etc/apt/sources.list.d/yandex-disk.list > /dev/null && wget http://repo.yandex.ru/yandex-disk/YANDEX-DISK-KEY.GPG -O- | \
+    sudo apt-key add - && sudo apt update && sudo apt install -y yandex-disk
+    echo "TODO: 'yandex-disk setup' manually"
 fi
 
 
 if [[ ${to_install["apps"]} == "true" ]]; then
-    # sudo snap install notion-snap slack todoist  # Only on Ubuntu 22.04 onwards.
-
-    if ! command -v teams &> /dev/null; then
-	      # Install teams
-	      curl https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
-	      sudo sh -c \
-	           'echo "deb [arch=amd64] https://packages.microsoft.com/repos/ms-teams stable main" > /etc/apt/sources.list.d/teams.list'
-	      sudo apt-get update
-	      sudo apt-get install teams
+    if command -v snap &> /dev/null; then
+        sudo snap install slack todoist zoom-client
+        sudo snap install code --classic
+        # sudo snap install notion-desktop
+    else
+        echo "ERROR: snap not installed. Please install manually."
     fi
-
-    if ! command -v code &> /dev/null; then
-	      sudo apt-get install wget gpg
-	      wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
-	      sudo install -D -o root -g root -m 644 packages.microsoft.gpg /etc/apt/keyrings/packages.microsoft.gpg
-	      sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list'
-	      rm -f packages.microsoft.gpg
-	      sudo apt-get install apt-transport-https
-	      sudo apt-get update
-	      sudo apt-get install code # or code-insiders
+    if [[ $UNAME == "Linux" ]] && command -v apt &> /dev/null; then
+        sudo apt install -y texlive-full openssh-server feh picom
+    else
+        echo "ERROR: Only apt package manager supported currently. Please install apps manually."
     fi
-
-    if ! command -v zoom &> /dev/null; then
-	      sudo wget https://zoom.us/client/latest/zoom_amd64.deb
-	      sudo apt-get install ./zoom_amd64.deb
-	      rm -fr ./zoom_amd64.deb
-    fi
-
-    echo "WARN: Install albert, latex, ssh-server manually."
+    echo "WARN: Install albert manually."
+    # https://software.opensuse.org/download.html?project=home:manuelschneid3r&package=albert
+    # echo 'deb http://download.opensuse.org/repositories/home:/manuelschneid3r/xUbuntu_22.04/ /' | sudo tee /etc/apt/sources.list.d/home:manuelschneid3r.list
+    # curl -fsSL https://download.opensuse.org/repositories/home:manuelschneid3r/xUbuntu_22.04/Release.key | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/home_manuelschneid3r.gpg > /dev/null
+    # sudo apt update
+    # sudo apt install albert
 fi
 
-# https://software.opensuse.org/download.html?project=home:manuelschneid3r&package=albert
-# echo 'deb http://download.opensuse.org/repositories/home:/manuelschneid3r/xUbuntu_22.04/ /' | sudo tee /etc/apt/sources.list.d/home:manuelschneid3r.list
-# curl -fsSL https://download.opensuse.org/repositories/home:manuelschneid3r/xUbuntu_22.04/Release.key | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/home_manuelschneid3r.gpg > /dev/null
-# sudo apt-get update
-# sudo apt-get install albert
-
-# https://tug.org/texlive/quickinstall.html
-# cd /tmp # working directory of your choice
-# wget https://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz
-# zcat install-tl-unx.tar.gz | tar xf -
-# cd install-tl-*
-# perl ./install-tl --no-interaction
-
-# sudo apt-get install openssh-server
 
 for l in ${!links[@]}; do
     make_link ${l} ${links[${l}]}
 done
+
+# TODO: Currently on first install, zshrc link does not happen properly, and so
+# the conda config goes to unlinked zshrc.
+
+# TODO: Also on first install, the rust zsh config does not get populated.
 
 # Install conda after zshrc is updated...
 if [[ ${to_install["conda"]} = true ]]; then
@@ -373,3 +320,13 @@ fi
 $BASEDIR/clean_zshrc.sh
 
 # set +x
+
+# ------------------------------------------------------------------------------
+# Manual stuff right now:
+# ------------------------------------------------------------------------------
+# TODO automate: Need to manually delete zshrc.
+# TODO automate: Need to run install twice (for zshrc and rust interaction)
+# TODO automate: albert install (because commands are specific to OS version)
+# TODO automate: .ssh and ssh_config.d
+# yandex config
+# box config

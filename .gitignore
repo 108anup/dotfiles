@@ -3,3 +3,4 @@
 .spacemacs.d/custom-user-config.el
 .spacemacs.d/custom-user-init.el
 .spacemacs.d/user-config.el
+.DS_Store
