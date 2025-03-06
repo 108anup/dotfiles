@@ -18,3 +18,4 @@ cd luarocks-3.11.1.tar.gz
 make
 sudo make install
 ```
+3. `cargo install --locked tree-sitter-cli`
