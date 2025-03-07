@@ -84,7 +84,7 @@ ZSH_CUSTOM=$HOME/.oh-my-zsh-custom
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(jump colored-man-pages zsh-autosuggestions ssh-agent fzf-zsh-plugin git)
+plugins=(jump colored-man-pages zsh-autosuggestions ssh-agent git fzf-zsh-plugin)
 
 source $ZSH/oh-my-zsh.sh
 
