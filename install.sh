@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 {
-  set -euo pipefail
+  # set -euo pipefail
   # set -x
 
   FULLPATH=$(realpath $0)
@@ -231,19 +231,18 @@
         sudo make install
       fi
 
-      if ! command -v nvm &>/dev/null; then
-        cd $scratch
-        curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
-        \. "$HOME/.nvm/nvm.sh" # in lieu of restarting the shell
-        nvm install 22
-      fi
+      # if ! command -v nvm &>/dev/null; then
+      #   cd $scratch
+      #   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
+      #   \. "$HOME/.nvm/nvm.sh" # in lieu of restarting the shell
+      #   nvm install 22
+      # fi
 
       if ! command -v nvim &>/dev/null; then
         cd $scratch
         curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz
         sudo rm -rf /opt/nvim
         sudo tar -C /opt -xzf nvim-linux-x86_64.tar.gz
-        links["lazy_nvim"]="$HOME/.config/nvim"
       fi
 
       fonts_dir="$HOME/.local/share/fonts"
@@ -261,6 +260,7 @@
       fi
 
       cd $cur_dir
+      links["lazy_nvim"]="$HOME/.config/nvim"
     else
       echo "Only apt package manager supported currently. Please install nvim manually."
     fi
