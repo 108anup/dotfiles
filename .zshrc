@@ -161,6 +161,7 @@ fi
 alias turbo_on='bash -c "$(declare -f turbo_on_fn); turbo_on_fn"'
 alias turbo_off='bash -c "$(declare -f turbo_off_fn); turbo_off_fn"'
 
+alias vim="nvim"
 alias emacsc="emacsclient -a '' -c"
 alias sudo="sudo "
 alias sudoe='sudo env "PATH=$PATH" '
