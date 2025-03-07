@@ -168,6 +168,17 @@ alias sudoe='sudo env "PATH=$PATH" '
 # gr: git root. root of git tree
 alias gr='r=$(git rev-parse --git-dir) && r=$(cd "$r" && pwd)/ && cd "${r%%/.git/*}"'
 alias socks="ssh -D 1337 -C -q -N"
+alias tstamp=$(date -u +"%Y%m%dT%H%M%SZ")
+alias mkscratch='cd "$(mktemp -d /tmp/scratch.XXXXXX)"'
+
+add_to_path() {
+    if [[ -d "$1" && ":$PATH:" != *":$1:"* ]]; then
+        export PATH="$PATH:$1"
+    fi
+}
+export add_to_path
+
+add_to_path /opt/nvim-linux-x86_64/bin
 
 # Base16 Shell
 BASE16_SHELL="$HOME/.config/base16-shell/"

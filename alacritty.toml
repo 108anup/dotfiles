@@ -6,13 +6,13 @@ WINIT_X11_SCALE_FACTOR = "1.0"
 size = 13
 
 [font.bold]
-family = "Source Code Pro"
+family = "Sauce Code Pro Nerd Font Mono"
 
 [font.italic]
-family = "Source Code Pro"
+family = "Sauce Code Pro Nerd Font Mono"
 
 [font.normal]
-family = "Source Code Pro"
+family = "Sauce Code Pro Nerd Font Mono"
 
 [terminal]
 
