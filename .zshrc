@@ -102,8 +102,10 @@ source $ZSH/oh-my-zsh.sh
 #   export EDITOR='mvim'
 # fi
 
+# https://www.reddit.com/r/zsh/comments/iy19pl/zsh_bind_jj_key_to_escape_key_in_vi_mode/
 bindkey -v
 bindkey -M viins 'jj' vi-cmd-mode
+
 export GIT_EDITOR='nvim'
 export VISUAL='nvim'
 export EDITOR='nvim'
