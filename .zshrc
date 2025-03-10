@@ -102,7 +102,9 @@ source $ZSH/oh-my-zsh.sh
 #   export EDITOR='mvim'
 # fi
 
-EDITOR='emacs'
+export GIT_EDITOR='nvim'
+export VISUAL='nvim'
+export EDITOR='nvim'
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
@@ -162,6 +164,9 @@ alias turbo_on='bash -c "$(declare -f turbo_on_fn); turbo_on_fn"'
 alias turbo_off='bash -c "$(declare -f turbo_off_fn); turbo_off_fn"'
 
 alias vim="nvim"
+alias zshrc="vim ~/.zshrc"
+alias zshrcs="source ~/.zshrc"
+alias tmuxrc="vim ~/.tmux.conf"
 alias emacsc="emacsclient -a '' -c"
 alias sudo="sudo "
 alias sudoe='sudo env "PATH=$PATH" '
