@@ -5,6 +5,13 @@ return {
     local view = require("iron.view")
     local common = require("iron.fts.common")
 
+    -- TODO: this does not seem to work as expected, debug when you have time later.
+    local function get_repl_split_cmd()
+      local total_panes = vim.fn.winnr() -- Get number of open windows
+      local width = math.floor(vim.o.columns / (total_panes + 1)) -- Divide available width
+      return "vertical rightbelow " .. width .. " split"
+    end
+
     iron.setup {
       config = {
         -- Whether a repl should be discarded or not
@@ -32,7 +39,7 @@ return {
         end,
         -- How the repl window will be displayed
         -- See below for more information
-        repl_open_cmd = view.right(60),
+        repl_open_cmd = view.split.vertical.botright(0.50), -- get_repl_split_cmd(), -- view.right(60),
 
         -- repl_open_cmd can also be an array-style table so that multiple 
         -- repl_open_commands can be given.
