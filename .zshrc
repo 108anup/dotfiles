@@ -102,6 +102,8 @@ source $ZSH/oh-my-zsh.sh
 #   export EDITOR='mvim'
 # fi
 
+bindkey -v
+bindkey -M viins 'jj' vi-cmd-mode
 export GIT_EDITOR='nvim'
 export VISUAL='nvim'
 export EDITOR='nvim'
