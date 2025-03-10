@@ -7,12 +7,15 @@ size = 13
 
 [font.bold]
 family = "Sauce Code Pro Nerd Font Mono"
+style = "Bold"
 
 [font.italic]
 family = "Sauce Code Pro Nerd Font Mono"
+style = "Italic"
 
 [font.normal]
 family = "Sauce Code Pro Nerd Font Mono"
+style = "Regular"
 
 [terminal]
 
