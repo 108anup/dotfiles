@@ -248,20 +248,6 @@
         sudo tar -C /opt -xzf nvim-linux-x86_64.tar.gz
       fi
 
-      fonts_dir="$HOME/.local/share/fonts"
-      ls $fonts_dir | grep SauceCodePro >/dev/null
-      found=$?
-      if [[ $found != 0 ]]; then
-        cd $scratch
-        mkdir -p "$fonts_dir"
-        zip_file="SourceCodePro.zip"
-        wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/$zip_file
-        unzip "$zip_file" -d "$fonts_dir"
-        rm "$zip_file"
-        find "$fonts_dir" -name '*Windows Compatible*' -delete
-        fc-cache -fv
-      fi
-
       cd $cur_dir
       links["lazy_nvim"]="$HOME/.config/nvim"
     else
@@ -288,6 +274,11 @@
       cur_dir = $(pwd)
       mkdir ~/tmp-fonts
       cd ~/tmp-fonts
+
+      zip_file="SourceCodePro.zip"
+      wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/$zip_file
+      unzip "$zip_file" -d "$fontpath"
+      find "$fonts_dir" -name '*Windows Compatible*' -delete
 
       # Source code pro (editor)
       wget https://github.com/adobe-fonts/source-code-pro/releases/download/2.042R-u%2F1.062R-i%2F1.026R-vf/OTF-source-code-pro-2.042R-u_1.062R-i.zip
