@@ -7,7 +7,7 @@ get_content(){
     # grep -Pzo "${PATTERN}(.*\n)*" $HOME/.zshrc | tail -n +3
 }
 
-get_content >> $HOME/.zshenv
+get_content >> $HOME/.shell_local_after
 num_lines=$(get_content | wc -l)
 total_lines=$(cat ~/.zshrc | wc -l)
 lines_to_keep=$((total_lines - num_lines))
