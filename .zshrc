@@ -78,13 +78,14 @@ DISABLE_UNTRACKED_FILES_DIRTY="true"
 
 # Would you like to use another custom folder than $ZSH/custom?
 ZSH_CUSTOM=$HOME/.oh-my-zsh-custom
+ZVM_INIT_MODE=sourcing
 
 # Which plugins would you like to load?
 # Standard plugins can be found in ~/.oh-my-zsh/plugins/*
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(jump colored-man-pages zsh-autosuggestions ssh-agent git fzf-zsh-plugin zsh-vi-mode)
+plugins=(jump colored-man-pages zsh-autosuggestions ssh-agent git zsh-vi-mode fzf-zsh-plugin)
 
 source $ZSH/oh-my-zsh.sh
 
