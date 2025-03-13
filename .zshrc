@@ -84,7 +84,7 @@ ZSH_CUSTOM=$HOME/.oh-my-zsh-custom
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(jump colored-man-pages zsh-autosuggestions ssh-agent git fzf-zsh-plugin)
+plugins=(jump colored-man-pages zsh-autosuggestions ssh-agent git fzf-zsh-plugin zsh-vi-mode)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -102,9 +102,9 @@ source $ZSH/oh-my-zsh.sh
 #   export EDITOR='mvim'
 # fi
 
-# https://www.reddit.com/r/zsh/comments/iy19pl/zsh_bind_jj_key_to_escape_key_in_vi_mode/
-bindkey -v
-bindkey -M viins 'jj' vi-cmd-mode
+# # https://www.reddit.com/r/zsh/comments/iy19pl/zsh_bind_jj_key_to_escape_key_in_vi_mode/
+# bindkey -v
+# bindkey -M viins 'jj' vi-cmd-mode
 
 export GIT_EDITOR='nvim'
 export VISUAL='nvim'

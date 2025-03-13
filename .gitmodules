@@ -4,3 +4,6 @@
 [submodule ".oh-my-zsh-custom/plugins/fzf-zsh-plugin"]
 	path = .oh-my-zsh-custom/plugins/fzf-zsh-plugin
 	url = https://github.com/unixorn/fzf-zsh-plugin.git
+[submodule ".oh-my-zsh-custom/plugins/zsh-vi-mode"]
+	path = .oh-my-zsh-custom/plugins/zsh-vi-mode
+	url = https://github.com/jeffreytse/zsh-vi-mode
