@@ -232,6 +232,9 @@ bindsym $mod+Ctrl+Down move workspace to output down
 
 bindsym $mod+Ctrl+l exec i3lock -c AAAAAA
 
+exec --no-startup-id setxkbmap -option ctrl:nocaps
+exec --no-startup-id xcape -e 'Control_L=Escape' -t 100
+
 # my applets/tray icons
 exec --no-startup-id /usr/bin/blueman-applet
 exec --no-startup-id /usr/bin/nm-applet
