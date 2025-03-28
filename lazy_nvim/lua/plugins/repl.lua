@@ -39,7 +39,7 @@ return {
         end,
         -- How the repl window will be displayed
         -- See below for more information
-        repl_open_cmd = view.split.vertical.botright(0.50), -- get_repl_split_cmd(), -- view.right(60),
+        repl_open_cmd = view.split.vertical.botright(0.33), -- get_repl_split_cmd(), -- view.right(60),
 
         -- repl_open_cmd can also be an array-style table so that multiple 
         -- repl_open_commands can be given.
