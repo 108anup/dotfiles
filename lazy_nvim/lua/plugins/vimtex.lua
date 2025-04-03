@@ -7,7 +7,7 @@ return {
     vim.g.vimtex_view_method = "zathura"
     vim.g.vimtex_syntax_conceal_disable = 1
     vim.g.vimtex_compiler_latexmk = {
-      out_dir = "./ouputs/vimtex/"
+      out_dir = "./outputs/vimtex/"
     }
   end
 }
