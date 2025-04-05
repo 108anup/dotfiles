@@ -231,15 +231,12 @@
         sudo make install
       fi
 
-      # This likely does not work because only zsh knows about nvm and not
-      # bash. Double check if this is even needed with the new neovim config.
-
-      # if ! command -v nvm &>/dev/null; then
-      #   cd $scratch
-      #   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
-      #   \. "$HOME/.nvm/nvm.sh" # in lieu of restarting the shell
-      #   nvm install 22
-      # fi
+      if ! command -v node &>/dev/null; then
+        cd $scratch
+        curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
+        \. "$HOME/.nvm/nvm.sh" # in lieu of restarting the shell
+        nvm install 22
+      fi
 
       if ! command -v nvim &>/dev/null; then
         cd $scratch

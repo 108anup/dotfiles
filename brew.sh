@@ -21,6 +21,9 @@ brew install font-source-code-pro
 brew install font-source-sans-3
 brew install font-open-sans
 brew install --cask font-caskaydia-mono-nerd-font
+
+brew install nvm
+nvm install 22
 brew install neovim
 brew install luarocks
 brew install --cask mactex
