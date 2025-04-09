@@ -100,7 +100,8 @@
 
   if [[ $UNAME == "Linux" ]] && command -v apt &>/dev/null; then
     sudo apt update
-    sudo apt install -y build-essential curl git g++ gcc tree htop net-tools python3
+    sudo apt install -y build-essential curl git g++ gcc tree htop net-tools python3 unzip fd-find ripgrep xsel
+    mkdir -p $HOME/.config
   else
     echo "ERROR: Only apt package manager supported currently. You many need to install build-essential and similar packages manually."
   fi
