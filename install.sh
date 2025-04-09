@@ -174,7 +174,7 @@
     if [[ -d "$HOME/.oh-my-zsh" ]]; then
       echo "Directory $HOME/.oh-my-zsh already exists, assuming oh-my-zsh installation"
     else
-      sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+      sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended --keep-zshrc
       # mv $HOME/.zshrc $HOME/.zshrc.oh-my-zsh.bkp
     fi
     links+=(
