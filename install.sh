@@ -376,7 +376,7 @@
 
       eval "$($HOME/miniconda3/bin/conda shell.zsh hook)"
       conda init zsh
-      conda create -yn wbase python=3 numpy scipy jupyter matplotlib pip
+      conda create -yn wbase python=3 numpy scipy jupyter matplotlib pip seaborn
       conda activate wbase
       echo -e "\nconda activate wbase" >>$HOME/.zshrc
     fi
