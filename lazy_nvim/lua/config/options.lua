@@ -6,3 +6,6 @@ vim.g.autoformat = false
 vim.g.snacks_animate = false
 
 vim.opt.ttimeoutlen=0
+
+vim.opt.spell = true
+vim.opt.spelllang = { "en_us" }
