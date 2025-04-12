@@ -100,7 +100,8 @@
 
   if [[ $UNAME == "Linux" ]] && command -v apt &>/dev/null; then
     sudo apt update
-    sudo apt install -y build-essential curl git g++ gcc tree htop net-tools python3
+    sudo apt install -y build-essential curl git g++ gcc tree htop net-tools python3 unzip fd-find ripgrep xsel
+    mkdir -p $HOME/.config
   else
     echo "ERROR: Only apt package manager supported currently. You many need to install build-essential and similar packages manually."
   fi
@@ -173,7 +174,7 @@
     if [[ -d "$HOME/.oh-my-zsh" ]]; then
       echo "Directory $HOME/.oh-my-zsh already exists, assuming oh-my-zsh installation"
     else
-      sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+      sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended --keep-zshrc
       # mv $HOME/.zshrc $HOME/.zshrc.oh-my-zsh.bkp
     fi
     links+=(
@@ -231,15 +232,12 @@
         sudo make install
       fi
 
-      # This likely does not work because only zsh knows about nvm and not
-      # bash. Double check if this is even needed with the new neovim config.
-
-      # if ! command -v nvm &>/dev/null; then
-      #   cd $scratch
-      #   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
-      #   \. "$HOME/.nvm/nvm.sh" # in lieu of restarting the shell
-      #   nvm install 22
-      # fi
+      if ! command -v node &>/dev/null; then
+        cd $scratch
+        curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
+        \. "$HOME/.nvm/nvm.sh" # in lieu of restarting the shell
+        nvm install 22
+      fi
 
       if ! command -v nvim &>/dev/null; then
         cd $scratch
@@ -376,7 +374,7 @@
 
       eval "$($HOME/miniconda3/bin/conda shell.zsh hook)"
       conda init zsh
-      conda create -yn wbase python=3 numpy scipy jupyter matplotlib pip
+      conda create -yn wbase python=3 numpy scipy jupyter matplotlib pip seaborn
       conda activate wbase
       echo -e "\nconda activate wbase" >>$HOME/.zshrc
     fi
