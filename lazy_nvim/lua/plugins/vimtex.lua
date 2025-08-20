@@ -13,5 +13,6 @@ return {
     vim.g.vimtex_compiler_latexmk = {
       out_dir = "./outputs/vimtex/"
     }
+    vim.g.vimtex_quickfix_mode = 0
   end
 }
