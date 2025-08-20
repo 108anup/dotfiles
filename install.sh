@@ -40,6 +40,7 @@
   if [[ $remote == "remote" ]]; then
     to_install+=(
       ["base16"]=true
+      ["fonts"]=true
       ["zsh"]=true
       ["nvim"]=true
       ["ohmyzsh"]=true
@@ -273,6 +274,7 @@
       mkdir ~/tmp-fonts
       cd ~/tmp-fonts
 
+      # SauceCodePro (terminal, vim)
       zip_file="SourceCodePro.zip"
       wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/$zip_file
       unzip "$zip_file" -d "$fontpath"
@@ -295,11 +297,11 @@
       sudo cp $fontpath /usr/local/share/fonts/ # the snap version of vscode does not look at user fonts it seems.
       fc-cache -f -v
 
-      # Siji (polybar)
-      git clone https://github.com/stark/siji && cd siji
-      ./install.sh
-      # https://github.com/stark/siji/issues/28
-      echo "WARN: If siji does not work, 'sudo rm /etc/fonts/70-no-bitmaps.conf'"
+      # # Siji (polybar)
+      # git clone https://github.com/stark/siji && cd siji
+      # ./install.sh
+      # # https://github.com/stark/siji/issues/28
+      # echo "WARN: If siji does not work, 'sudo rm /etc/fonts/70-no-bitmaps.conf'"
 
       # Successfully installed siji.pcf -> /home/anupa/.local/share/fonts
       # Add the following snippet in your custom startup script that gets executed during xlogin:
@@ -310,8 +312,8 @@
       rm -fr ~/tmp-fonts
       cd $cur_dir
 
-      # Unifont and noto color emoji (polybar)
-      sudo apt install -y unifont fonts-noto-color-emoji
+      # # Unifont and noto color emoji (polybar)
+      # sudo apt install -y unifont fonts-noto-color-emoji
     else
       echo "Fonts already installed."
     fi
