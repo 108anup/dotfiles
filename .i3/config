@@ -243,5 +243,5 @@ exec --no-startup-id /usr/bin/pasystray
 exec --no-startup-id /usr/bin/albert
 
 exec --no-startup-id ~/.i3/wacom.sh
-exec --no-startup-id ~/.i3/polybar.sh
-exec --no-startup-id ~/.i3_local_startup.sh
+exec_always --no-startup-id ~/.i3/polybar.sh
+exec_always --no-startup-id ~/.i3_local_startup.sh
