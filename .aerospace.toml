@@ -45,9 +45,7 @@ automatically-unhide-macos-hidden-apps = false
 # even when they are invisible.
 # This config version is only available since 'config-version = 2'
 # Fallback value (if you omit the key): persistent-workspaces = []
-persistent-workspaces = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B",
-                         "C", "D", "E", "F", "G", "I", "M", "N", "O", "P", "Q",
-                         "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
+persistent-workspaces = ["1-web", "2-term", "3-dev", "4-pdf", "5-files", "6-mail", "7-notes"]
 
 # A callback that runs every time binding mode changes
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
@@ -129,11 +127,13 @@ on-mode-changed = []
     alt-equal = 'resize smart +50'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#workspace
-    alt-1 = 'workspace 1'
-    alt-2 = 'workspace 2'
-    alt-3 = 'workspace 3'
-    alt-4 = 'workspace 4'
-    alt-5 = 'workspace 5'
+    alt-1 = 'workspace 1-web'
+    alt-2 = 'workspace 2-term'
+    alt-3 = 'workspace 3-dev'
+    alt-4 = 'workspace 4-pdf'
+    alt-5 = 'workspace 5-files'
+    alt-backtick = 'workspace 6-mail'
+    alt-tab = 'workspace 7-notes'
     alt-6 = 'workspace 6'
     alt-7 = 'workspace 7'
     alt-8 = 'workspace 8'
@@ -162,11 +162,13 @@ on-mode-changed = []
     alt-z = 'workspace Z'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#move-node-to-workspace
-    alt-shift-1 = 'move-node-to-workspace 1'
-    alt-shift-2 = 'move-node-to-workspace 2'
-    alt-shift-3 = 'move-node-to-workspace 3'
-    alt-shift-4 = 'move-node-to-workspace 4'
-    alt-shift-5 = 'move-node-to-workspace 5'
+    alt-shift-1 = 'move-node-to-workspace 1-web'
+    alt-shift-2 = 'move-node-to-workspace 2-term'
+    alt-shift-3 = 'move-node-to-workspace 3-dev'
+    alt-shift-4 = 'move-node-to-workspace 4-pdf'
+    alt-shift-5 = 'move-node-to-workspace 5-files'
+    alt-shift-backtick = 'move-node-to-workspace 6-mail'
+    alt-shift-tab = 'move-node-to-workspace 7-notes'
     alt-shift-6 = 'move-node-to-workspace 6'
     alt-shift-7 = 'move-node-to-workspace 7'
     alt-shift-8 = 'move-node-to-workspace 8'
@@ -217,3 +219,12 @@ on-mode-changed = []
     alt-shift-j = ['join-with down', 'mode main']
     alt-shift-k = ['join-with up', 'mode main']
     alt-shift-l = ['join-with right', 'mode main']
+
+[[on-window-detected]]
+    if.app-id = 'com.googlecode.iterm2'
+    run = 'move-node-to-workspace 2-term'
+
+[[on-window-detected]]
+    if.app-id = 'com.microsoft.VSCode'
+    run = 'move-node-to-workspace 3-dev'
+
