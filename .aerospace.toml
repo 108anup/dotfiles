@@ -228,3 +228,11 @@ on-mode-changed = []
     if.app-id = 'com.microsoft.VSCode'
     run = 'move-node-to-workspace 3-dev'
 
+[workspace-to-monitor-force-assignment]
+    1-web = 1
+    2-term = 1
+    3-dev = 1
+    4-pdf = 1
+    5-files = 1
+    6-mail = 2
+    7-notes = 2
